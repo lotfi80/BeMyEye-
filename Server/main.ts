@@ -1,12 +1,29 @@
 import express from 'express';
+import connectDB from './src/libs/db';
 import dotenv from 'dotenv';
+import userRoute from './src/routes/auth';
+import authRouter from './src/routes/auth';
+// import { authorizeJwt } from './src/middleware/authorization';
+import cookieparser from 'cookie-parser';
+
+
 
 dotenv.config();
 
-const port = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3002;
 const app = express();
 app.use(express.json());
+app.use(cookieparser());
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+app.use('/auth', authRouter);
+// app.use('/user', userRoute);
+
+
+(async () => {
+    await connectDB();
+  
+    app.listen(PORT, () => {
+      console.log(`The server 🙈 is listening on port ${PORT}`);
+    //   console.log(`Visit ${clientUrl} in your browser`);
+    });
+  })();
