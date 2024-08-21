@@ -7,8 +7,12 @@ export const register = async (req: Request, res: Response) => {
   const { username, firstname, lastname, email, password } = req.body;
   try {
     const existUser = await User.findOne({ username: username });
+    const existEmail = await User.findOne({ email });
     if (existUser) {
       return res.status(400).send({ msg: "Username already exists" });
+    }
+    if (existEmail) {
+      return res.status(400).send({ msg: "Email already exists" });
     }
 
     // hash the password of the user

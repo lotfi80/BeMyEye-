@@ -14,6 +14,8 @@ export function authorizeJwt(req : Request, res : Response, next : NextFunction)
     if (!user){
         return res.status(401).send({msg: 'Unauthorized'});
     }
+    
+
     // req.user = user;
     next();
 }
