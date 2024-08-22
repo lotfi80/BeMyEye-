@@ -1,9 +1,9 @@
 {
   "main": "server/index.ts",
   "scripts": {
-    "dev": "npm run dev:client & npm run dev:server",
+    "dev:client": "npm run dev --prefix client",
     "dev:server": "ts-node server/index.ts",
-    "dev:client": "npm run dev --prefix client"
+    "dev": "npm run dev:client & npm run dev:server"
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.7",
