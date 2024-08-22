@@ -21,7 +21,7 @@ app.use("/api", userRouter);
 // app.use("/product", productRouter);
 // app.use("/cart", cartRouter);
 
-const port = (process.env.PORT as string) || 3000;
+const port = (process.env.PORT as string) || 10000;
 const mongo_url = process.env.DB_URL as string;
 
 if (!mongo_url) {
