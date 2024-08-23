@@ -4,6 +4,7 @@ import { activateUser } from "../http/api";
 
 const ActivationSuccess: React.FC = () => {
   const { activationLink } = useParams<{ activationLink: string }>();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     const activateAccount = async () => {
@@ -24,7 +25,7 @@ const ActivationSuccess: React.FC = () => {
       <h1>Account Activation Successful!</h1>
       <p>
         Your account has been activated. You can now{" "}
-        <a href="/completeRegistration">Complete your Registration</a>.
+        <a href={`/userdata/${id}`}>Complete your Registration</a>.
       </p>
     </div>
   );
