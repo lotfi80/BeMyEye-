@@ -2,7 +2,7 @@
   "main": "server/index.ts",
   "scripts": {
     "dev:client": "npm run dev --prefix client",
-    "dev:server": "node_modules/.bin/ts-node server/index.ts",
+    "dev:server": "npx ts-node server/index.ts",
     "dev": "npm run dev:client & npm run dev:server"
   },
   "dependencies": {
