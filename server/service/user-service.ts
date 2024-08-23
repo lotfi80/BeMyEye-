@@ -39,7 +39,7 @@ export async function userServiceRegistration(
 
   await sendActivationMessage(
     email,
-    `http://localhost:5173/api/${activationLink}`
+    `http://localhost:5174/api/${activationLink}`
   );
 
   const tokens = await generateToken({

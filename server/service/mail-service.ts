@@ -13,16 +13,16 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendActivationMessage = async (to: string, link: string) => {
-  await transporter.sendMail({
-    from: process.env.SMTP_USER,
-    to,
-    subject: `Activation account on ${process.env.API_URL}`,
-    text: "",
-    html: `
-            <div>
-                  <h1>For activation account click on link</h1>
-                  <a href="${link}">${link}</a>
-            </div>
-            `,
-  });
+  try {
+    await transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: `Activation account on ${process.env.API_URL}`,
+      text: "",
+      html: `<div><h1>For activation account click on link</h1><a href="${link}">${link}</a></div>`,
+    });
+  } catch (error) {
+    console.error("Failed to send activation email:", error);
+    throw new Error("Failed to send activation email");
+  }
 };
