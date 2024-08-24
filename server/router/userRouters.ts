@@ -17,6 +17,7 @@ import { generateToken } from "../service/token-service";
 import { handleGoogleCallback } from "../service/passport-service";
 
 const userRouter = express.Router();
+const googleRouter = express.Router();
 
 userRouter.post(
   "/registration",
@@ -35,12 +36,12 @@ userRouter.get("/users", getUsers);
 userRouter.get("/users/:id", getUser);
 // userRouter.post("/callback", googleauth);
 
-userRouter.get(
+googleRouter.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-userRouter.get(
+googleRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   handleGoogleCallback

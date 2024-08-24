@@ -27,14 +27,14 @@ passport.use(
         return done(null, existingUser);
       }
 
-      // Если пользователь новый, создайте его в базе
-      const newUser = await new User({
-        googleId: profile.id,
-        email: profile.emails[0].value,
-        name: profile.displayName,
-      }).save();
+      // // Если пользователь новый, создайте его в базе
+      // const newUser = await new User({
+      //   googleId: profile.id,
+      //   email: profile.emails[0].value,
+      //   name: profile.displayName,
+      // }).save();
 
-      done(null, newUser);
+      // done(null, newUser);
     }
   )
 );
@@ -51,7 +51,6 @@ export const handleGoogleCallback = async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken } = await generateToken(payload);
   res.json({ accessToken, refreshToken });
-
 };
 
 // Сериализация пользователя

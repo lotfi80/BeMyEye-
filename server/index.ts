@@ -21,6 +21,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", userRouter);
+app.use("", userRouter);
 app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;
