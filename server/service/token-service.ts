@@ -1,9 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
 import jwt from "jsonwebtoken";
 import Token from "../models/token-model";
-import dotenv from "dotenv";
 import { ITokenPayload } from "../interfaces/TokenPayload";
 import { ConnectionClosedEvent } from "mongodb";
-dotenv.config();
 
 export async function generateToken(payload: ITokenPayload) {
   const accessToken = jwt.sign(

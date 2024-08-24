@@ -22,6 +22,10 @@ const LoginForm = () => {
     }
   };
 
+  const handleGoogleSignIn = () => {
+    window.location.href = "/auth/google";
+  };
+
   return (
     <div>
       <h1>Login</h1>
@@ -45,6 +49,13 @@ const LoginForm = () => {
           />
         </div>
         <button type="submit">Login</button>
+        <a
+          className="button google"
+          href="api/auth/google"
+          onClick={handleGoogleSignIn}
+        >
+          Sign in with Google
+        </a>
       </form>
     </div>
   );

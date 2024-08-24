@@ -1,5 +1,5 @@
 import { AuthTokens } from "../interfaces/AuthToken";
-import { User } from "../interfaces/User";
+import { IUser } from "../interfaces/User";
 
 const BASE_URL = "http://localhost:5000/api";
 // Функция для выполнения запросов с аутентификацией
@@ -43,7 +43,7 @@ export const fetchWithAuth = async (
 export const registerUser = async (
   email: string,
   password: string
-): Promise<AuthTokens> => {
+): Promise<void> => {
   try {
     const response = await fetch(`${BASE_URL}/registration`, {
       method: "POST",
@@ -58,31 +58,35 @@ export const registerUser = async (
       throw new Error("Registration failed");
     }
 
-    const data: AuthTokens = await response.json();
+    // const data: AuthTokens = await response.json();
 
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
+    // localStorage.setItem("accessToken", data.accessToken);
+    // localStorage.setItem("refreshToken", data.refreshToken);
 
-    return data;
+    // return data;
   } catch (error) {
     console.error("Error:", error);
     throw new Error("An error occurred during registration");
   }
 };
 // **********************************************************************
-export const activateUser = async (
-  activationLink: string
-): Promise<Response> => {
+export const activateUser = async (activationLink: string): Promise<any> => {
+  // Use 'any' to capture any type of response for debugging
   try {
+    console.log(`Sending request to: ${BASE_URL}/activate/${activationLink}`);
     const response = await fetch(`${BASE_URL}/activate/${activationLink}`, {
       method: "GET",
     });
 
     if (!response.ok) {
+      console.error("Response status:", response.status);
+      console.error("Response text:", await response.text());
       throw new Error(`Activation failed: ${response.statusText}`);
     }
-
-    return await response.json();
+    console.log("Activation successful");
+    // const jsonData = await response.json();
+    // console.log("Response data:", jsonData);
+    // return jsonData;
   } catch (error) {
     console.error("Error during activation:", error);
     throw new Error("An error occurred during account activation");
@@ -127,11 +131,12 @@ export const loginUser = async (
       credentials: "include",
     });
 
-    const data: AuthTokens = await response.json();
-
     if (!response.ok) {
       throw new Error("Login failed");
     }
+    const data: AuthTokens = await response.json();
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
 
     return data;
   } catch (error) {
@@ -195,20 +200,20 @@ export const refreshToken = async (): Promise<string | undefined> => {
   }
 };
 // **********************************************************************
-export const fetchUser = async (): Promise<User | undefined> => {
+export const fetchUser = async (): Promise<IUser | undefined> => {
   try {
-    const response = await fetch("http://localhost:5000/api/user", {
+    const response = await fetch("http://localhost:5000/api/users", {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      // },
     });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
 
-    const users: User = await response.json();
+    const users: IUser = await response.json();
     return users;
   } catch (error) {
     console.error("Failed to fetch users:", error);

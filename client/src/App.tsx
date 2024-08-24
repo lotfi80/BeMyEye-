@@ -5,6 +5,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+
 import ActivationSuccess from "./pages/ActivationSuccess";
 import RegisterForm from "./pages/RegisterForm";
 import { CompleteRegistration } from "./pages/CompleteRegistration";
@@ -14,7 +15,7 @@ import { Privacy } from "./pages/Privacy";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
 import { fetchUser } from "./http/api";
-import { User } from "./interfaces/User";
+import { IUser } from "./interfaces/User";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -23,7 +24,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const user: User | undefined = await fetchUser();
+        const user: IUser | undefined = await fetchUser();
         setIsAuthenticated(!!user);
       } catch {
         setIsAuthenticated(false);
@@ -45,7 +46,10 @@ const App: React.FC = () => {
           element={<CompleteRegistration />}
         />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/api/:activationLink" element={<ActivationSuccess />} />
+        <Route
+          path="/activate/:activationLink"
+          element={<ActivationSuccess />}
+        />
         <Route path="/home" element={<HomePage />} />
         <Route path="/userdata/:id" element={<UserData />} />
 

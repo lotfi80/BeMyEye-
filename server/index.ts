@@ -1,16 +1,18 @@
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import userRouter from "./router/userRouters";
-
-dotenv.config();
+import passport from "./service/passport-service";
+// import indexRouter from "./router/index";
+// import authRouter from "./router/auth";
 
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: process.env.CLIENT_URL as string,
     // origin: "*",
     credentials: true,
   })
@@ -19,8 +21,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", userRouter);
-// app.use("/product", productRouter);
-// app.use("/cart", cartRouter);
+app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;
 const mongo_url = process.env.DB_URL as string;

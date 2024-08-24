@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import {
   registration,
   completeRegistration,
@@ -11,6 +11,9 @@ import {
   googleauth,
 } from "../controllers/user-controller";
 import { body, validationResult } from "express-validator";
+import passport from "passport";
+import { generateToken } from "../service/token-service";
+import { handleGoogleCallback } from "../service/passport-service";
 
 const userRouter = express.Router();
 
@@ -29,6 +32,16 @@ userRouter.get("/activate/:link", activate);
 userRouter.get("/refresh", refresh);
 userRouter.get("/users", getUsers);
 userRouter.get("/users/:id", getUser);
-userRouter.post("/callback", googleauth);
+// userRouter.post("/callback", googleauth);
 
+userRouter.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+userRouter.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  handleGoogleCallback
+);
 export default userRouter;

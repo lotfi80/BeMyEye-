@@ -22,18 +22,20 @@ export const registration = async (
       return res.status(400).json({ message: "Validation error", errors });
     }
     const { email, password } = req.body;
-    const userData: IUserWithTokens | null = await userServiceRegistration(
-      email,
-      password
-    );
-    if (userData !== null) {
-      res.cookie("refreshToken", userData.refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      });
-      res.json(userData);
+    const user = await userServiceRegistration(email, password);
+    // if (userData !== null) {
+    //   res.cookie("refreshToken", userData.refreshToken, {
+    //     maxAge: 30 * 24 * 60 * 60 * 1000,
+    //     httpOnly: true,
+    //   });
+    //   res.json(userData);
+    // } else {
+    //   res.status(400).json({ message: "Registration failed" });
+    // }
+    if (user) {
+      return res.status(201).json({ message: "Registration successful" });
     } else {
-      res.status(400).json({ message: "Registration failed" });
+      return res.status(400).json({ message: "Registration failed" });
     }
   } catch (e) {
     console.error(e);
@@ -120,6 +122,7 @@ export const login = async (
     next(e);
   }
 };
+
 // ****************************************************************
 export const logout = async (
   req: Request,

@@ -22,7 +22,7 @@ export async function findUserByEmail(email: string) {
 export async function userServiceRegistration(
   email: string,
   password: string
-): Promise<IUserWithTokens | null> {
+): Promise<IUser | null> {
   const candidate = await User.findOne({ email });
   if (candidate) {
     throw new Error("User already exists");
@@ -39,25 +39,26 @@ export async function userServiceRegistration(
 
   await sendActivationMessage(
     email,
-    `http://localhost:5174/api/${activationLink}`
+    `${process.env.CLIENT_URL as string}/activate/${activationLink}`
   );
 
-  const tokens = await generateToken({
-    id: user._id.toString(),
-    email: user.email,
-    isActivated: user.isActivated,
-  });
+  // const tokens = await generateToken({
+  //   id: user._id.toString(),
+  //   email: user.email,
+  //   isActivated: user.isActivated,
+  // });
 
-  await saveToken(user._id.toString(), tokens.refreshToken);
+  // await saveToken(user._id.toString(), tokens.refreshToken);
 
-  return {
-    ...tokens,
-    user: {
-      email: user.email,
-      id: user._id.toString(),
-      isActivated: user.isActivated,
-    },
-  };
+  // return {
+  //   ...tokens,
+  //   user: {
+  //     email: user.email,
+  //     id: user._id.toString(),
+  //     isActivated: user.isActivated,
+  //   },
+  // };
+  return user;
 }
 // ********************************************************************************************************************
 export async function userServiceActivate(
