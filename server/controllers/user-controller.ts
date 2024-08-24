@@ -229,3 +229,21 @@ export const googleauth = async (
   }
 };
 //сдеалть фетч токенов из гугла в юзер-сервисе
+// *****************************************************************
+export async function findUserByLink(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> {
+  try {
+    const { link } = req.params;
+    const user = await User.findOne({ activationLink: link });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    res.json(user._id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+}

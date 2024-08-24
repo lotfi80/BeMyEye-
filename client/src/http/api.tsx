@@ -219,3 +219,26 @@ export const fetchUser = async (): Promise<IUser | undefined> => {
     console.error("Failed to fetch users:", error);
   }
 };
+// **************************************************
+export const getUserIdByActivationLink = async (
+  activationLink: string
+): Promise<string | undefined> => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${activationLink}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch user by activation link:", error);
+  }
+};

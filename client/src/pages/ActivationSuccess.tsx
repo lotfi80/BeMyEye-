@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { activateUser } from "../http/api";
-import { getUserIdByActivationLink } from "../services/findUserByLink";
+import { getUserIdByActivationLink } from "../http/api";
 
 const ActivationSuccess: React.FC = () => {
   const { activationLink } = useParams<{ activationLink: string }>();
@@ -10,10 +10,8 @@ const ActivationSuccess: React.FC = () => {
   useEffect(() => {
     const activateAccount = async () => {
       try {
-        console.log("Activation link:", activationLink);
         if (activationLink) {
           await activateUser(activationLink);
-          console.log("Activation successful");
 
           const userID = await getUserIdByActivationLink(activationLink);
           if (!userID) {

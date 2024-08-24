@@ -9,6 +9,7 @@ import {
   getUser,
   activate,
   googleauth,
+  findUserByLink,
 } from "../controllers/user-controller";
 import { body, validationResult } from "express-validator";
 import passport from "passport";
@@ -44,4 +45,6 @@ userRouter.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   handleGoogleCallback
 );
+
+userRouter.get("/user/:link", findUserByLink);
 export default userRouter;
