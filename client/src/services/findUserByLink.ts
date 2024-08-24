@@ -1,14 +1,13 @@
-import { IUser } from "../interfaces/User";
-import User from "../../../server/models/user-model";
-import mongoose from "mongoose";
+// import { IUser } from "../interfaces/User";
 
 export const getUserIdByActivationLink = async (
   link: string
 ): Promise<mongoose.Types.ObjectId | null> => {
   try {
+    console.log(link);
     const user: IUser | null = await User.findOne({
       activationLink: link,
-    });
+    }).exec();
     console.log("User by activation link:", user);
 
     if (user) {
