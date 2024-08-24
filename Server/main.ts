@@ -1,9 +1,9 @@
 import express from 'express';
 import connectDB from './src/libs/db';
 import dotenv from 'dotenv';
-import userRoute from './src/routes/auth';
+import userRoute from './src/routes/userRoutes';
 import authRouter from './src/routes/auth';
-// import { authorizeJwt } from './src/middleware/authorization';
+import {authorizeJwt} from './src/middelware/authorization';
 import cookieparser from 'cookie-parser';
 
 
@@ -15,8 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieparser());
 
-app.use('/auth', authRouter);
-// app.use('/user', userRoute);
+app.use('/auth', authRouter  );
+app.use('/user', authorizeJwt , userRoute);
 
 
 (async () => {

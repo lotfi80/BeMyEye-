@@ -13,6 +13,7 @@ export interface IUser extends Document  {
   postid: Types.ObjectId[];
   postlikes: Types.ObjectId[];
   hash: string;
+  refreshToken: string;
   registerDate: Date;
 }
 
@@ -29,6 +30,7 @@ const UserSchema: Schema<IUser> = new Schema({
   postid: [{ type: Types.ObjectId, ref: "Post" , required: false}],
   postlikes: [{ type: Types.ObjectId, ref: "Post" , required: false}],
   hash: { type: String, required: true },
+  refreshToken: { type: String, required: false },
   registerDate: { type: Date, default: Date.now },
 });
 
