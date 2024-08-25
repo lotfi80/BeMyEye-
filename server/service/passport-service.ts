@@ -8,6 +8,7 @@ import { generateToken, saveToken } from "./token-service";
 import { ITokenPayload } from "../interfaces/TokenPayload";
 
 passport.use(
+  `google`,
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID as string,
@@ -44,6 +45,52 @@ passport.use(
     }
   )
 );
+// **************************************************************************
+passport.use(
+  `google-register`,
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      callbackURL: `${process.env.API_URL}/auth/google/register/callback`,
+    },
+    async (
+      accessToken: string,
+      refreshToken: string,
+      profile: any,
+      done: Function
+    ) => {
+      try {
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (user) {
+          console.log("User already exists,  cannot register again.");
+          return done(null, false, { message: "User already exists" });
+        } else {
+          user = await User.findOne({ email: profile.emails[0].value });
+          if (user) {
+            user.googleId = profile.id;
+            await user.save();
+            console.log("User found by email, updated with Google ID.");
+            return done(null, user);
+          } else {
+            const newUser = new User({
+              googleId: profile.id,
+              email: profile.emails[0].value,
+            });
+            newUser.isActivated = true;
+            await newUser.save();
+            console.log("New user registered with Google.");
+            return done(null, newUser);
+          }
+        }
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
+);
+// **************************************************************************
 // **************************************************************************
 export const handleGoogleCallback = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -84,4 +131,6 @@ passport.deserializeUser(async (id: string, done: Function) => {
   const user = await User.findById(id);
   done(null, user);
 });
+// **************************************************************************
+
 export default passport;

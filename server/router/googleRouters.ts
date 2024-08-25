@@ -23,4 +23,17 @@ googleRouter.get(
   handleGoogleCallback
 );
 
+googleRouter.get(
+  "/auth/google/register",
+  passport.authenticate("google-register", { scope: ["profile", "email"] })
+);
+
+googleRouter.get(
+  "/auth/google/register/callback",
+  passport.authenticate("google-register", {
+    failureRedirect: "/",
+    session: false,
+  }),
+  handleGoogleCallback
+);
 export default googleRouter;

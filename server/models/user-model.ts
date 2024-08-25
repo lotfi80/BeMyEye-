@@ -29,7 +29,7 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
   },
   isActivated: {
     type: Boolean,
@@ -38,7 +38,7 @@ const UserSchema = new Schema({
   activationLink: {
     type: String,
   },
-  googleId: { type: String, required: true },
+  googleId: { type: String },
   firstname: { type: String },
   lastname: { type: String },
   username: { type: String },

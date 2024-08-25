@@ -61,18 +61,20 @@ export const registerUser = async (
     if (!response.ok) {
       throw new Error("Registration failed");
     }
-
-    // const data: AuthTokens = await response.json();
-
-    // localStorage.setItem("accessToken", data.accessToken);
-    // localStorage.setItem("refreshToken", data.refreshToken);
-
-    // return data;
   } catch (error) {
     console.error("Error:", error);
     throw new Error("An error occurred during registration");
   }
 };
+// **********************************************************************
+// export const googleRegistration = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+
+//   }
+
+// };
 // **********************************************************************
 export const activateUser = async (activationLink: string): Promise<any> => {
   // Use 'any' to capture any type of response for debugging
