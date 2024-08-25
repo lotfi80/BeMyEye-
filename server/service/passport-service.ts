@@ -4,7 +4,7 @@ dontenv.config();
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/user-model";
 import { Request, Response, NextFunction } from "express";
-import { generateToken } from "./token-service";
+import { generateToken, saveToken } from "./token-service";
 import { ITokenPayload } from "../interfaces/TokenPayload";
 
 passport.use(
@@ -12,7 +12,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      callbackURL: `${process.env.CLIENT_URL as string}/auth/google/callback`,
+      callbackURL: `${process.env.API_URL}/auth/google/callback`,
     },
     async (
       accessToken: string,
@@ -20,37 +20,58 @@ passport.use(
       profile: any,
       done: Function
     ) => {
-      const existingUser = await User.findOne({ googleId: profile.id });
+      try {
+        let user = await User.findOne({ googleId: profile.id });
 
-      if (existingUser) {
-        console.log("User already exists");
-        return done(null, existingUser);
+        if (user) {
+          console.log("User already exists, logging in");
+          return done(null, user);
+        } else {
+          user = await User.findOne({ email: profile.emails[0].value });
+          if (user) {
+            user.googleId = profile.id;
+            await user.save();
+            console.log("User becam id, logging in");
+            return done(null, user);
+          } else {
+            console.log("User not found");
+            return done(null, false, { message: "User not registered" });
+          }
+        }
+      } catch (error) {
+        return done(error, null);
       }
-
-      // // Если пользователь новый, создайте его в базе
-      // const newUser = await new User({
-      //   googleId: profile.id,
-      //   email: profile.emails[0].value,
-      //   name: profile.displayName,
-      // }).save();
-
-      // done(null, newUser);
     }
   )
 );
+// **************************************************************************
 export const handleGoogleCallback = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.redirect("/");
   }
   const user = req.user as any;
+  console.log("User:", user); // Debug
   const payload: ITokenPayload = {
     id: user.id,
     email: user.email,
     isActivated: user.isActivated,
   };
 
-  const { accessToken, refreshToken } = await generateToken(payload);
-  res.json({ accessToken, refreshToken });
+  try {
+    const { accessToken, refreshToken } = await generateToken(payload);
+    await saveToken(user._id.toString(), refreshToken);
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+    res.cookie("accessToken", accessToken, {
+      maxAge: 1 * 60 * 1000,
+      httpOnly: true,
+    });
+    res.redirect(`${process.env.CLIENT_URL}/token-receive`);
+  } catch (error) {
+    res.status(500).json({ error: "Error of generateToken" });
+  }
 };
 
 // Сериализация пользователя

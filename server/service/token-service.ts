@@ -23,7 +23,7 @@ export async function generateToken(payload: ITokenPayload) {
 
   return { accessToken, refreshToken };
 }
-
+// ***************************************************************
 export async function saveToken(userId: string, refreshToken: string) {
   const tokenData = await Token.findOne({ user: userId });
   if (tokenData) {
@@ -39,13 +39,13 @@ export async function removeToken(refreshToken: string): Promise<void> {
   const result = await Token.deleteOne({ refreshToken: refreshToken });
   console.log("Delete result:", result); // debug
 }
-
+// ***************************************************************
 export async function findToken(refreshToken: string) {
   console.log("in tokenservice", refreshToken);
   const tokenData = await Token.findOne({ refreshToken });
   return tokenData;
 }
-
+// ***************************************************************
 export async function validateAccessToken(token: string) {
   try {
     const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string);
@@ -54,7 +54,7 @@ export async function validateAccessToken(token: string) {
     console.log(e);
   }
 }
-
+// ***************************************************************
 export async function validateRefreshToken(token: string) {
   try {
     const userData = jwt.verify(

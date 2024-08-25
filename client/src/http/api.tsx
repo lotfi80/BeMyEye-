@@ -1,5 +1,6 @@
 import { AuthTokens } from "../interfaces/AuthToken";
 import { IUser } from "../interfaces/User";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5000/api";
 // Функция для выполнения запросов с аутентификацией
@@ -26,6 +27,9 @@ export const fetchWithAuth = async (
     if (response.status === 401) {
       accessToken = await refreshToken();
 
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+      }
       return fetch(url, {
         ...options,
         headers: {
@@ -145,6 +149,26 @@ export const loginUser = async (
   }
 };
 // **********************************************************************
+export const googleLogin = async (): Promise<void> => {
+  try {
+    const response = await fetch(`${BASE_URL}/get-tokens`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch tokens");
+    }
+
+    const data: AuthTokens = await response.json();
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    localStorage.setItem("userEmail", data.email);
+  } catch (error) {
+    console.error("Google login failed:", error);
+  }
+};
+// **********************************************************************
 export const logout = async (): Promise<void> => {
   try {
     const response = await fetch("http://localhost:5000/api/logout", {
@@ -242,3 +266,4 @@ export const getUserIdByActivationLink = async (
     console.error("Failed to fetch user by activation link:", error);
   }
 };
+// **********************************************************************

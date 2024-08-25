@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import userRouter from "./router/userRouters";
+import googleRouter from "./router/googleRouters";
 import passport from "./service/passport-service";
 // import indexRouter from "./router/index";
 // import authRouter from "./router/auth";
@@ -21,7 +22,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", userRouter);
-app.use("", userRouter);
+app.use("", googleRouter);
 app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;

@@ -18,6 +18,7 @@ export interface IUser extends Document {
   postlikes: mongoose.Types.ObjectId[];
   hash: string;
   registerDate: Date;
+  googleId: string;
 }
 
 const UserSchema = new Schema({
@@ -37,6 +38,7 @@ const UserSchema = new Schema({
   activationLink: {
     type: String,
   },
+  googleId: { type: String, required: true },
   firstname: { type: String },
   lastname: { type: String },
   username: { type: String },

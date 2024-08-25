@@ -8,16 +8,12 @@ import {
   getUsers,
   getUser,
   activate,
-  googleauth,
   findUserByLink,
+  sendTokensToClient,
 } from "../controllers/user-controller";
 import { body, validationResult } from "express-validator";
-import passport from "passport";
-import { generateToken } from "../service/token-service";
-import { handleGoogleCallback } from "../service/passport-service";
 
 const userRouter = express.Router();
-const googleRouter = express.Router();
 
 userRouter.post(
   "/registration",
@@ -34,18 +30,6 @@ userRouter.get("/activate/:link", activate);
 userRouter.get("/refresh", refresh);
 userRouter.get("/users", getUsers);
 userRouter.get("/users/:id", getUser);
-// userRouter.post("/callback", googleauth);
-
-googleRouter.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-googleRouter.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  handleGoogleCallback
-);
-
 userRouter.get("/user/:link", findUserByLink);
+userRouter.post("/get-tokens", sendTokensToClient);
 export default userRouter;
