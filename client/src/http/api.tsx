@@ -1,6 +1,8 @@
 import { AuthTokens } from "../interfaces/AuthToken";
 import { IUser } from "../interfaces/User";
 import { useNavigate } from "react-router-dom";
+import { useMyContext } from "../context/context";
+import { useState } from "react";
 
 const BASE_URL = "http://localhost:5000/api";
 // Функция для выполнения запросов с аутентификацией
@@ -173,7 +175,7 @@ export const googleLogin = async (): Promise<void> => {
 // **********************************************************************
 export const logout = async (): Promise<void> => {
   try {
-    const response = await fetch("http://localhost:5000/api/logout", {
+    const response = await fetch(`${BASE_URL}/logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -202,7 +204,7 @@ export const refreshToken = async (): Promise<string | undefined> => {
     throw new Error("No refresh token available");
   }
   try {
-    const response = await fetch("http://localhost:5000/api/refresh", {
+    const response = await fetch(`${BASE_URL}/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -228,7 +230,7 @@ export const refreshToken = async (): Promise<string | undefined> => {
 // **********************************************************************
 export const fetchUser = async (): Promise<IUser | undefined> => {
   try {
-    const response = await fetch("http://localhost:5000/api/users", {
+    const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
       // headers: {
       //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -250,12 +252,9 @@ export const getUserIdByActivationLink = async (
   activationLink: string
 ): Promise<string | undefined> => {
   try {
-    const response = await fetch(
-      `http://localhost:5000/api/user/${activationLink}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`${BASE_URL}/user/${activationLink}`, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
