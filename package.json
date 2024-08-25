@@ -6,6 +6,7 @@
     "dev": "npm run dev:client & npm run dev:server"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.19.3",
     "@types/cookie-parser": "^1.4.7",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",

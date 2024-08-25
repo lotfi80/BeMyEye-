@@ -37,12 +37,17 @@ export const HomePage: React.FC = () => {
     }
   };
 
+  const handleLocation = (): void => {
+    navigate("/location");
+  };
+
   return (
     <div>
       <header>
         <button onClick={handleRegister}>Register</button>
         <button onClick={handleLogin}>Login</button>
         <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleLocation}>Meine Location</button>
       </header>
       <main>{/* Addlogic to display prime */}</main>
     </div>

@@ -11,6 +11,7 @@ import RegisterForm from "./pages/RegisterForm";
 import LoginForm from "./pages/LoginForm";
 import { HomePage } from "./pages/HomePage";
 import { Privacy } from "./pages/Privacy";
+import { Location } from "./pages/Location";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
 import { fetchUser } from "./http/api";
@@ -48,8 +49,9 @@ const App: React.FC = () => {
           element={<ActivationSuccess />}
         />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/userdata/:id" element={<UserData />} />
+        <Route path="/location" element={<Location />} />
 
+        <Route path="/userdata/:id" element={<UserData />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/term" element={<TermOfService />} />
         <Route path="/token-receive" element={<GoogleAuthCallback />} />
