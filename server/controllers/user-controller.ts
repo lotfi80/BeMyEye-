@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import {
   userServiceRegistration,
+  userServiceCompleteRegistration,
   userServiceLogin,
   userServiceLogout,
   userServiceActivate,
@@ -22,18 +23,12 @@ export const registration = async (
       return res.status(400).json({ message: "Validation error", errors });
     }
     const { email, password } = req.body;
-    const userData: IUserWithTokens | null = await userServiceRegistration(
-      email,
-      password
-    );
-    if (userData !== null) {
-      res.cookie("refreshToken", userData.refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      });
-      res.json(userData);
+    const user = await userServiceRegistration(email, password);
+
+    if (user) {
+      return res.status(201).json({ message: "Registration successful" });
     } else {
-      res.status(400).json({ message: "Registration failed" });
+      return res.status(400).json({ message: "Registration failed" });
     }
   } catch (e) {
     console.error(e);
@@ -46,49 +41,43 @@ export const completeRegistration = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const userId: string = req.params.id;
-  const {
-    firstname,
-    lastname,
-    username,
-    birthdate,
-    profileimage,
-    city,
-    street,
-    country,
-  } = req.body;
-
-  if (
-    !firstname ||
-    !lastname ||
-    !username ||
-    !birthdate ||
-    !city ||
-    !street ||
-    !country
-  ) {
-    return res
-      .status(400)
-      .json({ message: "All fields must be filled to complete the profile." });
-  }
-
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
+    const userId: string = req.params.id;
+    const {
+      firstname,
+      lastname,
+      username,
+      birthdate,
+      profileimage,
+      city,
+      street,
+      country,
+    } = req.body;
+
+    if (
+      !firstname ||
+      !lastname ||
+      !username ||
+      !birthdate ||
+      !city ||
+      !street ||
+      !country
+    ) {
+      return res.status(400).json({
+        message: "All fields must be filled to complete the profile.",
+      });
     }
-
-    user.firstname = firstname;
-    user.lastname = lastname;
-    user.username = username;
-    user.birthdate = birthdate;
-    user.profileimage = profileimage;
-    user.city = city;
-    user.street = street;
-    user.country = country;
-
-    await user.save();
-
+    await userServiceCompleteRegistration(
+      userId,
+      firstname,
+      lastname,
+      username,
+      birthdate,
+      profileimage,
+      city,
+      street,
+      country
+    );
     return res.status(200).json({ message: "Profile completed successfully." });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error." });
@@ -115,6 +104,41 @@ export const login = async (
     } else {
       res.status(400).json({ message: "Login failed" });
     }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// ****************************************************************
+// export const getTokens = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<Response | void> => {
+//   try {
+//     const { refreshToken } = req.cookies;
+//     if (!refreshToken) {
+//       return res.status(400).json({ message: "No refresh token provided" });
+//     }
+//     const userData = await userServiceRefresh(refreshToken);
+//     res.json(userData);
+//   } catch (e) {
+//     console.error(e);
+//     next(e);
+//   }
+// };
+// ****************************************************************
+export const sendTokensToClient = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const tokens = req.cookies;
+    if (!tokens.refreshToken) {
+      return res.status(400).json({ message: "No refresh token provided" });
+    }
+    res.json(tokens);
   } catch (e) {
     console.error(e);
     next(e);
@@ -192,7 +216,7 @@ export const getUsers = async (
     next(e);
   }
 };
-
+// *****************************************************************
 export const getUser = async (
   req: Request,
   res: Response,
@@ -207,22 +231,21 @@ export const getUser = async (
   }
 };
 // *****************************************************************
-export const googleauth = async (
+
+export async function findUserByLink(
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> => {
+): Promise<Response | void> {
   try {
-    const { code } = req.body;
-    if (!code) {
-      return res
-        .status(400)
-        .json({ message: "Authorization code is required" });
+    const { link } = req.params;
+    const user = await User.findOne({ activationLink: link });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
     }
-    return res.json("Google auth");
+    res.json(user._id);
   } catch (e) {
     console.error(e);
     next(e);
   }
-};
-//сдеалть фетч токенов из гугла в юзер-сервисе
+}

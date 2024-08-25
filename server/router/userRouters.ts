@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import {
   registration,
   completeRegistration,
@@ -8,7 +8,8 @@ import {
   getUsers,
   getUser,
   activate,
-  googleauth,
+  findUserByLink,
+  sendTokensToClient,
 } from "../controllers/user-controller";
 import { body, validationResult } from "express-validator";
 
@@ -29,6 +30,6 @@ userRouter.get("/activate/:link", activate);
 userRouter.get("/refresh", refresh);
 userRouter.get("/users", getUsers);
 userRouter.get("/users/:id", getUser);
-userRouter.post("/callback", googleauth);
-
+userRouter.get("/user/:link", findUserByLink);
+userRouter.post("/get-tokens", sendTokensToClient);
 export default userRouter;

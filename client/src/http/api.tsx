@@ -1,5 +1,6 @@
 import { AuthTokens } from "../interfaces/AuthToken";
-import { User } from "../interfaces/User";
+import { IUser } from "../interfaces/User";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5000/api";
 // Функция для выполнения запросов с аутентификацией
@@ -26,6 +27,9 @@ export const fetchWithAuth = async (
     if (response.status === 401) {
       accessToken = await refreshToken();
 
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+      }
       return fetch(url, {
         ...options,
         headers: {
@@ -43,7 +47,7 @@ export const fetchWithAuth = async (
 export const registerUser = async (
   email: string,
   password: string
-): Promise<AuthTokens> => {
+): Promise<void> => {
   try {
     const response = await fetch(`${BASE_URL}/registration`, {
       method: "POST",
@@ -57,32 +61,38 @@ export const registerUser = async (
     if (!response.ok) {
       throw new Error("Registration failed");
     }
-
-    const data: AuthTokens = await response.json();
-
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
-
-    return data;
   } catch (error) {
     console.error("Error:", error);
     throw new Error("An error occurred during registration");
   }
 };
 // **********************************************************************
-export const activateUser = async (
-  activationLink: string
-): Promise<Response> => {
+// export const googleRegistration = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+
+//   }
+
+// };
+// **********************************************************************
+export const activateUser = async (activationLink: string): Promise<any> => {
+  // Use 'any' to capture any type of response for debugging
   try {
+    console.log(`Sending request to: ${BASE_URL}/activate/${activationLink}`);
     const response = await fetch(`${BASE_URL}/activate/${activationLink}`, {
       method: "GET",
     });
 
     if (!response.ok) {
+      console.error("Response status:", response.status);
+      console.error("Response text:", await response.text());
       throw new Error(`Activation failed: ${response.statusText}`);
     }
-
-    return await response.json();
+    console.log("Activation successful");
+    // const jsonData = await response.json();
+    // console.log("Response data:", jsonData);
+    // return jsonData;
   } catch (error) {
     console.error("Error during activation:", error);
     throw new Error("An error occurred during account activation");
@@ -127,16 +137,37 @@ export const loginUser = async (
       credentials: "include",
     });
 
-    const data: AuthTokens = await response.json();
-
     if (!response.ok) {
       throw new Error("Login failed");
     }
+    const data: AuthTokens = await response.json();
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
 
     return data;
   } catch (error) {
     console.error("Error:", error);
     throw new Error("An error occurred during login");
+  }
+};
+// **********************************************************************
+export const googleLogin = async (): Promise<void> => {
+  try {
+    const response = await fetch(`${BASE_URL}/get-tokens`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch tokens");
+    }
+
+    const data: AuthTokens = await response.json();
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    localStorage.setItem("userEmail", data.email);
+  } catch (error) {
+    console.error("Google login failed:", error);
   }
 };
 // **********************************************************************
@@ -195,22 +226,46 @@ export const refreshToken = async (): Promise<string | undefined> => {
   }
 };
 // **********************************************************************
-export const fetchUser = async (): Promise<User | undefined> => {
+export const fetchUser = async (): Promise<IUser | undefined> => {
   try {
-    const response = await fetch("http://localhost:5000/api/user", {
+    const response = await fetch("http://localhost:5000/api/users", {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      // },
     });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
 
-    const users: User = await response.json();
+    const users: IUser = await response.json();
     return users;
   } catch (error) {
     console.error("Failed to fetch users:", error);
   }
 };
+// **************************************************
+export const getUserIdByActivationLink = async (
+  activationLink: string
+): Promise<string | undefined> => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${activationLink}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch user by activation link:", error);
+  }
+};
+// **********************************************************************

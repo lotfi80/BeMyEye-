@@ -60,6 +60,12 @@ const RegisterForm: React.FC = () => {
         </div>
         <button type="submit">Register</button>
       </form>
+      <a
+        className="button google"
+        href={`http://localhost:5000/auth/google/register`}
+      >
+        Register with Google
+      </a>
     </div>
   );
 };

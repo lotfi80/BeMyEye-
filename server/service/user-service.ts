@@ -22,7 +22,7 @@ export async function findUserByEmail(email: string) {
 export async function userServiceRegistration(
   email: string,
   password: string
-): Promise<IUserWithTokens | null> {
+): Promise<IUser | null> {
   const candidate = await User.findOne({ email });
   if (candidate) {
     throw new Error("User already exists");
@@ -39,25 +39,10 @@ export async function userServiceRegistration(
 
   await sendActivationMessage(
     email,
-    `http://localhost:5173/api/${activationLink}`
+    `${process.env.CLIENT_URL as string}/activate/${activationLink}`
   );
 
-  const tokens = await generateToken({
-    id: user._id.toString(),
-    email: user.email,
-    isActivated: user.isActivated,
-  });
-
-  await saveToken(user._id.toString(), tokens.refreshToken);
-
-  return {
-    ...tokens,
-    user: {
-      email: user.email,
-      id: user._id.toString(),
-      isActivated: user.isActivated,
-    },
-  };
+  return user;
 }
 // ********************************************************************************************************************
 export async function userServiceActivate(
@@ -70,6 +55,34 @@ export async function userServiceActivate(
   user.isActivated = true;
   await user.save();
 }
+//********************************************************************************************************************
+export async function userServiceCompleteRegistration(
+  id: string,
+  firstname: string,
+  lastname: string,
+  username: string,
+  birthdate: Date,
+  profileimage: string,
+  city: string,
+  street: string,
+  country: string
+): Promise<IUser | void> {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new Error("User not found.");
+  }
+  user.firstname = firstname;
+  user.lastname = lastname;
+  user.username = username;
+  user.birthdate = birthdate;
+  user.profileimage = profileimage;
+  user.city = city;
+  user.street = street;
+  user.country = country;
+
+  await user.save();
+}
+
 // ********************************************************************************************************************
 export async function userServiceLogin(
   email: string,
@@ -148,3 +161,4 @@ export async function userServiceRefresh(refreshToken: string) {
   await saveToken(user._id.toString(), tokens.refreshToken);
   return tokens; //kj (userData);
 }
+// **********************************

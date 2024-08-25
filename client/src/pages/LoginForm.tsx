@@ -46,6 +46,9 @@ const LoginForm = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      <a className="button google" href={`http://localhost:5000/auth/google`}>
+        Sign in with Google
+      </a>
     </div>
   );
 };

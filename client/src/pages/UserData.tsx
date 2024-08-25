@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { completeRegistration } from "../http/api";
+import { completeRegistrationFunction } from "../http/api";
+import { useParams } from "react-router-dom";
 
 const UserData: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -18,8 +20,16 @@ const UserData: React.FC = () => {
       city: form.city.value,
       street: form.street.value,
     };
-
-    navigate("/home");
+    if (id) {
+      try {
+        await completeRegistrationFunction(id, formData);
+        navigate("/home");
+      } catch (error) {
+        console.error("Error completing registration:", error);
+      }
+    } else {
+      console.error("User ID is missing.");
+    }
   };
 
   return (

@@ -16,7 +16,7 @@ export const sendActivationMessage = async (to: string, link: string) => {
   await transporter.sendMail({
     from: process.env.SMTP_USER,
     to,
-    subject: `Activation account on ${process.env.API_URL}`,
+    subject: `Activation account on BeMyEye`,
     text: "",
     html: `
             <div>
