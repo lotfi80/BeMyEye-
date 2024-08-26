@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./router/userRouters";
 import googleRouter from "./router/googleRouters";
 import categoryRouter from "./router/categories";
+import postRouter from "./router/postRouters";
 import passport from "./service/passport-service";
 // import indexRouter from "./router/index";
 // import authRouter from "./router/auth";
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use("/api", userRouter);
 app.use("/categories", categoryRouter);
 app.use("", googleRouter);
+app.use("/posts", postRouter);
 
 app.use(passport.initialize());
 

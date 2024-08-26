@@ -9,6 +9,7 @@ import {
   getUser,
   activate,
   findUserByLink,
+  findUserIDByToken,
   sendTokensToClient,
 } from "../controllers/user-controller";
 import { body, validationResult } from "express-validator";
@@ -28,8 +29,9 @@ userRouter.post("/login", login);
 userRouter.post("/logout", logout);
 userRouter.get("/activate/:link", activate);
 userRouter.get("/refresh", refresh);
+userRouter.get("/user/:link", findUserByLink);
+userRouter.get("/user", findUserIDByToken);
+userRouter.post("/get-tokens", sendTokensToClient);
 userRouter.get("/users", getUsers);
 userRouter.get("/users/:id", getUser);
-userRouter.get("/user/:link", findUserByLink);
-userRouter.post("/get-tokens", sendTokensToClient);
 export default userRouter;

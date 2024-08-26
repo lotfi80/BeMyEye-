@@ -6,7 +6,10 @@ export interface IPostImage extends Document {
 }
 
 const PostImageSchema: Schema<IPostImage> = new Schema({
-  postid: { type: Schema.Types.ObjectId, ref: "Post", required: true },
+  postid: {
+    type: Schema.Types.ObjectId,
+    ref: "Post",
+  },
   image: { type: String, required: true },
 });
 

@@ -268,3 +268,21 @@ export const getUserIdByActivationLink = async (
   }
 };
 // **********************************************************************
+export const getUserIDByToken = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/user`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error, access denied`);
+    }
+    const data = await response.json();
+    return data.userId;
+  } catch (e) {
+    console.log(`access denied`);
+  }
+};

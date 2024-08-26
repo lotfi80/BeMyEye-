@@ -47,8 +47,8 @@ const UserSchema = new Schema({
   city: { type: String },
   street: { type: String },
   country: { type: String },
-  postid: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  postlikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+  postid: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   hash: { type: String, default: null },
   registerDate: { type: Date, default: Date.now },
 });
