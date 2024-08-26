@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../http/api";
-import "./HomePage.css";
+
+import Main from "../components/HomePage/main";
 
 const getEmailFromLocalStorage = (): string | null => {
   return localStorage.getItem("userEmail");
 };
 
-interface Product {
-  id: string;
-  name: string;
-  articel: string;
-  price: number;
-}
-
-export const HomePage: React.FC = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const email: string | null = getEmailFromLocalStorage();
 
   const handleRegister = (): void => {
-    navigate("/");
+    navigate("/register");
   };
 
   const handleLogin = (): void => {
@@ -37,14 +28,21 @@ export const HomePage: React.FC = () => {
     }
   };
 
+  const handleLocation = (): void => {
+    navigate("/location");
+  };
+
   return (
     <div>
       <header>
         <button onClick={handleRegister}>Register</button>
         <button onClick={handleLogin}>Login</button>
         <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleLocation}>Meine Location</button>
       </header>
-      <main>{/* Addlogic to display prime */}</main>
+      <Main />
     </div>
   );
 };
+
+export default Home;

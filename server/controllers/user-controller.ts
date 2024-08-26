@@ -10,6 +10,8 @@ import {
 import { validationResult } from "express-validator";
 import { IUserWithTokens } from "../interfaces/UserWithTokens";
 import User from "../models/user-model";
+import Token from "../models/token-model";
+import { validateAccessToken } from "../service/token-service";
 
 // ****************************************************************
 export const registration = async (
@@ -249,3 +251,38 @@ export async function findUserByLink(
     next(e);
   }
 }
+// ******************************************
+export async function findUserIDByToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Access token missing" });
+  }
+  const accessToken: string = authHeader.split(" ")[1];
+
+  try {
+    const data = await validateAccessToken(accessToken);
+    if (data === null) {
+      console.error("Token is invalid or returned as a string");
+      return res.status(400).json({ message: "Invalid token" });
+    }
+
+    const userId = data.id;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID not found in token" });
+    }
+    res.json({ userId });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+}
+
+// ******
+// const authHeader = req.headers.authorization;
+// if (!authHeader || !authHeader.startsWith('Bearer ')) {
+//   return res.status(401).json({ message: "Access token missing or invalid" });
+//

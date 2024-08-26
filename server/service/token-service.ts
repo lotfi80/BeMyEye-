@@ -46,12 +46,19 @@ export async function findToken(refreshToken: string) {
   return tokenData;
 }
 // ***************************************************************
-export async function validateAccessToken(token: string) {
+
+export async function validateAccessToken(
+  token: string
+): Promise<ITokenPayload | null> {
   try {
-    const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string);
+    const userData = jwt.verify(
+      token,
+      process.env.JWT_ACCESS_SECRET as string
+    ) as ITokenPayload;
     return userData;
   } catch (e) {
-    console.log(e);
+    console.log("Error verifying token:", e);
+    return null;
   }
 }
 // ***************************************************************
