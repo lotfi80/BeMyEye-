@@ -28,6 +28,7 @@ export const createPost = async (
       });
     }
     res.status(201).json({ message: "Post successfully created", newPost });
+    //     res.status(201).json({ message: "PostImage successfully created", newPostImage });
   } catch (e) {
     console.error(e);
     next(e);

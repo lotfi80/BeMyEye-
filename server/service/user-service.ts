@@ -98,7 +98,11 @@ export async function userServiceLogin(
   if (hashPassword !== user.password) {
     throw new Error("Invalid password");
   }
-
+  // -----------neu function. Vielleicht muss user ein Nachricht bekommen, dass er nicht aktiviert ist
+  if ((user.isActivated = false)) {
+    throw new Error("User is not activated");
+  }
+  // -------------------
   const tokens = await generateToken({
     id: user._id.toString(),
     email: user.email,
