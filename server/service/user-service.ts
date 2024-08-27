@@ -15,6 +15,7 @@ import { IUserPayload } from "../interfaces/UserPayload";
 import { ITokenData } from "../interfaces/TokenData";
 import { IToken } from "../models/token-model";
 
+// *********************************************************************************************
 export async function findUserByEmail(email: string) {
   return User.findOne({ email });
 }
@@ -123,46 +124,5 @@ export async function userServiceLogin(
 export async function userServiceLogout(refreshToken: string): Promise<void> {
   await removeToken(refreshToken);
 }
-// ***************************************************************************************
-export async function userServiceRefresh(refreshToken: string) {
-  if (!refreshToken) {
-    throw new Error("User is NOT authorized");
-  }
 
-  const userData = (await validateRefreshToken(
-    refreshToken
-  )) as IUserPayload | null;
-
-  if (!userData) {
-    throw new Error("Invalid refresh token");
-  }
-
-  const tokenFromDb: IToken | null = await findToken(refreshToken);
-  if (!tokenFromDb) {
-    throw new Error("Token not found in the database");
-  }
-
-  if (!userData || !tokenFromDb) {
-    throw new Error("User is not authorized");
-  }
-
-  const user: IUser | null = await User.findById((userData as IUserPayload).id);
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  if (!user.isActivated) {
-    throw new Error("User is not activated");
-  }
-
-  const tokens: ITokenData = await generateToken({
-    id: user._id.toString(),
-    email: user.email,
-    isActivated: user.isActivated,
-  });
-
-  await saveToken(user._id.toString(), tokens.refreshToken);
-  return tokens; //kj (userData);
-}
 // **********************************

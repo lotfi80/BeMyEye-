@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useMyContext } from "../context/context";
+import { useCategoryUserContext } from "../context/CategoryUser";
 import { getUserIDByToken } from "../http/api";
 import { dataFormDatenGet } from "../http/api";
 
 const PostComponent: React.FC = () => {
-  const { categories, setCategories } = useMyContext();
+  const { categories, setCategories } = useCategoryUserContext();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [city, setCity] = useState<string>("");

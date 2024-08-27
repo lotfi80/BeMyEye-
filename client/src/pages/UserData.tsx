@@ -1,11 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { dataFormDatenGet, getUserIDByToken } from "../http/api";
 import { useParams } from "react-router-dom";
+import { IUser } from "../interfaces/User";
+import { useCategoryUserContext } from "../context/CategoryUser";
 
 const UserData: React.FC = () => {
   const navigate = useNavigate();
+  const {user, setUser} = useCategoryUserContext();
   const { id } = useParams<{ id: string | undefined }>();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userId = await getUserIDByToken();
+      if (!userId) {
+        console.error("User ID not found");
+        return;
+      }
+      const user = await dataFormDatenGet<IUser>(`api/userProfile/${userId}`);
+      if (user) {
+        setFirstname(user.firstname);
+        setLastname(user.lastname);
+        setUsername(user.username);
+        setBirthdate(user.birthdate);
+        setCountry(user.country);
+        setCity(user.city);
+        setStreet(user.street);
+      }
+    };
+    if (id) {
+      fetchUser();
+    } else {
+      console.error("User ID is missing.");
+    }
+  }, []);
+
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [username, setUsername] = useState<string>("");

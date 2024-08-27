@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import {
   userServiceRegistration,
-  userServiceCompleteRegistration,
   userServiceLogin,
   userServiceLogout,
   userServiceActivate,
-  userServiceRefresh,
 } from "../service/user-service";
 import { validationResult } from "express-validator";
 import { IUserWithTokens } from "../interfaces/UserWithTokens";
@@ -194,27 +192,7 @@ export const activate = async (
     next(e);
   }
 };
-// *****************************************************************
-export const refresh = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
-  try {
-    const { refreshToken } = req.cookies;
-    const userData = await userServiceRefresh(refreshToken);
 
-    res.cookie("refreshToken", userData.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-
-    return res.json(userData);
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-};
 // *****************************************************************
 export const getUsers = async (
   req: Request,
@@ -228,20 +206,7 @@ export const getUsers = async (
     next(e);
   }
 };
-// *****************************************************************
-export const getUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
-  try {
-    const userId = req.params.id;
-    return res.json(userId);
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-};
+
 // *****************************************************************
 
 export async function findUserByLink(
@@ -291,7 +256,20 @@ export async function findUserIDByToken(
     next(e);
   }
 }
-
+// *****************************************************************
+export const getUserDataByID = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId = req.params.id;
+    return res.json(userId);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
 // ******
 // const authHeader = req.headers.authorization;
 // if (!authHeader || !authHeader.startsWith('Bearer ')) {

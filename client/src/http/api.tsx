@@ -1,50 +1,11 @@
 import { AuthTokens } from "../interfaces/AuthToken";
 import { IUser } from "../interfaces/User";
 import { useNavigate } from "react-router-dom";
-import { useMyContext } from "../context/context";
+import { useCategoryUserContext } from "../context/CategoryUser";
 import { useState } from "react";
 
 const BASE_URL = "http://localhost:5000/api";
-// Функция для выполнения запросов с аутентификацией
-type FetchOptions = RequestInit & {
-  headers?: { [key: string]: string };
-};
-// **********************************************************************
-export const fetchWithAuth = async (
-  url: string,
-  options: FetchOptions = {}
-) => {
-  let accessToken: string | null | undefined =
-    localStorage.getItem("accessToken");
 
-  const makeRequest = async (): Promise<Response> => {
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (response.status === 401) {
-      accessToken = await refreshToken();
-
-      if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-      }
-      return fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-    }
-
-    return response;
-  };
-  return makeRequest();
-};
 // **********************************************************************
 export const registerUser = async (
   email: string,
@@ -72,7 +33,6 @@ export const registerUser = async (
 
 // **********************************************************************
 export const activateUser = async (activationLink: string): Promise<any> => {
-  // Use 'any' to capture any type of response for debugging
   try {
     console.log(`Sending request to: ${BASE_URL}/activate/${activationLink}`);
     const response = await fetch(`${BASE_URL}/activate/${activationLink}`, {
@@ -81,7 +41,6 @@ export const activateUser = async (activationLink: string): Promise<any> => {
 
     if (!response.ok) {
       console.error("Response status:", response.status);
-      console.error("Response text:", await response.text());
       throw new Error(`Activation failed: ${response.statusText}`);
     }
     console.log("Activation successful");
@@ -90,31 +49,6 @@ export const activateUser = async (activationLink: string): Promise<any> => {
     throw new Error("An error occurred during account activation");
   }
 };
-// **************************************************************************
-// export const profileFunction = async (
-//   id: string,
-//   formData: Record<string, any>
-// ) => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/userProfile/${id}`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(formData),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`Activation failed: ${response.statusText}`);
-//     }
-
-//     return await response.json();
-//   } catch (error) {
-//     console.error("Error:", error);
-//     throw new Error("An error occurred during registration");
-//   }
-// };
-// **********************************************************************
 
 // **************************************************************************
 export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
@@ -208,53 +142,25 @@ export const logout = async (): Promise<void> => {
     console.error("Logout failed:", error);
   }
 };
+
 // **********************************************************************
-export const refreshToken = async (): Promise<string | undefined> => {
-  const refreshToken = localStorage.getItem("refreshToken");
-
-  if (!refreshToken) {
-    throw new Error("No refresh token available");
-  }
+export const getUserDataByID = async (
+  id: string
+): Promise<IUser | undefined> => {
   try {
-    const response = await fetch(`${BASE_URL}/refresh`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    const data: AuthTokens | undefined = await response.json();
-    if (data) {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      console.log("Tokens refreshed successfully");
-      return data.accessToken;
-    }
-  } catch (error) {
-    console.error("Token refresh failed:", error);
-  }
-};
-// **********************************************************************
-export const fetchUser = async (): Promise<IUser | undefined> => {
-  try {
-    const response = await fetch(`${BASE_URL}/users`, {
+    const response = await fetch(`${BASE_URL}/user/${id}`, {
       method: "GET",
-      // headers: {
-      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
     });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
 
-    const users: IUser = await response.json();
-    return users;
+    const user: IUser = await response.json();
+    return user;
   } catch (error) {
     console.error("Failed to fetch users:", error);
   }

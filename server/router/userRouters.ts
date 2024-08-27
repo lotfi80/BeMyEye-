@@ -1,18 +1,17 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import {
   registration,
   userProfile,
   login,
   logout,
-  refresh,
   getUsers,
-  getUser,
+  getUserDataByID,
   activate,
   findUserByLink,
   findUserIDByToken,
   sendTokensToClient,
 } from "../controllers/user-controller";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import multer from "multer";
 
 const userRouter = express.Router();
@@ -30,11 +29,10 @@ userRouter.post("/userProfile/:id", upload.single(`profileimage`), userProfile);
 userRouter.post("/login", login);
 userRouter.post("/logout", logout);
 userRouter.get("/activate/:link", activate);
-userRouter.get("/refresh", refresh);
 userRouter.get("/user/:link", findUserByLink);
 userRouter.get("/user", findUserIDByToken);
 userRouter.post("/get-tokens", sendTokensToClient);
-userRouter.get("/users", getUsers);
-userRouter.get("/users/:id", getUser);
+// userRouter.get("/users", getUsers);
+userRouter.get("/users/:id", getUserDataByID);
 
 export default userRouter;

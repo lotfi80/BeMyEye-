@@ -4,18 +4,6 @@ import { getUserIDByToken } from "../http/api";
 
 const Header: React.FC = () => {
   const [id, setID] = useState("");
-  useEffect(() => {
-    const fetchUserID = async () => {
-      try {
-        const userid = await getUserIDByToken();
-        setID(userid);
-      } catch (e) {
-        console.error(`Token is invalid`, e);
-      }
-    };
-    fetchUserID();
-  }, [id]);
-  console.log(id);
 
   return (
     <header className="bg-white w-full py-4 shadow-md h-[15%]">
