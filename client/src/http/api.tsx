@@ -69,14 +69,7 @@ export const registerUser = async (
   }
 };
 // **********************************************************************
-// export const googleRegistration = async (
-//   req: Request,
-//   res: Response
-// ): Promise<void> => {
 
-//   }
-
-// };
 // **********************************************************************
 export const activateUser = async (activationLink: string): Promise<any> => {
   // Use 'any' to capture any type of response for debugging
@@ -92,36 +85,55 @@ export const activateUser = async (activationLink: string): Promise<any> => {
       throw new Error(`Activation failed: ${response.statusText}`);
     }
     console.log("Activation successful");
-    // const jsonData = await response.json();
-    // console.log("Response data:", jsonData);
-    // return jsonData;
   } catch (error) {
     console.error("Error during activation:", error);
     throw new Error("An error occurred during account activation");
   }
 };
 // **************************************************************************
-export const completeRegistrationFunction = async (
-  id: string,
-  formData: Record<string, any>
-) => {
+// export const profileFunction = async (
+//   id: string,
+//   formData: Record<string, any>
+// ) => {
+//   try {
+//     const response = await fetch(`${BASE_URL}/userProfile/${id}`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(formData),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`Activation failed: ${response.statusText}`);
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error:", error);
+//     throw new Error("An error occurred during registration");
+//   }
+// };
+// **********************************************************************
+
+// **************************************************************************
+export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/complete-registration/${id}`, {
+    const response = await fetch(`http://localhost:5000/${pathEnd}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      body: JSON.stringify(formData),
+      body: formData,
     });
-
+    const data = await response.json();
     if (!response.ok) {
-      throw new Error(`Activation failed: ${response.statusText}`);
+      console.error("Server response error:", data);
+      throw new Error("Failed to create form");
     }
-
-    return await response.json();
+    console.log("Form submitted successfully:", data);
   } catch (error) {
-    console.error("Error:", error);
-    throw new Error("An error occurred during registration");
+    console.error("Fehler beim Erstellen der Form:", error);
   }
 };
 // ***************************************************************************
@@ -276,7 +288,8 @@ export const getUserIDByToken = async () => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-
+    console.log(response);
+    console.log(localStorage.getItem("accessToken"));
     if (!response.ok) {
       throw new Error(`Error, access denied`);
     }

@@ -5,6 +5,7 @@ import { Categories } from "../types/types";
 interface ContextType {
   categories: Categories[];
   setCategories: (categories: Categories[]) => void;
+  // user: User | null;
 }
 interface MyProviderProps {
   children: ReactNode;

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import {
   registration,
-  completeRegistration,
+  userProfile,
   login,
   logout,
   refresh,
@@ -13,6 +13,7 @@ import {
   sendTokensToClient,
 } from "../controllers/user-controller";
 import { body, validationResult } from "express-validator";
+import multer from "multer";
 
 const userRouter = express.Router();
 
@@ -24,7 +25,8 @@ userRouter.post(
     .withMessage("Password must be between 6 and 32 characters long"),
   registration
 );
-userRouter.post("/complete-registration/:id", completeRegistration);
+const upload = multer({ dest: "avatar/" });
+userRouter.post("/userProfile/:id", upload.single(`profileimage`), userProfile);
 userRouter.post("/login", login);
 userRouter.post("/logout", logout);
 userRouter.get("/activate/:link", activate);
@@ -34,4 +36,5 @@ userRouter.get("/user", findUserIDByToken);
 userRouter.post("/get-tokens", sendTokensToClient);
 userRouter.get("/users", getUsers);
 userRouter.get("/users/:id", getUser);
+
 export default userRouter;

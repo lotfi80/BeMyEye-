@@ -61,10 +61,11 @@ const App: React.FC = () => {
               path="/activate/:activationLink"
               element={<ActivationSuccess />}
             />
+            <Route path="/profile/:id" element={<UserData />} />
+
             <Route path="/posts" element={<PostComponent />} />
             <Route path="/location" element={<Location />} />
 
-            <Route path="/userdata/:id" element={<UserData />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/term" element={<TermOfService />} />
             <Route path="/token-receive" element={<GoogleAuthCallback />} />

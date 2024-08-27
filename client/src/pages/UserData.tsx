@@ -1,90 +1,169 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { completeRegistrationFunction } from "../http/api";
+import { dataFormDatenGet, getUserIDByToken } from "../http/api";
 import { useParams } from "react-router-dom";
 
 const UserData: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string | undefined }>();
+  const [firstname, setFirstname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [birthdate, setBirthdate] = useState<string>("");
+  const [profileimage, setProfileimage] = React.useState<File | null>(null);
+  const [country, setCountry] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [street, setStreet] = useState<string>("");
 
   const handleSubmit = async (event: React.FormEvent) => {
+    console.log("handleSubmit");
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const formData = {
-      firstname: form.firstname.value,
-      lastname: form.lastname.value,
-      username: form.username.value,
-      birthdate: form.birthdate.value,
-      profileimage: form.profileimage.value,
-      country: form.country.value,
-      city: form.city.value,
-      street: form.street.value,
-    };
+    // const form = event.target as HTMLFormElement;
+    const formData = new FormData();
+    formData.append("firstname", firstname);
+    formData.append("lastname", lastname);
+    formData.append("username", username);
+    formData.append("birthdate", birthdate);
+    if (profileimage) {
+      formData.append("profileimage", profileimage);
+    }
+    formData.append("country", country);
+    formData.append("city", city);
+    formData.append("street", street);
+
     if (id) {
-      try {
-        await completeRegistrationFunction(id, formData);
-        navigate("/home");
-      } catch (error) {
-        console.error("Error completing registration:", error);
-      }
+      await dataFormDatenGet(formData, `api/userProfile/${id}`);
     } else {
       console.error("User ID is missing.");
     }
   };
 
   return (
-    <div>
-      <h1>Complete Your Profile</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <h1 className="text-2xl font-bold mb-6 text-gray-800">
+        Complete Your Profile
+      </h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <label htmlFor="firstname">First Name:</label>
         <br />
-        <input type="text" id="firstname" name="firstname" required />
+        <input
+          type="text"
+          id="firstname"
+          name="firstname"
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <br />
         <br />
 
         <label htmlFor="lastname">Last Name:</label>
         <br />
-        <input type="text" id="lastname" name="lastname" required />
+        <input
+          type="text"
+          id="lastname"
+          name="lastname"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
         <br />
         <br />
 
         <label htmlFor="username">Username:</label>
         <br />
-        <input type="text" id="username" name="username" required />
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
         <br />
         <br />
 
         <label htmlFor="birthdate">Birthdate:</label>
         <br />
-        <input type="date" id="birthdate" name="birthdate" required />
+        <input
+          type="date"
+          id="birthdate"
+          name="birthdate"
+          value={birthdate}
+          onChange={(e) => setBirthdate(e.target.value)}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <br />
         <br />
 
         <label htmlFor="profileimage">Profile Image URL:</label>
         <br />
-        <input type="text" id="profileimage" name="profileimage" />
+        <input
+          type="file"
+          id="profileimage"
+          name="profileimage"
+          onChange={(e) =>
+            setProfileimage(e.target.files ? e.target.files[0] : null)
+          }
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <br />
         <br />
 
         <label htmlFor="country">Country:</label>
         <br />
-        <input type="text" id="country" name="country" required />
+        <input
+          type="text"
+          id="country"
+          name="country"
+          value={country}
+          required
+          onChange={(e) => setCountry(e.target.value)}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <br />
         <br />
 
         <label htmlFor="city">City:</label>
         <br />
-        <input type="text" id="city" name="city" required />
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value={city}
+          required
+          onChange={(e) => setCity(e.target.value)}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <br />
         <br />
 
         <label htmlFor="street">Street:</label>
         <br />
-        <input type="text" id="street" name="street" />
+        <input
+          type="text"
+          id="street"
+          name="street"
+          value={street}
+          required
+          onChange={(e) => setStreet(e.target.value)}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <br />
         <br />
 
-        <input type="submit" value="Complete Profile" />
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../context/context";
 import { getUserIDByToken } from "../http/api";
+import { dataFormDatenGet } from "../http/api";
 
 const PostComponent: React.FC = () => {
   const { categories, setCategories } = useMyContext();
@@ -17,7 +18,7 @@ const PostComponent: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/categories", {
+        const response = await fetch("http://localhost:5000/categories/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -64,19 +65,7 @@ const PostComponent: React.FC = () => {
       formData.append("image", image);
     }
     formData.append("userid", userId);
-    try {
-      const response = await fetch("http://localhost:5000/posts/create", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: formData,
-      });
-      const data = await response.json();
-      console.log("Post erfolgreich erstellt:", data);
-    } catch (error) {
-      console.error("Fehler beim Erstellen des Posts:", error);
-    }
+    await dataFormDatenGet(formData, "posts/create");
   };
 
   if (loadingCategories) return <p>Lädt Kategorien...</p>;

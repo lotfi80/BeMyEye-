@@ -9,9 +9,10 @@ import {
 } from "../service/user-service";
 import { validationResult } from "express-validator";
 import { IUserWithTokens } from "../interfaces/UserWithTokens";
-import User from "../models/user-model";
+import User, { IUser } from "../models/user-model";
 import Token from "../models/token-model";
 import { validateAccessToken } from "../service/token-service";
+import multer from "multer";
 
 // ****************************************************************
 export const registration = async (
@@ -38,23 +39,18 @@ export const registration = async (
   }
 };
 // ****************************************************************
-export const completeRegistration = async (
+
+export const userProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
   try {
     const userId: string = req.params.id;
-    const {
-      firstname,
-      lastname,
-      username,
-      birthdate,
-      profileimage,
-      city,
-      street,
-      country,
-    } = req.body;
+    const { firstname, lastname, username, birthdate, country, city, street } =
+      req.body;
+
+    const profileimage = req.file;
 
     if (
       !firstname ||
@@ -69,20 +65,34 @@ export const completeRegistration = async (
         message: "All fields must be filled to complete the profile.",
       });
     }
-    await userServiceCompleteRegistration(
-      userId,
-      firstname,
-      lastname,
-      username,
-      birthdate,
-      profileimage,
-      city,
-      street,
-      country
+    let userData: IUser | any = await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          firstname: firstname,
+          lastname: lastname,
+          username: username,
+          birthdate: birthdate,
+          city: city,
+          street: street,
+          country: country,
+        },
+      },
+      { $upsert: true }
     );
-    return res.status(200).json({ message: "Profile completed successfully." });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error." });
+
+    if (profileimage) {
+      userData = await User.updateOne(
+        { _id: userId },
+        {
+          profileimage: profileimage.path,
+        },
+        { $upsert: true }
+      );
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 };
 // ****************************************************************
@@ -258,11 +268,12 @@ export async function findUserIDByToken(
   next: NextFunction
 ): Promise<Response | void> {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!authHeader || !authHeader.startsWith("Bearer")) {
     return res.status(401).json({ message: "Access token missing" });
   }
   const accessToken: string = authHeader.split(" ")[1];
-
+  console.log("Access token:", accessToken); // Debug
+  console.log("Auth header:", authHeader); // Debug
   try {
     const data = await validateAccessToken(accessToken);
     if (data === null) {
