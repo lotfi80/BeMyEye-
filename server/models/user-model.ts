@@ -15,7 +15,7 @@ export interface IUser extends Document {
   street: string;
   country: string;
   postid: mongoose.Types.ObjectId[];
-  postlikes: mongoose.Types.ObjectId[];
+  // postlikes: mongoose.Types.ObjectId[];
   hash: string;
   registerDate: Date;
   googleId: string;

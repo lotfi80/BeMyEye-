@@ -1,19 +1,10 @@
 import { createHash } from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import { sendActivationMessage } from "./mail-service";
-import {
-  generateToken,
-  saveToken,
-  removeToken,
-  validateRefreshToken,
-  findToken,
-} from "./token-service";
+import { generateToken, saveToken, removeToken } from "./token-service";
 import User from "../models/user-model";
 import { IUser } from "../models/user-model";
-import { IUserWithTokens } from "../interfaces/UserWithTokens";
-import { IUserPayload } from "../interfaces/UserPayload";
-import { ITokenData } from "../interfaces/TokenData";
-import { IToken } from "../models/token-model";
+import { ITokensWithID } from "../interfaces/ITokensWithID";
 
 // *********************************************************************************************
 export async function findUserByEmail(email: string) {
@@ -88,8 +79,8 @@ export async function userServiceCompleteRegistration(
 export async function userServiceLogin(
   email: string,
   password: string
-): Promise<IUserWithTokens> {
-  const user = await User.findOne({ email });
+): Promise<ITokensWithID> {
+  const user = await User.findOne({ email: email });
   if (!user) {
     throw new Error("Cannot find user");
   }
@@ -99,8 +90,9 @@ export async function userServiceLogin(
   if (hashPassword !== user.password) {
     throw new Error("Invalid password");
   }
-  // -----------neu function. Vielleicht muss user ein Nachricht bekommen, dass er nicht aktiviert ist
-  if ((user.isActivated = false)) {
+  // ----------- muss user ein Nachricht bekommen, dass er nicht aktiviert ist
+  if (!user.isActivated) {
+    console.log("User is not activated");
     throw new Error("User is not activated");
   }
   // -------------------
@@ -109,15 +101,12 @@ export async function userServiceLogin(
     email: user.email,
     isActivated: user.isActivated,
   });
-  await saveToken(user._id.toString(), tokens.refreshToken);
+  console.log(tokens);
 
+  await saveToken(user._id.toString(), tokens.refreshToken);
   return {
     ...tokens,
-    user: {
-      email: user.email,
-      id: user._id.toString(),
-      isActivated: user.isActivated,
-    },
+    id: user.id,
   };
 }
 // ********************************************************************************************************************

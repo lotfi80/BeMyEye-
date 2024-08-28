@@ -7,7 +7,7 @@ interface ContextType {
   categories: Categories[];
   setCategories: (categories: Categories[]) => void;
   user: IUser | null;
-  setUser: (user: IUser) => void;
+  setUser: (user: IUser | null) => void;
 }
 
 interface MyProviderProps {

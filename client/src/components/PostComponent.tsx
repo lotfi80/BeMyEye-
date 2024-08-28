@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../context/CategoryUser";
-import { getUserIDByToken } from "../http/api";
 import { dataFormDatenGet } from "../http/api";
 
 const PostComponent: React.FC = () => {
@@ -49,11 +48,11 @@ const PostComponent: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const userId = await getUserIDByToken();
-    if (!userId) {
-      console.error("User ID not found");
-      return;
-    }
+    // const userId = await getUserIDByToken();
+    // if (!userId) {
+    //   console.error("User ID not found");
+    //   return;
+    // }
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -64,7 +63,7 @@ const PostComponent: React.FC = () => {
     if (image) {
       formData.append("image", image);
     }
-    formData.append("userid", userId);
+    // formData.append("userid", userId);
     await dataFormDatenGet(formData, "posts/create");
   };
 

@@ -1,25 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Category from "./category/category";
 import Container from "./post-search/container";
-import { getUserIDByToken, fetchUser } from "../../http/api";
+import { getUserDataByID } from "../../http/api";
 
-function Main() {
+export const Main: React.FC = () => {
   const [id, setID] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userID = await getUserIDByToken();
-        setID(userID);
-        const userData = await fetchUser();
-        console.log("userData", userData);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="w-full h-screen flex">
@@ -33,6 +18,6 @@ function Main() {
       </div>
     </div>
   );
-}
+};
 
 export default Main;

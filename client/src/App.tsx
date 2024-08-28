@@ -12,7 +12,7 @@ import { Location } from "./pages/Location";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
 import { IUser } from "./interfaces/User";
-import { GoogleAuthCallback } from "./components/GoogleAuthCallback";
+import GoogleAuthCallback from "./components/GoogleAuthCallback";
 import { Error } from "./pages/Error";
 // ////
 import { CategoryUserProvider } from "./context/CategoryUser";
@@ -62,7 +62,7 @@ const App: React.FC = () => {
 
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/term" element={<TermOfService />} />
-            <Route path="/token-receive" element={<GoogleAuthCallback />} />
+            <Route path="/tokenReceive" element={<GoogleAuthCallback />} />
             <Route path="/error" element={<Error />} />
           </Routes>
           <Footer />

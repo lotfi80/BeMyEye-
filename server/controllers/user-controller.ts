@@ -6,11 +6,10 @@ import {
   userServiceActivate,
 } from "../service/user-service";
 import { validationResult } from "express-validator";
-import { IUserWithTokens } from "../interfaces/UserWithTokens";
+import { ITokensWithID } from "../interfaces/ITokensWithID";
 import User, { IUser } from "../models/user-model";
 import Token from "../models/token-model";
 import { validateAccessToken } from "../service/token-service";
-import multer from "multer";
 
 // ****************************************************************
 export const registration = async (
@@ -36,63 +35,7 @@ export const registration = async (
     next(e);
   }
 };
-// ****************************************************************
 
-export const userProfile = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
-  try {
-    const userId: string = req.params.id;
-    const { firstname, lastname, username, birthdate, country, city, street } =
-      req.body;
-
-    const profileimage = req.file;
-
-    if (
-      !firstname ||
-      !lastname ||
-      !username ||
-      !birthdate ||
-      !city ||
-      !street ||
-      !country
-    ) {
-      return res.status(400).json({
-        message: "All fields must be filled to complete the profile.",
-      });
-    }
-    let userData: IUser | any = await User.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          firstname: firstname,
-          lastname: lastname,
-          username: username,
-          birthdate: birthdate,
-          city: city,
-          street: street,
-          country: country,
-        },
-      },
-      { $upsert: true }
-    );
-
-    if (profileimage) {
-      userData = await User.updateOne(
-        { _id: userId },
-        {
-          profileimage: profileimage.path,
-        },
-        { $upsert: true }
-      );
-    }
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-};
 // ****************************************************************
 export const login = async (
   req: Request,
@@ -101,16 +44,22 @@ export const login = async (
 ): Promise<Response | void> => {
   try {
     const { email, password } = req.body;
-    const userData: IUserWithTokens | null = await userServiceLogin(
+    const responseData: ITokensWithID | null = await userServiceLogin(
       email,
       password
     );
-    if (userData !== null && userData.user.isActivated) {
-      res.cookie("refreshToken", userData.refreshToken, {
+
+    if (!responseData) {
+      return res.status(400).json({ message: "Login failed" });
+    }
+    const userData: IUser | null = await User.findById(responseData.id);
+
+    if (userData !== null && userData.isActivated) {
+      res.cookie("refreshToken", responseData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      res.json(userData);
+      res.json({ user: userData, tokens: responseData });
     } else {
       res.status(400).json({ message: "Login failed" });
     }
@@ -120,35 +69,19 @@ export const login = async (
   }
 };
 // ****************************************************************
-// export const getTokens = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<Response | void> => {
-//   try {
-//     const { refreshToken } = req.cookies;
-//     if (!refreshToken) {
-//       return res.status(400).json({ message: "No refresh token provided" });
-//     }
-//     const userData = await userServiceRefresh(refreshToken);
-//     res.json(userData);
-//   } catch (e) {
-//     console.error(e);
-//     next(e);
-//   }
-// };
-// ****************************************************************
-export const sendTokensToClient = async (
+export const sendDataToClient = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const tokens = req.cookies;
-    if (!tokens.refreshToken) {
+    const tokensAndID = req.cookies;
+    if (!tokensAndID.refreshToken) {
       return res.status(400).json({ message: "No refresh token provided" });
     }
-    res.json(tokens);
+    const currentUser: IUser | null = await User.findById(tokensAndID.id);
+    const data = { currentUser, tokensAndID };
+    res.json(data);
   } catch (e) {
     console.error(e);
     next(e);
@@ -227,36 +160,7 @@ export async function findUserByLink(
   }
 }
 // ******************************************
-export async function findUserIDByToken(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer")) {
-    return res.status(401).json({ message: "Access token missing" });
-  }
-  const accessToken: string = authHeader.split(" ")[1];
-  console.log("Access token:", accessToken); // Debug
-  console.log("Auth header:", authHeader); // Debug
-  try {
-    const data = await validateAccessToken(accessToken);
-    if (data === null) {
-      console.error("Token is invalid or returned as a string");
-      return res.status(400).json({ message: "Invalid token" });
-    }
 
-    const userId = data.id;
-    if (!userId) {
-      return res.status(400).json({ message: "User ID not found in token" });
-    }
-    res.json({ userId });
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-}
-// *****************************************************************
 export const getUserDataByID = async (
   req: Request,
   res: Response,
@@ -275,3 +179,62 @@ export const getUserDataByID = async (
 // if (!authHeader || !authHeader.startsWith('Bearer ')) {
 //   return res.status(401).json({ message: "Access token missing or invalid" });
 //
+
+// *****************************************************************
+// ****************************************************************
+
+export const userProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    const { firstname, lastname, username, birthdate, country, city, street } =
+      req.body;
+
+    const profileimage = req.file;
+
+    if (
+      !firstname ||
+      !lastname ||
+      !username ||
+      !birthdate ||
+      !city ||
+      !street ||
+      !country
+    ) {
+      return res.status(400).json({
+        message: "All fields must be filled to complete the profile.",
+      });
+    }
+    let userData: IUser | any = await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          firstname: firstname,
+          lastname: lastname,
+          username: username,
+          birthdate: birthdate,
+          city: city,
+          street: street,
+          country: country,
+        },
+      },
+      { $upsert: true }
+    );
+
+    if (profileimage) {
+      userData = await User.updateOne(
+        { _id: userId },
+        {
+          profileimage: profileimage.path,
+        },
+        { $upsert: true }
+      );
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
