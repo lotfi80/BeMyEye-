@@ -5,5 +5,6 @@ export interface IUserWithTokens {
     id: string;
     email: string;
     isActivated: boolean;
+   
   };
 }

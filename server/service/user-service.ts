@@ -112,6 +112,11 @@ export async function userServiceLogin(
       email: user.email,
       id: user._id.toString(),
       isActivated: user.isActivated,
+      profileimage: user.profileimage,
+      city: user.city,
+      street: user.street,
+      country: user.country,
+     
     },
   };
 }

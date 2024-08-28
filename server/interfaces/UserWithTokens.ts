@@ -5,5 +5,10 @@ export interface IUserWithTokens {
     id: string;
     email: string;
     isActivated: boolean;
+    profileimage: string;
+    city: string;
+    street: string;
+    country: string;
+
   };
 }
