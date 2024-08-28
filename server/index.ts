@@ -14,6 +14,15 @@ import authRouter from "./router/authRouters";
 import passport from "./service/passport-service";
 // import indexRouter from "./router/index";
 // import authRouter from "./router/auth";
+import fs from "fs";
+import path from "path";
+
+const uploadDir = path.join(__dirname, "..", "postImages");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 
 const app = express();
 app.use(
@@ -26,6 +35,8 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+
+// app.use("/users", userRouter);
 
 app.use("/api", userRouter);
 app.use("", googleRouter);

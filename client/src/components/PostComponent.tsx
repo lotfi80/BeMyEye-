@@ -38,7 +38,6 @@ const PostComponent: React.FC = () => {
       }
     };
 
-    // Wenn die Kategorien im Kontext leer sind, lade sie
     if (categories.length === 0) {
       fetchCategories();
     } else {
@@ -60,8 +59,9 @@ const PostComponent: React.FC = () => {
     formData.append("street", street);
     formData.append("country", country);
     formData.append("category", selectedCategory);
+    
     if (image) {
-      formData.append("image", image);
+      formData.append("postImages", image);
     }
     // formData.append("userid", userId);
     await dataFormDatenGet(formData, "posts/create");

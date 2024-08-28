@@ -11,6 +11,7 @@ export interface IPost extends Document {
   postcomments: Types.ObjectId[];
   postlikes: Types.ObjectId[];
   postDate: Date;
+  category: Types.ObjectId;
 }
 
 const PostSchema: Schema<IPost> = new Schema({
@@ -24,5 +25,6 @@ const PostSchema: Schema<IPost> = new Schema({
   postcomments: [{ type: Schema.Types.ObjectId, ref: "PostComment" }],
   postlikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   postDate: { type: Date, default: Date.now },
+  category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
 });
 export const Post = mongoose.model<IPost>("Post", PostSchema);
