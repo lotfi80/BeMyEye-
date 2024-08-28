@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import { fetchUser } from "./http/api";
+
 import ActivationSuccess from "./pages/ActivationSuccess";
 import RegisterForm from "./pages/RegisterForm";
-import { CompleteRegistration } from "./pages/CompleteRegistration";
 import LoginForm from "./pages/LoginForm";
-import { HomePage } from "./pages/HomePage";
 import { Privacy } from "./pages/Privacy";
+import { Location } from "./pages/Location";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
-import { fetchUser } from "./http/api";
-import { User } from "./interfaces/User";
+import { IUser } from "./interfaces/User";
+import GoogleAuthCallback from "./components/GoogleAuthCallback";
+import { Error } from "./pages/Error";
+// ////
+import { CategoryUserProvider } from "./context/CategoryUser";
+// ////
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import Footer from "./components/Footer";
+import PostComponent from "./components/PostComponent";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -23,7 +29,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const user: User | undefined = await fetchUser();
+        const user: IUser | undefined = await fetchUser();
         setIsAuthenticated(!!user);
       } catch {
         setIsAuthenticated(false);
@@ -31,27 +37,37 @@ const App: React.FC = () => {
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
   if (loading) return <div>Loading...</div>;
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<RegisterForm />} index />
-        <Route
-          path="/completeRegistration"
-          element={<CompleteRegistration />}
-        />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/api/:activationLink" element={<ActivationSuccess />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/userdata/:id" element={<UserData />} />
+      <CategoryUserProvider>
+        <div className="bg-white h-screen w-full">
+          <Header />
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<RegisterForm />} index />
+            <Route path="/login" element={<LoginForm />} />
+            <Route
+              path="/activate/:activationLink"
+              element={<ActivationSuccess />}
+            />
+            <Route path="/profile/:id" element={<UserData />} />
 
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/term" element={<TermOfService />} />
-      </Routes>
+            <Route path="/posts" element={<PostComponent />} />
+            <Route path="/location" element={<Location />} />
+
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/term" element={<TermOfService />} />
+            <Route path="/tokenReceive" element={<GoogleAuthCallback />} />
+            <Route path="/error" element={<Error />} />
+          </Routes>
+          <Footer />
+        </div>
+      </CategoryUserProvider>
     </Router>
   );
 };

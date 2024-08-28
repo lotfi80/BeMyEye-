@@ -1,33 +1,36 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { activateUser } from "../http/api";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { activateUser, getUserIdByActivationLink } from "../http/api";
 
-const ActivationSuccess: React.FC = () => {
+const ActivationSuccess = () => {
   const { activationLink } = useParams<{ activationLink: string }>();
+  const [currentUserID, setCurrentUserID] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const activateAccount = async () => {
       try {
         if (activationLink) {
           await activateUser(activationLink);
+
+          const userID = await getUserIdByActivationLink(activationLink);
+          if (!userID) {
+            throw new Error("User ID not found");
+          }
+          setCurrentUserID(userID.toString());
+          console.log("User ID:", userID);
+
+          navigate(`/home`);
         }
       } catch (error) {
-        console.error("Activation failed:", error);
+        console.error("Error in account activation process:", error);
       }
     };
 
     activateAccount();
-  }, [activationLink]);
+  }, [activationLink, navigate]);
 
-  return (
-    <div>
-      <h1>Account Activation Successful!</h1>
-      <p>
-        Your account has been activated. You can now{" "}
-        <a href="/completeRegistration">Complete your Registration</a>.
-      </p>
-    </div>
-  );
+  return <div>Activating...</div>;
 };
 
 export default ActivationSuccess;

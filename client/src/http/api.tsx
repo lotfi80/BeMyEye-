@@ -1,51 +1,15 @@
 import { AuthTokens } from "../interfaces/AuthToken";
-import { User } from "../interfaces/User";
+import { IUser } from "../interfaces/User";
 
 const BASE_URL = "http://localhost:5000/api";
-// Функция для выполнения запросов с аутентификацией
-type FetchOptions = RequestInit & {
-  headers?: { [key: string]: string };
-};
-// **********************************************************************
-export const fetchWithAuth = async (
-  url: string,
-  options: FetchOptions = {}
-) => {
-  let accessToken: string | null | undefined =
-    localStorage.getItem("accessToken");
 
-  const makeRequest = async (): Promise<Response> => {
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (response.status === 401) {
-      accessToken = await refreshToken();
-
-      return fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-    }
-
-    return response;
-  };
-  return makeRequest();
-};
 // **********************************************************************
 export const registerUser = async (
   email: string,
   password: string
-): Promise<AuthTokens> => {
+): Promise<void> => {
   try {
-    const response = await fetch(`${BASE_URL}/registration`, {
+    const response = await fetch(`http://localhost:5000/auth/registration`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,68 +21,66 @@ export const registerUser = async (
     if (!response.ok) {
       throw new Error("Registration failed");
     }
-
-    const data: AuthTokens = await response.json();
-
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
-
-    return data;
   } catch (error) {
     console.error("Error:", error);
     throw new Error("An error occurred during registration");
   }
 };
 // **********************************************************************
-export const activateUser = async (
-  activationLink: string
-): Promise<Response> => {
+
+export const activateUser = async (activationLink: string): Promise<any> => {
   try {
-    const response = await fetch(`${BASE_URL}/activate/${activationLink}`, {
-      method: "GET",
-    });
+    console.log(
+      `Sending request to: http://localhost:5000/auth/activate/${activationLink}`
+    );
+    const response = await fetch(
+      `http://localhost:5000/auth/activate/${activationLink}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
+      console.error("Response status:", response.status);
       throw new Error(`Activation failed: ${response.statusText}`);
     }
-
-    return await response.json();
+    console.log("Activation successful");
   } catch (error) {
     console.error("Error during activation:", error);
     throw new Error("An error occurred during account activation");
   }
 };
-// **************************************************************************
-export const completeRegistrationFunction = async (
-  id: string,
-  formData: Record<string, any>
-) => {
+
+// **********************************************************************
+export const getUserIdByActivationLink = async (
+  activationLink: string
+): Promise<string | undefined> => {
   try {
-    const response = await fetch(`${BASE_URL}/complete-registration/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch(
+      `http://localhost:5000/auth/user/${activationLink}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`Activation failed: ${response.statusText}`);
+      throw new Error(`Error: ${response.statusText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    return data;
   } catch (error) {
-    console.error("Error:", error);
-    throw new Error("An error occurred during registration");
+    console.error("Failed to fetch user by activation link:", error);
   }
 };
 // ***************************************************************************
 export const loginUser = async (
   email: string,
   password: string
-): Promise<AuthTokens> => {
+): Promise<IUser> => {
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`http://localhost:5000/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -127,22 +89,59 @@ export const loginUser = async (
       credentials: "include",
     });
 
-    const data: AuthTokens = await response.json();
-
     if (!response.ok) {
+      const errorMessage = await response.text();
+
+      console.error(`Login failed: ${errorMessage}`);
       throw new Error("Login failed");
     }
 
-    return data;
+    const data = await response.json();
+
+    if (data.tokens) {
+      localStorage.setItem("accessToken", data.tokens.accessToken);
+      localStorage.setItem("refreshToken", data.tokens.refreshToken);
+      alert("Login successful!");
+    } else {
+      console.log("No tokens found in response");
+    }
+
+    return data.user;
   } catch (error) {
     console.error("Error:", error);
     throw new Error("An error occurred during login");
   }
 };
 // **********************************************************************
+export const googleLogin = async (): Promise<IUser | void> => {
+  try {
+    const response = await fetch(`http://localhost:5000/auth/tokenReceive`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch tokens");
+    }
+
+    const data = await response.json();
+    if (data.tokensAndID) {
+      localStorage.setItem("accessToken", data.tokensAndID.accessToken);
+      localStorage.setItem("refreshToken", data.tokensAndID.refreshToken);
+      alert("Login successful!");
+    } else {
+      console.log("No tokens found in response");
+    }
+
+    return data.currentUser;
+  } catch (error) {
+    console.error("Google login failed:", error);
+  }
+};
+// **********************************************************************
 export const logout = async (): Promise<void> => {
   try {
-    const response = await fetch("http://localhost:5000/api/logout", {
+    const response = await fetch(`http://localhost:5000/auth/logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -163,41 +162,13 @@ export const logout = async (): Promise<void> => {
     console.error("Logout failed:", error);
   }
 };
+
 // **********************************************************************
-export const refreshToken = async (): Promise<string | undefined> => {
-  const refreshToken = localStorage.getItem("refreshToken");
-
-  if (!refreshToken) {
-    throw new Error("No refresh token available");
-  }
+export const getUserDataByID = async (
+  id: string
+): Promise<IUser | undefined> => {
   try {
-    const response = await fetch("http://localhost:5000/api/refresh", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-
-    const data: AuthTokens | undefined = await response.json();
-    if (data) {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      console.log("Tokens refreshed successfully");
-      return data.accessToken;
-    }
-  } catch (error) {
-    console.error("Token refresh failed:", error);
-  }
-};
-// **********************************************************************
-export const fetchUser = async (): Promise<User | undefined> => {
-  try {
-    const response = await fetch("http://localhost:5000/api/user", {
+    const response = await fetch(`http://localhost:5000/api/user/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -208,9 +179,50 @@ export const fetchUser = async (): Promise<User | undefined> => {
       throw new Error(`Error: ${response.statusText}`);
     }
 
-    const users: User = await response.json();
+    const user: IUser = await response.json();
+    return user;
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+  }
+};
+
+// **********************************************************************
+export const fetchUser = async (): Promise<IUser | undefined> => {
+  try {
+    const response = await fetch(`${BASE_URL}/users`, {
+      method: "GET",
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      // },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    const users: IUser = await response.json();
     return users;
   } catch (error) {
     console.error("Failed to fetch users:", error);
+  }
+};
+// **************************************************************************
+export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
+  try {
+    const response = await fetch(`http://localhost:5000/${pathEnd}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: formData,
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      console.error("Server response error:", data);
+      throw new Error("Failed to create form");
+    }
+    console.log("Form submitted successfully:", data);
+  } catch (error) {
+    console.error("Fehler beim Erstellen der Form:", error);
   }
 };

@@ -1,34 +1,23 @@
 import express from "express";
 import {
-  registration,
-  completeRegistration,
-  login,
-  logout,
-  refresh,
+  userProfile,
+  getUserDataByID,
+  // findUserIDByToken,
+  // deleteUser,// wir brauchen das
   getUsers,
-  getUser,
-  activate,
-  googleauth,
 } from "../controllers/user-controller";
-import { body, validationResult } from "express-validator";
+
+import multer from "multer";
 
 const userRouter = express.Router();
 
-userRouter.post(
-  "/registration",
-  body("email").isEmail().withMessage("Invalid email format"),
-  body("password")
-    .isLength({ min: 6, max: 32 })
-    .withMessage("Password must be between 6 and 32 characters long"),
-  registration
-);
-userRouter.post("/complete-registration/:id", completeRegistration);
-userRouter.post("/login", login);
-userRouter.post("/logout", logout);
-userRouter.get("/activate/:link", activate);
-userRouter.get("/refresh", refresh);
+const upload = multer({ dest: "avatar/" });
+
+// userRouter.get("/user", findUserIDByToken);
+
+userRouter.get("/user/:id", getUserDataByID);
+userRouter.post("/user/:id", upload.single(`profileimage`), userProfile);
+// userRouter.delete("/user/:id", deleteUser); // wir brauchen das
 userRouter.get("/users", getUsers);
-userRouter.get("/users/:id", getUser);
-userRouter.post("/callback", googleauth);
 
 export default userRouter;

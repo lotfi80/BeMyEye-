@@ -15,9 +15,10 @@ export interface IUser extends Document {
   street: string;
   country: string;
   postid: mongoose.Types.ObjectId[];
-  postlikes: mongoose.Types.ObjectId[];
+  // postlikes: mongoose.Types.ObjectId[];
   hash: string;
   registerDate: Date;
+  googleId: string;
 }
 
 const UserSchema = new Schema({
@@ -28,7 +29,7 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
   },
   isActivated: {
     type: Boolean,
@@ -37,6 +38,7 @@ const UserSchema = new Schema({
   activationLink: {
     type: String,
   },
+  googleId: { type: String },
   firstname: { type: String },
   lastname: { type: String },
   username: { type: String },
@@ -45,8 +47,8 @@ const UserSchema = new Schema({
   city: { type: String },
   street: { type: String },
   country: { type: String },
-  postid: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  postlikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+  postid: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   hash: { type: String, default: null },
   registerDate: { type: Date, default: Date.now },
 });

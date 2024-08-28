@@ -1,37 +1,46 @@
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import connectDB from "./service/mongo-start";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
 import userRouter from "./router/userRouters";
+import googleRouter from "./router/googleRouters";
+import categoryRouter from "./router/categoriesRouters";
+import postRouter from "./router/postRouters";
+import mapRouter from "./router/mapRouters";
+import authRouter from "./router/authRouters";
 
-dotenv.config();
+import passport from "./service/passport-service";
+// import indexRouter from "./router/index";
+// import authRouter from "./router/auth";
 
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: process.env.CLIENT_URL as string,
+    // origin: "*",
     credentials: true,
   })
 );
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use("/api", userRouter);
-// app.use("/product", productRouter);
-// app.use("/cart", cartRouter);
+app.use("", googleRouter);
+app.use("/posts", postRouter);
+app.use("/categories", categoryRouter);
+app.use("/map", mapRouter);
+app.use("/auth", authRouter);
 
-const port = (process.env.PORT as string) || 3000;
-const mongo_url = process.env.DB_URL as string;
+app.use(passport.initialize());
 
-if (!mongo_url) {
-  throw new Error("MongoDB URL is not defined in environment variables.");
-}
+const port = (process.env.PORT as string) || 10000;
 
 const start = async () => {
   try {
-    await mongoose.connect(mongo_url);
-    console.log("Connected to MongoDB");
+    await connectDB();
     app.listen(port, () => {
       console.log(`Server is running on port= ${port}`);
     });
