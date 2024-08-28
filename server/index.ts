@@ -6,8 +6,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./router/userRouters";
 import googleRouter from "./router/googleRouters";
-import categoryRouter from "./router/categories";
+import categoryRouter from "./router/categoriesRouters";
 import postRouter from "./router/postRouters";
+import mapRouter from "./router/mapRouters";
+import authRouter from "./router/authRouters";
+
 import passport from "./service/passport-service";
 // import indexRouter from "./router/index";
 // import authRouter from "./router/auth";
@@ -36,9 +39,11 @@ app.use(cookieParser());
 // app.use("/users", userRouter);
 
 app.use("/api", userRouter);
-app.use("/categories", categoryRouter);
 app.use("", googleRouter);
 app.use("/posts", postRouter);
+app.use("/categories", categoryRouter);
+app.use("/map", mapRouter);
+app.use("/auth", authRouter);
 
 app.use(passport.initialize());
 

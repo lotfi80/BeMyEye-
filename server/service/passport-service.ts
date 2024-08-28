@@ -91,15 +91,13 @@ passport.use(
   )
 );
 // **************************************************************************
-// **************************************************************************
 export const handleGoogleCallback = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.redirect("/");
   }
   const user = req.user as any;
-  console.log("User:", user); // Debug
   const payload: ITokenPayload = {
-    id: user.id,
+    id: user._id,
     email: user.email,
     isActivated: user.isActivated,
   };
@@ -115,22 +113,15 @@ export const handleGoogleCallback = async (req: Request, res: Response) => {
       maxAge: 1 * 60 * 1000,
       httpOnly: true,
     });
-    res.redirect(`${process.env.CLIENT_URL}/token-receive`);
+    res.cookie("id", user._id.toString(), {
+      httpOnly: true,
+    });
+    res.redirect(`${process.env.CLIENT_URL}/tokenReceive`);
   } catch (error) {
     res.status(500).json({ error: "Error of generateToken" });
   }
 };
 
-// Сериализация пользователя
-passport.serializeUser((user: any, done: Function) => {
-  done(null, user.id);
-});
-
-// Десериализация пользователя
-passport.deserializeUser(async (id: string, done: Function) => {
-  const user = await User.findById(id);
-  done(null, user);
-});
 // **************************************************************************
 
 export default passport;

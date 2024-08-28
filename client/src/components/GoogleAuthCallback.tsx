@@ -2,14 +2,20 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { googleLogin } from "../http/api";
+import { useCategoryUserContext } from "../context/CategoryUser";
 
-export const GoogleAuthCallback: React.FC = () => {
+const GoogleAuthCallback = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useCategoryUserContext();
 
   useEffect(() => {
-    const fetchTokens = async () => {
+    const fetchData = async () => {
       try {
-        await googleLogin();
+        const currentUser = await googleLogin();
+        if (currentUser) {
+          setUser(currentUser);
+        } else console.log(`No data found`);
+
         navigate("/home");
       } catch (e) {
         console.error(e);
@@ -17,8 +23,10 @@ export const GoogleAuthCallback: React.FC = () => {
       }
     };
 
-    fetchTokens();
-  }, [navigate]);
+    fetchData();
+  }, []);
 
   return <div>Processing Google Login...</div>;
 };
+
+export default GoogleAuthCallback;

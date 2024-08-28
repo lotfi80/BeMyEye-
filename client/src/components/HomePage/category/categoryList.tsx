@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useMyContext } from "../../../context/context";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
 
 const CategoryList: React.FC = () => {
-  const { categories, setCategories } = useMyContext();
+  const { categories, setCategories } = useCategoryUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/categories", {
+        const response = await fetch("http://localhost:5000/categories/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

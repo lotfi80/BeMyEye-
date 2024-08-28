@@ -1,37 +1,23 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import {
-  registration,
-  completeRegistration,
-  login,
-  logout,
-  refresh,
+  userProfileUpdate,
+  getUserDataByID,
+  // findUserIDByToken,
+  // deleteUser,// wir brauchen das
   getUsers,
-  getUser,
-  activate,
-  findUserByLink,
-  findUserIDByToken,
-  sendTokensToClient,
 } from "../controllers/user-controller";
-import { body, validationResult } from "express-validator";
+
+import multer from "multer";
 
 const userRouter = express.Router();
 
-userRouter.post(
-  "/registration",
-  body("email").isEmail().withMessage("Invalid email format"),
-  body("password")
-    .isLength({ min: 6, max: 32 })
-    .withMessage("Password must be between 6 and 32 characters long"),
-  registration
-);
-userRouter.post("/complete-registration/:id", completeRegistration);
-userRouter.post("/login", login);
-userRouter.post("/logout", logout);
-userRouter.get("/activate/:link", activate);
-userRouter.get("/refresh", refresh);
-userRouter.get("/user/:link", findUserByLink);
-userRouter.get("/user", findUserIDByToken);
-userRouter.post("/get-tokens", sendTokensToClient);
+const upload = multer({ dest: "avatar/" });
+
+// userRouter.get("/user", findUserIDByToken);
+
+userRouter.get("/user/:id", getUserDataByID);
+userRouter.put("/user/:id", upload.single(`profileimage`), userProfileUpdate);
+// userRouter.delete("/user/:id", deleteUser); // wir brauchen das
 userRouter.get("/users", getUsers);
-userRouter.get("/users/:id", getUser);
+
 export default userRouter;

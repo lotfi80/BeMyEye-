@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { fetchUser } from "./http/api";
 
@@ -17,10 +12,10 @@ import { Location } from "./pages/Location";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
 import { IUser } from "./interfaces/User";
-import { GoogleAuthCallback } from "./components/GoogleAuthCallback";
+import GoogleAuthCallback from "./components/GoogleAuthCallback";
 import { Error } from "./pages/Error";
 // ////
-import { ContextProvider } from "./context/context";
+import { CategoryUserProvider } from "./context/CategoryUser";
 // ////
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -42,14 +37,13 @@ const App: React.FC = () => {
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
   if (loading) return <div>Loading...</div>;
   return (
     <Router>
-      <ContextProvider>
+      <CategoryUserProvider>
         <div className="bg-white h-screen w-full">
           <Header />
           <Routes>
@@ -61,18 +55,19 @@ const App: React.FC = () => {
               path="/activate/:activationLink"
               element={<ActivationSuccess />}
             />
+            <Route path="/profile/:id" element={<UserData />} />
+
             <Route path="/posts" element={<PostComponent />} />
             <Route path="/location" element={<Location />} />
 
-            <Route path="/userdata/:id" element={<UserData />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/term" element={<TermOfService />} />
-            <Route path="/token-receive" element={<GoogleAuthCallback />} />
+            <Route path="/tokenReceive" element={<GoogleAuthCallback />} />
             <Route path="/error" element={<Error />} />
           </Routes>
           <Footer />
         </div>
-      </ContextProvider>
+      </CategoryUserProvider>
     </Router>
   );
 };

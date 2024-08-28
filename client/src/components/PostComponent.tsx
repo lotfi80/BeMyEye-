@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useMyContext } from "../context/context";
-import { getUserIDByToken } from "../http/api";
+import { useCategoryUserContext } from "../context/CategoryUser";
+import { dataFormDatenGet } from "../http/api";
 
 const PostComponent: React.FC = () => {
-  const { categories, setCategories } = useMyContext();
+  const { categories, setCategories } = useCategoryUserContext();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -17,7 +17,7 @@ const PostComponent: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/categories", {
+        const response = await fetch("http://localhost:5000/categories/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -47,11 +47,11 @@ const PostComponent: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const userId = await getUserIDByToken();
-    if (!userId) {
-      console.error("User ID not found");
-      return;
-    }
+    // const userId = await getUserIDByToken();
+    // if (!userId) {
+    //   console.error("User ID not found");
+    //   return;
+    // }
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -63,20 +63,8 @@ const PostComponent: React.FC = () => {
     if (image) {
       formData.append("postImages", image);
     }
-    formData.append("userid", userId);
-    try {
-      const response = await fetch("http://localhost:5000/posts/create", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: formData,
-      });
-      const data = await response.json();
-      console.log("Post erfolgreich erstellt:", data);
-    } catch (error) {
-      console.error("Fehler beim Erstellen des Posts:", error);
-    }
+    // formData.append("userid", userId);
+    await dataFormDatenGet(formData, "posts/create");
   };
 
   if (loadingCategories) return <p>Lädt Kategorien...</p>;
