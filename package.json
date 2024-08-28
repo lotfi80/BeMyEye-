@@ -3,7 +3,7 @@
   "scripts": {
     "dev:client": "npm run dev --prefix client",
     "dev:server": "npx ts-node server/index.ts",
-    "dev": "npm run dev:client & npm run dev:server",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "insert": "ts-node ./server/scripts/categoriesInsert.ts"
   },
   "dependencies": {
