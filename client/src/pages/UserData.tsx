@@ -72,10 +72,13 @@ const UserData: React.FC = () => {
           placeholder={`${user?.firstname}`}
           value={user?.firstname || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setUser((prevUser: IUser | null) => ({
-              ...prevUser,
-              firstname: e.target.value,
-            }))
+            setUser(
+              (prevUser) =>
+                prevUser && {
+                  ...prevUser,
+                  firstname: e.target.value,
+                }
+            )
           }
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

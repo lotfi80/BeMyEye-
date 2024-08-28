@@ -1,20 +1,26 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { createContext, useState, ReactNode, useContext } from "react";
 import { Categories } from "../types/types";
 import { IUser } from "../interfaces/User";
+import { StreamState } from "http2";
 
 interface ContextType {
   categories: Categories[];
   setCategories: (categories: Categories[]) => void;
   user: IUser | null;
-  setUser: (user: IUser | null) => void;
+  setUser: Dispatch<SetStateAction<IUser | null>>;
 }
 
 interface MyProviderProps {
   children: ReactNode;
 }
 
-export const MyContext = createContext<ContextType | null>(null);
+export const MyContext = createContext<ContextType>({
+  categories: [],
+  setCategories: () => {},
+  user: null,
+  setUser: () => {},
+});
 
 export const CategoryUserProvider: React.FC<MyProviderProps> = ({
   children,

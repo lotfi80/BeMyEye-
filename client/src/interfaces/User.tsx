@@ -1,6 +1,5 @@
-import mongoose, { Document } from "mongoose";
-export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId;
+export interface IUser {
+  _id: string;
   email: string;
   password: string;
   isActivated: boolean;
@@ -13,8 +12,8 @@ export interface IUser extends Document {
   city: string;
   street: string;
   country: string;
-  postid: mongoose.Types.ObjectId[];
-  postlikes: mongoose.Types.ObjectId[];
+  postid: string[];
+  postlikes: string[];
   hash: string;
   registerDate: Date;
 }
