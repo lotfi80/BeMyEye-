@@ -202,6 +202,17 @@ const UserData: React.FC = () => {
         />
         <br />
         <br />
+        <input
+          type="text"
+          id="street"
+          name="street"
+          placeholder={`***************`}
+          value={user?.password || ""}
+          onChange={(e) => {
+            inputFurPasswortChecking(e);
+          }}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
