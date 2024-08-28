@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import { userInContextUpdateRequest, getHash } from "../http/api";
@@ -6,11 +6,15 @@ import { userInContextUpdateRequest, getHash } from "../http/api";
 const UserData = (): React.ReactNode => {
   const navigate = useNavigate();
   const { user, setUser } = useCategoryUserContext();
-  let isPassword: Boolean = !!user?.password;
-  let password: string = "";
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   useEffect(() => {
     console.log("user", user);
+    console.log("password", password);
+    console.log("confirmpassword", confirmPassword);
+    console.log("user.hasPassword", user?.hasPassword);
+    console.log("user._id", user?._id);
   }, []);
 
   const handleOnChange = (
@@ -28,59 +32,17 @@ const UserData = (): React.ReactNode => {
   };
   // ********************************************************************************************************************
 
-  // const handleOnChangePassword = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   event.preventDefault();
-  //   event.target.value === password
-  //     ? setUser(
-  //         (prevUser) =>
-  //           prevUser && {
-  //             ...prevUser,
-  //             password: event.,
-  //           }
-  //       )
-  //     : console.log("Password is not confirmed)");
-  // };
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (isPassword && user && password) {
-      const hashPassword: string | void = await getHash(user._id, password);
-      if (!hashPassword) {
-        alert("Password is not confirmed");
-        return;
-      }
-      setUser(
-        (prevUser) =>
-          prevUser && {
-            ...prevUser,
-            password: hashPassword,
-          }
-      );
-    } else {
-      alert("Password is not confirmed");
+    if (password === confirmPassword && user && !user.hasPassword) {
+      await getHash(user._id, password);
+      user.hasPassword = true;
     }
-
     if (user) await userInContextUpdateRequest(user._id, user);
     console.log("User data submitted:", user);
 
     navigate("/home");
-    // const form = event.target as HTMLFormElement;
-    // const formData = new FormData();
-    // formData.append("firstname", user?.firstname || "");
-    // formData.append("lastname", user?.lastname || "");
-    // formData.append("username", user?.username || "");
-    // formData.append("birthdate", user?.birthdate?.toISOString().split('T')[0]  || "");
-    // if (user?.profileimage) {
-    //   formData.append("profileimage", user?.profileimage);
-    // }
-    // formData.append("country", user?.country || "");
-    // formData.append("city", user?.city || "");
-    // formData.append("street", user?.street || "");
-    // const response = await dataFormDatenGet(formData);
   };
-
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
@@ -207,7 +169,7 @@ const UserData = (): React.ReactNode => {
         />
         <br />
         <br />
-        {!isPassword && (
+        {!user?.hasPassword && (
           <div>
             <label htmlFor="passCreate">Create password:</label>
             <input
@@ -215,9 +177,9 @@ const UserData = (): React.ReactNode => {
               id="passCreate"
               name="passCreate"
               placeholder="min 6 signs"
-              value={""}
+              value={password}
               onChange={(e) => {
-                (password = e.target.value), (isPassword = true);
+                setPassword(e.target.value);
               }}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -228,11 +190,9 @@ const UserData = (): React.ReactNode => {
               id="passConfirm"
               name="passConfirm"
               placeholder="min 6 signs"
-              value={""}
+              value={confirmPassword}
               onChange={(e) => {
-                e.target.value !== password
-                  ? (isPassword = true)
-                  : (isPassword = false);
+                setConfirmPassword(e.target.value);
               }}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
