@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import { dataFormDatenGet } from "../http/api";
-
 const PostComponent: React.FC = () => {
   const { categories, setCategories } = useCategoryUserContext();
+  const { user, setUser } = useCategoryUserContext(); //************** */
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -13,7 +15,7 @@ const PostComponent: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -24,11 +26,9 @@ const PostComponent: React.FC = () => {
           },
           credentials: "include",
         });
-
         if (!response.ok) {
           throw new Error("Netzwerkantwort war nicht ok");
         }
-
         const data = await response.json();
         setCategories(data);
         setLoadingCategories(false);
@@ -37,14 +37,12 @@ const PostComponent: React.FC = () => {
         setLoadingCategories(false);
       }
     };
-
     if (categories.length === 0) {
       fetchCategories();
     } else {
       setLoadingCategories(false);
     }
   }, [categories, setCategories]);
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // const userId = await getUserIDByToken();
@@ -52,6 +50,7 @@ const PostComponent: React.FC = () => {
     //   console.error("User ID not found");
     //   return;
     // }
+    console.log("hello");
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -59,17 +58,16 @@ const PostComponent: React.FC = () => {
     formData.append("street", street);
     formData.append("country", country);
     formData.append("category", selectedCategory);
-    
     if (image) {
       formData.append("postImages", image);
     }
-    // formData.append("userid", userId);
+    const userID = user?._id; // ******************************
+    formData.append("userid", userID as string); //***************
     await dataFormDatenGet(formData, "posts/create");
+    navigate("/home");
   };
-
   if (loadingCategories) return <p>Lädt Kategorien...</p>;
   if (error) return <p>{error}</p>;
-
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
@@ -139,11 +137,10 @@ const PostComponent: React.FC = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Post erstellen
+          Post erstellen test
         </button>
       </form>
     </div>
   );
 };
-
 export default PostComponent;
