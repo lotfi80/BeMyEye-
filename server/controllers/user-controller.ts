@@ -183,7 +183,7 @@ export const getUserDataByID = async (
 // *****************************************************************
 // ****************************************************************
 
-export const userProfile = async (
+export const userProfileUpdate = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -193,7 +193,7 @@ export const userProfile = async (
     const { firstname, lastname, username, birthdate, country, city, street } =
       req.body;
 
-    const profileimage = req.file;
+    // const profileimage = req.file;
 
     if (
       !firstname ||
@@ -208,14 +208,16 @@ export const userProfile = async (
         message: "All fields must be filled to complete the profile.",
       });
     }
-    let userData: IUser | any = await User.updateOne(
+    const birthdateDate = new Date(birthdate);
+
+    await User.updateOne(
       { _id: userId },
       {
         $set: {
           firstname: firstname,
           lastname: lastname,
           username: username,
-          birthdate: birthdate,
+          birthdate: birthdateDate,
           city: city,
           street: street,
           country: country,
@@ -224,15 +226,17 @@ export const userProfile = async (
       { $upsert: true }
     );
 
-    if (profileimage) {
-      userData = await User.updateOne(
-        { _id: userId },
-        {
-          profileimage: profileimage.path,
-        },
-        { $upsert: true }
-      );
-    }
+    // if (profileimage) {
+    //   await User.updateOne(
+    //     { _id: userId },
+    //     {
+    //       profileimage: profileimage.path,
+    //     },
+    //     { $upsert: true }
+    //   );
+    // }
+    const currentUser: IUser | null = await User.findById(userId);
+    return res.json(currentUser);
   } catch (e) {
     console.error(e);
     next(e);

@@ -4,7 +4,7 @@ import Container from "../components/HomePage/post-search/container";
 import { getUserDataByID } from "../http/api";
 import HomeVonNath from "../components/HomePage/Home";
 
-export const Main: React.FC = () => {
+export const Home: React.FC = () => {
   const [id, setID] = useState("");
 
   return (
@@ -22,4 +22,4 @@ export const Main: React.FC = () => {
   );
 };
 
-export default Main;
+export default Home;

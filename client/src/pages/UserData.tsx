@@ -4,6 +4,7 @@ import { dataFormDatenGet } from "../http/api";
 import { useParams } from "react-router-dom";
 import { IUser } from "../interfaces/User";
 import { useCategoryUserContext } from "../context/CategoryUser";
+import { userInContextUpdateRequest } from "../http/api";
 
 const UserData: React.FC = () => {
   const navigate = useNavigate();
@@ -41,30 +42,38 @@ const UserData: React.FC = () => {
   //   }
   // }, []);
 
-  // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-  //   setUser(
-  //     (prevUser) =>
-  //       prevUser && {
-  //         ...prevUser,
-  //         firstname: e.target.value,
-  //       }
-  //   )
-  // }
+  const handleOnChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    fieldName: string
+  ) => {
+    event.preventDefault();
+    setUser(
+      (prevUser) =>
+        prevUser && {
+          ...prevUser,
+          [fieldName]: event.target.value,
+        }
+    );
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (user) await userInContextUpdateRequest(user._id, user);
+    console.log("User data submitted:", user);
+    navigate("/home");
     // const form = event.target as HTMLFormElement;
-    const formData = new FormData();
-    formData.append("firstname", user?.firstname || "");
-    formData.append("lastname", user?.lastname || "");
-    formData.append("username", user?.username || "");
-    formData.append("birthdate", user?.birthdate.toDateString() || "");
-    if (user?.profileimage) {
-      formData.append("profileimage", user?.profileimage);
-    }
-    formData.append("country", user?.country || "");
-    formData.append("city", user?.city || "");
-    formData.append("street", user?.street || "");
+    // const formData = new FormData();
+    // formData.append("firstname", user?.firstname || "");
+    // formData.append("lastname", user?.lastname || "");
+    // formData.append("username", user?.username || "");
+    // formData.append("birthdate", user?.birthdate?.toISOString().split('T')[0]  || "");
+    // if (user?.profileimage) {
+    //   formData.append("profileimage", user?.profileimage);
+    // }
+    // formData.append("country", user?.country || "");
+    // formData.append("city", user?.city || "");
+    // formData.append("street", user?.street || "");
+    // const response = await dataFormDatenGet(formData);
   };
 
   return (
@@ -81,15 +90,7 @@ const UserData: React.FC = () => {
           name="firstname"
           placeholder={`${user?.firstname}`}
           value={user?.firstname || ""}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setUser(
-              (prevUser) =>
-                prevUser && {
-                  ...prevUser,
-                  firstname: e.target.value,
-                }
-            )
-          }
+          onChange={(e) => handleOnChange(e, "firstname")}
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -101,8 +102,9 @@ const UserData: React.FC = () => {
           type="text"
           id="lastname"
           name="lastname"
-          // value={lastname}
-          // onChange={(e) => setLastname(e.target.value)}
+          placeholder={`${user?.lastname}`}
+          value={user?.lastname || ""}
+          onChange={(e) => handleOnChange(e, "lastname")}
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -114,8 +116,9 @@ const UserData: React.FC = () => {
           type="text"
           id="username"
           name="username"
-          // value={username}
-          // onChange={(e) => setUsername(e.target.value)}
+          placeholder={`${user?.username}`}
+          value={user?.username || ""}
+          onChange={(e) => handleOnChange(e, "username")}
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -127,8 +130,21 @@ const UserData: React.FC = () => {
           type="date"
           id="birthdate"
           name="birthdate"
-          // value={birthdate}
-          // onChange={(e) => setBirthdate(e.target.value)}
+          placeholder={`${user?.birthdate}`}
+          value={
+            user?.birthdate
+              ? new Date(user.birthdate).toISOString().split("T")[0]
+              : ""
+          }
+          onChange={(e) => {
+            setUser(
+              (prevUser) =>
+                prevUser && {
+                  ...prevUser,
+                  birthdate: e.target.value ? new Date(e.target.value) : null,
+                }
+            );
+          }}
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -140,9 +156,9 @@ const UserData: React.FC = () => {
           type="file"
           id="profileimage"
           name="profileimage"
-          // // onChange={(e) =>
-          // //   setProfileimage(e.target.files ? e.target.files[0] : null)
-          // }
+          // onChange={(e) =>
+          //   setProfileimage(e.target.files ? e.target.files[0] : null)}
+
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <br />
@@ -153,9 +169,9 @@ const UserData: React.FC = () => {
           type="text"
           id="country"
           name="country"
-          // value={country}
-          // required
-          // onChange={(e) => setCountry(e.target.value)}
+          placeholder={`${user?.country}`}
+          value={user?.country || ""}
+          onChange={(e) => handleOnChange(e, "country")}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <br />
@@ -166,9 +182,9 @@ const UserData: React.FC = () => {
           type="text"
           id="city"
           name="city"
-          // value={city}
-          // required
-          // onChange={(e) => setCity(e.target.value)}
+          placeholder={`${user?.city}`}
+          value={user?.city || ""}
+          onChange={(e) => handleOnChange(e, "city")}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <br />
@@ -179,9 +195,9 @@ const UserData: React.FC = () => {
           type="text"
           id="street"
           name="street"
-          // value={street}
-          // required
-          // onChange={(e) => setStreet(e.target.value)}
+          placeholder={`${user?.street}`}
+          value={user?.street || ""}
+          onChange={(e) => handleOnChange(e, "street")}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <br />

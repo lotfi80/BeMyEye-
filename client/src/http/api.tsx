@@ -226,3 +226,28 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
     console.error("Fehler beim Erstellen der Form:", error);
   }
 };
+// **********************************************************************
+export const userInContextUpdateRequest = async (
+  id: string,
+  user: IUser
+): Promise<void> => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/user/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: JSON.stringify(user),
+    });
+    const message = await response.json();
+    if (!response.ok) {
+      console.error("Server response error:", message);
+      throw new Error("Failed to create form");
+    }
+    console.log("Form submitted successfully:", message);
+  } catch (error) {
+    console.error("Error:", error);
+    throw new Error("Invalid Data submitted");
+  }
+};

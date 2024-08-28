@@ -7,7 +7,7 @@ export interface IUser {
   firstname: string;
   lastname: string;
   username: string;
-  birthdate: Date;
+  birthdate: Date | null;
   profileimage: string;
   city: string;
   street: string;
