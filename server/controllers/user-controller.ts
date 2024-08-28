@@ -10,6 +10,7 @@ import { ITokensWithID } from "../interfaces/ITokensWithID";
 import User, { IUser } from "../models/user-model";
 import Token from "../models/token-model";
 import { validateAccessToken } from "../service/token-service";
+import { createHash } from "crypto";
 
 // ****************************************************************
 export const registration = async (
@@ -237,6 +238,41 @@ export const userProfileUpdate = async (
     // }
     const currentUser: IUser | null = await User.findById(userId);
     return res.json(currentUser);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+// ****************************************************************
+export const passwordUpdate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({
+        message: "Password is not confirmed",
+      });
+    }
+    const sha256 = createHash("sha256");
+    const hashPassword: string = sha256.update(password).digest("hex");
+
+    await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          password: hashPassword,
+        },
+      },
+      { $upsert: true }
+    );
+
+    return res.json(hashPassword);
   } catch (e) {
     console.error(e);
     next(e);

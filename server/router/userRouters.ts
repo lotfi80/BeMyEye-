@@ -1,6 +1,7 @@
 import express from "express";
 import {
   userProfileUpdate,
+  passwordUpdate,
   getUserDataByID,
   // findUserIDByToken,
   // deleteUser,// wir brauchen das
@@ -17,6 +18,7 @@ const upload = multer({ dest: "avatar/" });
 
 userRouter.get("/user/:id", getUserDataByID);
 userRouter.put("/user/:id", upload.single(`profileimage`), userProfileUpdate);
+userRouter.put("/passwordUpdate/:id", passwordUpdate);
 // userRouter.delete("/user/:id", deleteUser); // wir brauchen das
 userRouter.get("/users", getUsers);
 

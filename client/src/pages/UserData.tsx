@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { dataFormDatenGet } from "../http/api";
-import { useParams } from "react-router-dom";
-import { IUser } from "../interfaces/User";
 import { useCategoryUserContext } from "../context/CategoryUser";
-import { userInContextUpdateRequest } from "../http/api";
+import { userInContextUpdateRequest, getHash } from "../http/api";
 
-const UserData: React.FC = () => {
+const UserData = (): React.ReactNode => {
   const navigate = useNavigate();
   const { user, setUser } = useCategoryUserContext();
-  // const { id } = useParams<{ id: string | undefined }>();
-  // const [firstname, setFirstname] = useState<string>("");
-  // const [lastname, setLastname] = useState<string>("");
-  // const [username, setUsername] = useState<string>("");
-  // const [birthdate, setBirthdate] = useState<string>("");
-  // const [profileimage, setProfileimage] = React.useState<File | null>(null);
-  // const [country, setCountry] = useState<string>("");
-  // const [city, setCity] = useState<string>("");
-  // const [street, setStreet] = useState<string>("");
+  let isPassword: Boolean = !!user?.password;
+  let password: string = "";
 
   useEffect(() => {
     console.log("user", user);
@@ -36,11 +26,45 @@ const UserData: React.FC = () => {
         }
     );
   };
+  // ********************************************************************************************************************
+
+  // const handleOnChangePassword = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   event.preventDefault();
+  //   event.target.value === password
+  //     ? setUser(
+  //         (prevUser) =>
+  //           prevUser && {
+  //             ...prevUser,
+  //             password: event.,
+  //           }
+  //       )
+  //     : console.log("Password is not confirmed)");
+  // };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (isPassword && user && password) {
+      const hashPassword: string | void = await getHash(user._id, password);
+      if (!hashPassword) {
+        alert("Password is not confirmed");
+        return;
+      }
+      setUser(
+        (prevUser) =>
+          prevUser && {
+            ...prevUser,
+            password: hashPassword,
+          }
+      );
+    } else {
+      alert("Password is not confirmed");
+    }
+
     if (user) await userInContextUpdateRequest(user._id, user);
     console.log("User data submitted:", user);
+
     navigate("/home");
     // const form = event.target as HTMLFormElement;
     // const formData = new FormData();
@@ -183,17 +207,38 @@ const UserData: React.FC = () => {
         />
         <br />
         <br />
-        {!user?.password && (
-          <input
-            type="password"
-            id="passCreate"
-            name="passCreate"
-            placeholder="Create password"
-            value={""}
-            onChange={(e) => handleOnChange(e, "password")}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        {!isPassword && (
+          <div>
+            <label htmlFor="passCreate">Create password:</label>
+            <input
+              type="password"
+              id="passCreate"
+              name="passCreate"
+              placeholder="min 6 signs"
+              value={""}
+              onChange={(e) => {
+                (password = e.target.value), (isPassword = true);
+              }}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <label htmlFor="passCreate">Confirm password:</label>
+            <input
+              type="password"
+              id="passConfirm"
+              name="passConfirm"
+              placeholder="min 6 signs"
+              value={""}
+              onChange={(e) => {
+                e.target.value !== password
+                  ? (isPassword = true)
+                  : (isPassword = false);
+              }}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         )}
+
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"

@@ -1,7 +1,8 @@
 export interface IUser {
   _id: string;
   email: string;
-  password: string;
+  // password: string | null | undefined;
+  hasPassword: boolean;
   isActivated: boolean;
   activationLink?: string | null;
   firstname: string;

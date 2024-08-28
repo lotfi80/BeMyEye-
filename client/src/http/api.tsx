@@ -251,3 +251,32 @@ export const userInContextUpdateRequest = async (
     throw new Error("Invalid Data submitted");
   }
 };
+// **********************************************************************
+export const getHash = async (
+  id: string,
+  password: string
+): Promise<string> => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/passwordUpdate/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify(password),
+      }
+    );
+    const hash = await response.json();
+    if (!response.ok) {
+      console.error("Server response error:");
+      throw new Error("Failed to create form");
+    }
+    console.log("Password submitted successfully:");
+    return hash;
+  } catch (error) {
+    console.error("Error:", error);
+    throw new Error("Invalid Data submitted");
+  }
+};

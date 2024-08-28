@@ -115,3 +115,28 @@ export async function userServiceLogout(refreshToken: string): Promise<void> {
 }
 
 // **********************************
+export async function passwordUpdate(
+  email: string,
+  password: string
+): Promise<IUser | null> {
+  const candidate = await User.findOne({ email });
+  if (candidate) {
+    throw new Error("User already exists");
+  }
+  const activationLink = uuidv4();
+  const sha256 = createHash("sha256");
+  const hashPassword: string = sha256.update(password).digest("hex");
+
+  const user: IUser = await User.create({
+    email,
+    password: hashPassword,
+    activationLink: activationLink,
+  });
+
+  await sendActivationMessage(
+    email,
+    `${process.env.CLIENT_URL as string}/activate/${activationLink}`
+  );
+
+  return user;
+}
