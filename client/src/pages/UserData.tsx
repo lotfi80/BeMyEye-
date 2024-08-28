@@ -19,28 +19,9 @@ const UserData: React.FC = () => {
   // const [city, setCity] = useState<string>("");
   // const [street, setStreet] = useState<string>("");
 
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     if (!id) {
-  //       console.error("User ID not found");
-  //       return;
-  //     }
-  //     if (user) {
-  //       setFirstname(user.firstname);
-  //       setLastname(user.lastname);
-  //       setUsername(user.username);
-  //       setBirthdate(user.birthdate.toDateString());
-  //       setCountry(user.country);
-  //       setCity(user.city);
-  //       setStreet(user.street);
-  //     }
-  //   };
-  //   if (id) {
-  //     fetchUser();
-  //   } else {
-  //     console.error("User ID is missing.");
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log("user", user);
+  }, []);
 
   const handleOnChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -202,24 +183,23 @@ const UserData: React.FC = () => {
         />
         <br />
         <br />
-        <input
-          type="text"
-          id="street"
-          name="street"
-          placeholder={`***************`}
-          value={user?.password || ""}
-          onChange={(e) => {
-            inputFurPasswortChecking(e);
-          }}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        {!user?.password && (
+          <input
+            type="password"
+            id="passCreate"
+            name="passCreate"
+            placeholder="Create password"
+            value={""}
+            onChange={(e) => handleOnChange(e, "password")}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        )}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
           Submit
         </button>
-        //{" "}
       </form>
     </div>
   );
