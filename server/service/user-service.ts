@@ -45,6 +45,7 @@ export async function userServiceActivate(
     throw new Error("Incorrect activation link");
   }
   user.isActivated = true;
+  user.hasPassword = true;
   await user.save();
 }
 //********************************************************************************************************************
@@ -115,9 +116,3 @@ export async function userServiceLogout(refreshToken: string): Promise<void> {
 }
 
 // **********************************
-export async function passwordUpdate(password: string): Promise<string> {
-  const sha256 = createHash("sha256");
-  const hashPassword: string = sha256.update(password).digest("hex");
-
-  return hashPassword;
-}

@@ -7,8 +7,8 @@ import {
   // deleteUser,// wir brauchen das
   getUsers,
 } from "../controllers/user-controller";
-
 import multer from "multer";
+import { imagesUpload } from "../service/multer-service";
 
 const userRouter = express.Router();
 

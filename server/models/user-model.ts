@@ -4,6 +4,7 @@ export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   email: string;
   password: string;
+  hasPassword: boolean;
   isActivated: boolean;
   activationLink?: string | null;
   firstname: string;
@@ -31,6 +32,7 @@ const UserSchema = new Schema({
     type: String,
     // required: true,
   },
+  hasPassword: { type: Boolean, default: false },
   isActivated: {
     type: Boolean,
     default: false,

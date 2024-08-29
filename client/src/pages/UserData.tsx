@@ -8,6 +8,7 @@ const UserData = (): React.ReactNode => {
   const { user, setUser } = useCategoryUserContext();
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [inputVisible, setInputVisible] = useState<boolean>(false);
 
   useEffect(() => {
     console.log("user", user);
@@ -34,10 +35,20 @@ const UserData = (): React.ReactNode => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (password === confirmPassword && user && !user.hasPassword) {
-      await getHash(user._id, password);
-      user.hasPassword = true;
+
+    if (user && !user.hasPassword) {
+      if (password === confirmPassword) {
+        await getHash(user._id, password);
+        user.hasPassword = true;
+      } else {
+        alert("Passwords do not match");
+      }
     }
+
+    if (user && user.hasPassword) {
+      await getHash(user._id, password);
+    }
+
     if (user) await userInContextUpdateRequest(user._id, user);
     console.log("User data submitted:", user);
 
@@ -184,7 +195,7 @@ const UserData = (): React.ReactNode => {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
-            <label htmlFor="passCreate">Confirm password:</label>
+            <label htmlFor="passConfirm">Confirm password:</label>
             <input
               type="password"
               id="passConfirm"
@@ -193,6 +204,63 @@ const UserData = (): React.ReactNode => {
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
+              }}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        )}
+
+        {user?.hasPassword && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setInputVisible(true);
+            }}
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Change password
+          </button>
+        )}
+
+        {inputVisible && (
+          <div>
+            <label htmlFor="oldPass">Enter your password:</label>
+            <input
+              type="password"
+              id="oldPass"
+              name="oldPass"
+              placeholder="enter your password"
+              value={password}
+              onChange={async (e) => {
+                setPassword(e.target.value);
+              }}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <label htmlFor="passCreate">New password:</label>
+            <input
+              type="password"
+              id="passCreate"
+              name="passCreate"
+              placeholder="min 6 signs"
+              value={confirmPassword}
+              onChange={async (e) => {
+                setConfirmPassword(e.target.value);
+              }}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <label htmlFor="passConfirm">Confirm password:</label>
+            <input
+              type="password"
+              id="passConfirm"
+              name="passConfirm"
+              placeholder="min 6 signs"
+              // value={"000"}
+              onChange={async (e) => {
+                if (e.target.value !== confirmPassword && user) {
+                  alert("passwords do not match");
+                }
               }}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

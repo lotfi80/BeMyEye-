@@ -14,7 +14,6 @@ const LoginForm = () => {
 
     try {
       const currentUser = await loginUser(email, password);
-      currentUser.hasPassword = true;
       setUser(currentUser);
       navigate(`/home`);
     } catch (error) {

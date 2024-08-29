@@ -254,6 +254,8 @@ export const passwordUpdate = async (
     const userId: string = req.params.id;
     const { password } = req.body;
 
+    const user: IUser | null = await User.findById(userId);
+
     if (!password) {
       return res.status(400).json({
         message: "Password is not confirmed",
@@ -262,15 +264,28 @@ export const passwordUpdate = async (
     const sha256 = createHash("sha256");
     const hashPassword: string = sha256.update(password).digest("hex");
 
-    await User.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          password: hashPassword,
+    if (user?.password && hashPassword !== user?.password) {
+      throw new Error("Invalid old password");
+    }
+
+    if (user?.password && hashPassword === user?.password) {
+      console.log("Password is the same");
+      const sha256 = createHash("sha256");
+      const hashPassword: string = sha256.update(password).digest("hex");
+    }
+
+    if (!user?.password) {
+      await User.updateOne(
+        { _id: userId },
+        {
+          $set: {
+            password: hashPassword,
+            hasPassword: true,
+          },
         },
-      },
-      { $upsert: true }
-    );
+        { $upsert: true }
+      );
+    }
 
     return res.json(hashPassword);
   } catch (e) {
