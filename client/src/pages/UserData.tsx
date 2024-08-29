@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import { userInContextUpdateRequest, getHash } from "../http/api";
 
-const UserData = (): React.ReactNode => {
+const UserData: React.FC = () => {
   const navigate = useNavigate();
   const { user, setUser } = useCategoryUserContext();
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [oldPassword, setOldPassword] = useState<string>("");
   const [inputVisible, setInputVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -16,13 +17,12 @@ const UserData = (): React.ReactNode => {
     console.log("confirmpassword", confirmPassword);
     console.log("user.hasPassword", user?.hasPassword);
     console.log("user._id", user?._id);
-  }, []);
+  }, [user, password, confirmPassword, oldPassword]);
 
   const handleOnChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     fieldName: string
   ) => {
-    event.preventDefault();
     setUser(
       (prevUser) =>
         prevUser && {
@@ -36,17 +36,22 @@ const UserData = (): React.ReactNode => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (user && !user.hasPassword) {
+    if (user && user.hasPassword) {
       if (password === confirmPassword) {
-        await getHash(user._id, password);
+        await getHash(user._id, oldPassword, password);
         user.hasPassword = true;
       } else {
         alert("Passwords do not match");
       }
     }
 
-    if (user && user.hasPassword) {
-      await getHash(user._id, password);
+    if (user && !user.hasPassword) {
+      if (password === confirmPassword) {
+        await getHash(user._id, oldPassword, password);
+        user.hasPassword = true;
+      } else {
+        alert("Passwords do not match");
+      }
     }
 
     if (user) await userInContextUpdateRequest(user._id, user);
@@ -54,6 +59,7 @@ const UserData = (): React.ReactNode => {
 
     navigate("/home");
   };
+
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
@@ -230,9 +236,9 @@ const UserData = (): React.ReactNode => {
               id="oldPass"
               name="oldPass"
               placeholder="enter your password"
-              value={password}
-              onChange={async (e) => {
-                setPassword(e.target.value);
+              value={oldPassword}
+              onChange={(e) => {
+                setOldPassword(e.target.value);
               }}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -243,9 +249,9 @@ const UserData = (): React.ReactNode => {
               id="passCreate"
               name="passCreate"
               placeholder="min 6 signs"
-              value={confirmPassword}
-              onChange={async (e) => {
-                setConfirmPassword(e.target.value);
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -256,11 +262,9 @@ const UserData = (): React.ReactNode => {
               id="passConfirm"
               name="passConfirm"
               placeholder="min 6 signs"
-              // value={"000"}
-              onChange={async (e) => {
-                if (e.target.value !== confirmPassword && user) {
-                  alert("passwords do not match");
-                }
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
               }}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

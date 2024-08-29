@@ -252,7 +252,11 @@ export const userInContextUpdateRequest = async (
   }
 };
 // **********************************************************************
-export const getHash = async (id: string, password: string): Promise<void> => {
+export const getHash = async (
+  id: string,
+  oldPassword: string,
+  password: string
+): Promise<void> => {
   try {
     const response = await fetch(
       `http://localhost:5000/api/passwordUpdate/${id}`,
@@ -262,7 +266,7 @@ export const getHash = async (id: string, password: string): Promise<void> => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ oldPassword, password }),
       }
     );
     // const hash = await response.json();

@@ -79,6 +79,7 @@ passport.use(
               email: profile.emails[0].value,
             });
             newUser.isActivated = true;
+            newUser.hasPassword = false;
             await newUser.save();
             console.log("New user registered with Google.");
             return done(null, newUser);

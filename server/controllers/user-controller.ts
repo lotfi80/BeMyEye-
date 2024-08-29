@@ -252,40 +252,46 @@ export const passwordUpdate = async (
 ): Promise<Response | void> => {
   try {
     const userId: string = req.params.id;
-    const { password } = req.body;
+    const { oldPassword, password } = req.body;
 
     const user: IUser | null = await User.findById(userId);
-
+    console.log("server/password", password);
+    console.log("server/old password", oldPassword);
     if (!password) {
       return res.status(400).json({
         message: "Password is not confirmed",
       });
     }
-    const sha256 = createHash("sha256");
-    const hashPassword: string = sha256.update(password).digest("hex");
+    const hashPassword: string = createHash("sha256")
+      .update(password)
+      .digest("hex");
 
-    if (user?.password && hashPassword !== user?.password) {
+    console.log("server/hashPassword", hashPassword);
+
+    const hashOldPassword: string = createHash("sha256")
+      .update(oldPassword)
+      .digest("hex");
+
+    if (user?.hasPassword && hashOldPassword !== user?.password) {
       throw new Error("Invalid old password");
     }
 
-    if (user?.password && hashPassword === user?.password) {
+    if (user?.hasPassword && hashPassword === user?.password) {
       console.log("Password is the same");
-      const sha256 = createHash("sha256");
-      const hashPassword: string = sha256.update(password).digest("hex");
     }
 
-    if (!user?.password) {
-      await User.updateOne(
-        { _id: userId },
-        {
-          $set: {
-            password: hashPassword,
-            hasPassword: true,
-          },
+    // if (!user?.password) {
+    await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          password: hashPassword,
+          hasPassword: true,
         },
-        { $upsert: true }
-      );
-    }
+      },
+      { $upsert: true }
+    );
+    // }
 
     return res.json(hashPassword);
   } catch (e) {
