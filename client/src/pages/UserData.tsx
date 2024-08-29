@@ -277,6 +277,14 @@ const UserData: React.FC = () => {
         >
           Submit
         </button>
+
+        <button
+          type="button"
+          onClick={() => navigate("/home")}
+          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Cancel
+        </button>
       </form>
     </div>
   );
