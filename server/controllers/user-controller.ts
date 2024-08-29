@@ -10,6 +10,7 @@ import { ITokensWithID } from "../interfaces/ITokensWithID";
 import User, { IUser } from "../models/user-model";
 import Token from "../models/token-model";
 import { validateAccessToken } from "../service/token-service";
+import { createHash } from "crypto";
 
 // ****************************************************************
 export const registration = async (
@@ -193,8 +194,6 @@ export const userProfileUpdate = async (
     const { firstname, lastname, username, birthdate, country, city, street } =
       req.body;
 
-    // const profileimage = req.file;
-
     if (
       !firstname ||
       !lastname ||
@@ -226,17 +225,92 @@ export const userProfileUpdate = async (
       { $upsert: true }
     );
 
-    // if (profileimage) {
-    //   await User.updateOne(
-    //     { _id: userId },
-    //     {
-    //       profileimage: profileimage.path,
-    //     },
-    //     { $upsert: true }
-    //   );
-    // }
     const currentUser: IUser | null = await User.findById(userId);
     return res.json(currentUser);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// ***************  ****************************************************
+export const userProfileImageUpdate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    const profileimage = req.file;
+
+    if (!profileimage) {
+      return res.status(400).json({ message: "No image file uploaded." });
+    }
+
+    await User.updateOne(
+      { _id: userId },
+      {
+        profileimage: profileimage.path,
+      },
+      { $upsert: true }
+    );
+
+    const currentUser: IUser | null = await User.findById(userId);
+    return res.json(currentUser);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// ****************************************************************
+export const passwordUpdate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    const { oldPassword, password } = req.body;
+
+    const user: IUser | null = await User.findById(userId);
+    console.log("server/password", password);
+    console.log("server/old password", oldPassword);
+    if (!password) {
+      return res.status(400).json({
+        message: "Password is not confirmed",
+      });
+    }
+    const hashPassword: string = createHash("sha256")
+      .update(password)
+      .digest("hex");
+
+    console.log("server/hashPassword", hashPassword);
+
+    const hashOldPassword: string = createHash("sha256")
+      .update(oldPassword)
+      .digest("hex");
+
+    if (user?.hasPassword && hashOldPassword !== user?.password) {
+      throw new Error("Invalid old password");
+    }
+
+    if (user?.hasPassword && hashPassword === user?.password) {
+      console.log("Password is the same");
+    }
+
+    // if (!user?.password) {
+    await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          password: hashPassword,
+          hasPassword: true,
+        },
+      },
+      { $upsert: true }
+    );
+    // }
+
+    return res.json(hashPassword);
   } catch (e) {
     console.error(e);
     next(e);

@@ -23,4 +23,5 @@ authRouter.post("/logout", logout);
 authRouter.get("/activate/:link", activate);
 authRouter.get("/user/:link", findUserByLink);
 authRouter.post("/tokenReceive", sendDataToClient);
+
 export default authRouter;

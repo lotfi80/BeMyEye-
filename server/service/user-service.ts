@@ -45,6 +45,7 @@ export async function userServiceActivate(
     throw new Error("Incorrect activation link");
   }
   user.isActivated = true;
+  user.hasPassword = true;
   await user.save();
 }
 //********************************************************************************************************************
