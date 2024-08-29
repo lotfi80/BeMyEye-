@@ -194,7 +194,7 @@ export const userProfileUpdate = async (
     const { firstname, lastname, username, birthdate, country, city, street } =
       req.body;
 
-    // const profileimage = req.file;
+    const profileimage = req.file;
 
     if (
       !firstname ||
