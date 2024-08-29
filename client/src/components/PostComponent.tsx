@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
@@ -16,10 +15,6 @@ const PostComponent: React.FC = () => {
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-<<<<<<< HEAD
-
-=======
->>>>>>> 6e9bbe3f7f3e36840edc5cba6bd4ff0f2f795535
   useEffect(() => {
     const fetchCategories = async () => {
       try {
