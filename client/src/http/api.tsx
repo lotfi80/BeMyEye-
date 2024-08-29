@@ -251,6 +251,33 @@ export const userInContextUpdateRequest = async (
     throw new Error("Invalid Data submitted");
   }
 };
+// ****************************************************************
+export const uploadProfileImage = async (
+  id: string,
+  formData: FormData
+): Promise<void> => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${id}/upload-image`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: formData,
+      }
+    );
+    const message = await response.json();
+    if (!response.ok) {
+      console.error("Server response error:", message);
+      throw new Error("Failed to upload profile image");
+    }
+    console.log("Profile image uploaded successfully:", message);
+  } catch (error) {
+    console.error("Error:", error);
+    throw new Error("Failed to upload profile image");
+  }
+};
 // **********************************************************************
 export const getHash = async (
   id: string,

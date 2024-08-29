@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
-import { userInContextUpdateRequest, getHash } from "../http/api";
+import {
+  userInContextUpdateRequest,
+  getHash,
+  uploadProfileImage,
+} from "../http/api";
 
 const UserData: React.FC = () => {
   const navigate = useNavigate();
@@ -32,34 +36,7 @@ const UserData: React.FC = () => {
         }
     );
   };
-  // ********************************************************************************************************************
 
-  // const handleSubmit = async (event: React.FormEvent) => {
-  //   event.preventDefault();
-
-  //   if (user && user.hasPassword) {
-  //     if (password === confirmPassword) {
-  //       await getHash(user._id, oldPassword, password);
-  //       user.hasPassword = true;
-  //     } else {
-  //       alert("Passwords do not match");
-  //     }
-  //   }
-
-  //   if (user && !user.hasPassword) {
-  //     if (password === confirmPassword) {
-  //       await getHash(user._id, oldPassword, password);
-  //       user.hasPassword = true;
-  //     } else {
-  //       alert("Passwords do not match");
-  //     }
-  //   }
-
-  //   if (user) await userInContextUpdateRequest(user._id, user);
-  //   console.log("User data submitted:", user);
-
-  //   navigate("/home");
-  // };
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -85,7 +62,21 @@ const UserData: React.FC = () => {
       console.log("User data submitted:", user);
     }
 
-    navigate("/home");
+    try {
+      if (image && user) {
+        const formData = new FormData();
+        formData.append("profileimage", image);
+
+        await uploadProfileImage(user._id, formData);
+        console.log("Profile image uploaded successfully.");
+        console.log("Profile image uploaded successfully:", image);
+      }
+
+      navigate("/home");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Invalid Data submitted");
+    }
   };
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
@@ -167,7 +158,7 @@ const UserData: React.FC = () => {
           type="file"
           id="profileimage"
           name="profileimage"
-          // onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+          onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <br />

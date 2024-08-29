@@ -1,6 +1,7 @@
 import express from "express";
 import {
   userProfileUpdate,
+  userProfileImageUpdate,
   passwordUpdate,
   getUserDataByID,
   // findUserIDByToken,
@@ -17,10 +18,11 @@ const userRouter = express.Router();
 // userRouter.get("/user", findUserIDByToken);
 
 userRouter.get("/user/:id", getUserDataByID);
-userRouter.put(
-  "/user/:id",
-  profileImagesUpload.single(`profileimages`),
-  userProfileUpdate
+userRouter.put("/user/:id", userProfileUpdate);
+userRouter.post(
+  "/user/:id/upload-image",
+  profileImagesUpload.single("profileimage"),
+  userProfileImageUpdate
 );
 userRouter.put("/passwordUpdate/:id", passwordUpdate);
 // userRouter.delete("/user/:id", deleteUser); // wir brauchen das

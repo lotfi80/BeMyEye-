@@ -194,8 +194,6 @@ export const userProfileUpdate = async (
     const { firstname, lastname, username, birthdate, country, city, street } =
       req.body;
 
-    const profileimage = req.file;
-
     if (
       !firstname ||
       !lastname ||
@@ -227,15 +225,6 @@ export const userProfileUpdate = async (
       { $upsert: true }
     );
 
-    // if (profileimage) {
-    //   await User.updateOne(
-    //     { _id: userId },
-    //     {
-    //       profileimage: profileimage.path,
-    //     },
-    //     { $upsert: true }
-    //   );
-    // }
     const currentUser: IUser | null = await User.findById(userId);
     return res.json(currentUser);
   } catch (e) {
@@ -243,7 +232,35 @@ export const userProfileUpdate = async (
     next(e);
   }
 };
+// ***************  ****************************************************
+export const userProfileImageUpdate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    const profileimage = req.file;
 
+    if (!profileimage) {
+      return res.status(400).json({ message: "No image file uploaded." });
+    }
+
+    await User.updateOne(
+      { _id: userId },
+      {
+        profileimage: profileimage.path,
+      },
+      { $upsert: true }
+    );
+
+    const currentUser: IUser | null = await User.findById(userId);
+    return res.json(currentUser);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
 // ****************************************************************
 export const passwordUpdate = async (
   req: Request,
