@@ -6,6 +6,7 @@ import { userInContextUpdateRequest, getHash } from "../http/api";
 const UserData: React.FC = () => {
   const navigate = useNavigate();
   const { user, setUser } = useCategoryUserContext();
+  const [image, setImage] = useState<File | null>(null);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [oldPassword, setOldPassword] = useState<string>("");
@@ -33,33 +34,59 @@ const UserData: React.FC = () => {
   };
   // ********************************************************************************************************************
 
+  // const handleSubmit = async (event: React.FormEvent) => {
+  //   event.preventDefault();
+
+  //   if (user && user.hasPassword) {
+  //     if (password === confirmPassword) {
+  //       await getHash(user._id, oldPassword, password);
+  //       user.hasPassword = true;
+  //     } else {
+  //       alert("Passwords do not match");
+  //     }
+  //   }
+
+  //   if (user && !user.hasPassword) {
+  //     if (password === confirmPassword) {
+  //       await getHash(user._id, oldPassword, password);
+  //       user.hasPassword = true;
+  //     } else {
+  //       alert("Passwords do not match");
+  //     }
+  //   }
+
+  //   if (user) await userInContextUpdateRequest(user._id, user);
+  //   console.log("User data submitted:", user);
+
+  //   navigate("/home");
+  // };
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (user && user.hasPassword) {
+    if ((password || confirmPassword || oldPassword) && user) {
       if (password === confirmPassword) {
-        await getHash(user._id, oldPassword, password);
-        user.hasPassword = true;
+        if (user.hasPassword && oldPassword) {
+          await getHash(user._id, oldPassword, password);
+        } else if (!user.hasPassword) {
+          await getHash(user._id, oldPassword, password);
+          user.hasPassword = true;
+        } else {
+          alert("Enter your password");
+          return;
+        }
       } else {
         alert("Passwords do not match");
+        return;
       }
     }
 
-    if (user && !user.hasPassword) {
-      if (password === confirmPassword) {
-        await getHash(user._id, oldPassword, password);
-        user.hasPassword = true;
-      } else {
-        alert("Passwords do not match");
-      }
+    if (user) {
+      await userInContextUpdateRequest(user._id, user);
+      console.log("User data submitted:", user);
     }
-
-    if (user) await userInContextUpdateRequest(user._id, user);
-    console.log("User data submitted:", user);
 
     navigate("/home");
   };
-
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
@@ -140,9 +167,7 @@ const UserData: React.FC = () => {
           type="file"
           id="profileimage"
           name="profileimage"
-          // onChange={(e) =>
-          //   setProfileimage(e.target.files ? e.target.files[0] : null)}
-
+          // onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <br />
