@@ -251,6 +251,50 @@ export const userInContextUpdateRequest = async (
     throw new Error("Invalid Data submitted");
   }
 };
+
+
+// **********************************************************************
+
+// export const getAllPosts = async (): Promise<any> => {
+//   try {
+//     const response = await fetch(`http://localhost:5000/posts`, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch posts");
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Failed to fetch posts:", error);
+//   }
+// }
+
+export const getAllPosts = async (page: number = 1, limit: number = 9): Promise<any> => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts?page=${page}&limit=${limit}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
+
+    const data = await response.json();
+    console.log("API response:", data);  // Überprüfe die API-Antwort hier
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch posts:", error);
+    return [];  // Gib ein leeres Array zurück, um Fehler zu vermeiden
+
 // ****************************************************************
 export const uploadProfileImage = async (
   id: string,
@@ -306,5 +350,6 @@ export const getHash = async (
   } catch (error) {
     console.error("Error:", error);
     throw new Error("Invalid Data submitted");
+
   }
 };
