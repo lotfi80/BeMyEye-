@@ -13,7 +13,6 @@ const GoogleAuthCallback = () => {
       try {
         const currentUser = await googleLogin();
         if (currentUser) {
-          currentUser.hasPassword = false;
           setUser(currentUser);
         } else console.log(`No data found`);
 

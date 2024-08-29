@@ -32,7 +32,7 @@ const UserSchema = new Schema({
     type: String,
     // required: true,
   },
-  hasPassword: { type: Boolean, default: false },
+  hasPassword: { type: Boolean },
   isActivated: {
     type: Boolean,
     default: false,
