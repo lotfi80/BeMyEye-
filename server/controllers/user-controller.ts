@@ -169,7 +169,8 @@ export const getUserDataByID = async (
 ): Promise<Response | void> => {
   try {
     const userId = req.params.id;
-    return res.json(userId);
+    const user = await User.findById(userId);
+    return res.json(user);
   } catch (e) {
     console.error(e);
     next(e);
@@ -246,10 +247,14 @@ export const userProfileImageUpdate = async (
       return res.status(400).json({ message: "No image file uploaded." });
     }
 
+    const imagePath = `profileImages/${profileimage.filename}`;
+
     await User.updateOne(
       { _id: userId },
       {
-        profileimage: profileimage.path,
+        $set: {
+          profileimage: imagePath,
+        },
       },
       { $upsert: true }
     );

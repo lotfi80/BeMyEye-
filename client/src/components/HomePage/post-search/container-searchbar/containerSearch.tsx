@@ -1,17 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
+
+import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
 import SearchBar from "./searchBar";
 import DistanceList from "./distance";
+
+const libraries: Libraries = ["places"];
+
 function ContainerSearch() {
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
+    setAutocomplete(autocompleteInstance);
+  };
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      setSearchTerm(place.formatted_address || "");
+      console.log(searchTerm);
+    } else {
+      console.log("Error");
+    }
+  };
+  const apiKey = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
   return (
-    <div>
-      {" "}
+    <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
       <div className="w-[40%] h-[20%] bg-gray-100 p-4 flex items-center">
-        <SearchBar />
+        <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+          <input
+            type="text"
+            placeholder="enter Sity"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
+          />
+        </Autocomplete>
       </div>
       <div className="w-[60%] h-[20%] bg-white p-4 flex items-center">
         <DistanceList />
       </div>
-    </div>
+    </LoadScript>
   );
 }
 

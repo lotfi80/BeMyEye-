@@ -5,6 +5,7 @@ import {
   userInContextUpdateRequest,
   getHash,
   uploadProfileImage,
+  getUserDataByID,
 } from "../http/api";
 
 const UserData: React.FC = () => {
@@ -16,13 +17,20 @@ const UserData: React.FC = () => {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [inputVisible, setInputVisible] = useState<boolean>(false);
 
+  console.log("user.profileImage", user?.profileimage);
   useEffect(() => {
-    console.log("user", user);
-    console.log("password", password);
-    console.log("confirmpassword", confirmPassword);
-    console.log("user.hasPassword", user?.hasPassword);
-    console.log("user._id", user?._id);
-  }, [user, password, confirmPassword, oldPassword]);
+    console.log("User data updated:", user);
+  }, [user]);
+
+  const profileImage = user?.profileimage
+    ? `http://localhost:5000/${user.profileimage}`
+    : null;
+  console.log("profileImage", profileImage);
+  const defaultImage =
+    "http://localhost:5000/profileImages/avatar-default-svgrepo-com.svg";
+  const avatar = profileImage || defaultImage;
+  console.log("avatar", avatar);
+  const imageUrl = image ? URL.createObjectURL(image) : avatar;
 
   const handleOnChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -68,18 +76,28 @@ const UserData: React.FC = () => {
         formData.append("profileimage", image);
 
         await uploadProfileImage(user._id, formData);
+
+        if (user) {
+          const updatedUser = await getUserDataByID(user._id);
+          updatedUser && setUser(updatedUser);
+        }
         console.log("Profile image uploaded successfully.");
         console.log("Profile image uploaded successfully:", image);
       }
-
-      navigate("/home");
     } catch (error) {
       console.error("Error:", error);
       alert("Invalid Data submitted");
     }
+
+    navigate("/home");
   };
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <img
+        src={imageUrl}
+        alt="Profile Image"
+        className="w-32 h-32 object-cover rounded-full"
+      />
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         Complete Your Profile
       </h1>
@@ -154,6 +172,7 @@ const UserData: React.FC = () => {
         <br />
         <label htmlFor="profileimage">Profile Image URL:</label>
         <br />
+
         <input
           type="file"
           id="profileimage"
