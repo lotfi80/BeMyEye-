@@ -18,12 +18,12 @@ import fs from "fs";
 import path from "path";
 
 const uploadDir = path.join(__dirname, "..", "postImages");
+const uploadProfileDir = path.join(__dirname, "..", "profileImages");
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 const uploadProfileDir = path.join(__dirname, "..", "profileImages");
-
 
 const app = express();
 app.use(
@@ -45,6 +45,7 @@ app.use("/posts", postRouter);
 app.use("/categories", categoryRouter);
 app.use("/map", mapRouter);
 app.use("/auth", authRouter);
+app.use("/profileImages", express.static(uploadProfileDir));
 
 app.use(passport.initialize());
 

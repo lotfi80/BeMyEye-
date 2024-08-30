@@ -297,12 +297,14 @@ export const uploadProfileImage = async (
         body: formData,
       }
     );
-    const message = await response.json();
     if (!response.ok) {
-      console.error("Server response error:", message);
+      console.error("Server response error:");
       throw new Error("Failed to upload profile image");
     }
-    console.log("Profile image uploaded successfully:", message);
+
+    await response.json();
+
+    console.log("Profile image uploaded successfully:");
   } catch (error) {
     console.error("Error:", error);
     throw new Error("Failed to upload profile image");

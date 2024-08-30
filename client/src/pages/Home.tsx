@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Category from "../components/HomePage/category/category";
 import Container from "../components/HomePage/post-search/container";
-import { getUserDataByID } from "../http/api";
 import HomeVonNath from "../components/HomePage/Home";
 
 export const Home: React.FC = () => {

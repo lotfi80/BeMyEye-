@@ -21,6 +21,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import PostComponent from "./components/PostComponent";
+import { UserContextSaver, UserContextLoader } from "./components/LocalStorage";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -44,6 +45,8 @@ const App: React.FC = () => {
   return (
     <Router>
       <CategoryUserProvider>
+        <UserContextLoader />
+        <UserContextSaver />
         <div className="bg-white h-screen w-full">
           <Header />
           <Routes>
