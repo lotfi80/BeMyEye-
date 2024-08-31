@@ -39,7 +39,6 @@ app.use(cookieParser());
 
 // app.use("/users", userRouter);
 app.use("/postImages", express.static(uploadDir));
-app.use("/profileImages", express.static(uploadProfileDir));
 app.use("/api", userRouter);
 app.use("", googleRouter);
 app.use("/posts", postRouter);
