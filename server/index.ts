@@ -46,6 +46,7 @@ app.use("/categories", categoryRouter);
 app.use("/map", mapRouter);
 app.use("/auth", authRouter);
 app.use("/profileImages", express.static(uploadProfileDir));
+app.use("/postImages", express.static(uploadDir));
 
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
