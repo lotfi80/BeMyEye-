@@ -9,7 +9,7 @@ export interface IUser {
   lastname: string;
   username: string;
   birthdate: Date | null;
-  profileimage: string;
+  profileimage: string | null;
   city: string;
   street: string;
   country: string;
