@@ -192,8 +192,16 @@ export const userProfileUpdate = async (
 ): Promise<Response | void> => {
   try {
     const userId: string = req.params.id;
-    const { firstname, lastname, username, birthdate, country, city, street } =
-      req.body;
+    const {
+      firstname,
+      lastname,
+      username,
+      birthdate,
+      country,
+      city,
+      street,
+      sex,
+    } = req.body;
 
     if (
       !firstname ||
@@ -221,6 +229,7 @@ export const userProfileUpdate = async (
           city: city,
           street: street,
           country: country,
+          sex: sex,
         },
       },
       { $upsert: true }

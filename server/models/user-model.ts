@@ -20,6 +20,7 @@ export interface IUser extends Document {
   hash: string;
   registerDate: Date;
   googleId: string;
+  sex: number;
 }
 
 const UserSchema = new Schema({
@@ -53,6 +54,7 @@ const UserSchema = new Schema({
   postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   hash: { type: String, default: null },
   registerDate: { type: Date, default: Date.now },
+  sex: { type: Number },
 });
 
 const User = mongoose.model<IUser>("User", UserSchema);
