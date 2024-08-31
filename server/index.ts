@@ -46,6 +46,11 @@ app.use("/map", mapRouter);
 app.use("/auth", authRouter);
 app.use("/profileImages", express.static(uploadProfileDir));
 
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request for ${req.url}`);
+  next();
+});
+
 app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;

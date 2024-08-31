@@ -12,6 +12,7 @@ const UserData: React.FC = () => {
   const navigate = useNavigate();
   const { user, setUser } = useCategoryUserContext();
   const [image, setImage] = useState<File | null>(null);
+  const [galleryImage, setGalleryImage] = useState<string | null>(null);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [oldPassword, setOldPassword] = useState<string>("");
@@ -23,6 +24,16 @@ const UserData: React.FC = () => {
       setSex(user?.sex);
     }
   }, [user]);
+
+  useEffect(() => {
+    console.log("galleryImage updated", galleryImage);
+    if (user && galleryImage) {
+      setUser({
+        ...user,
+        profileimage: galleryImage,
+      });
+    }
+  }, [galleryImage]);
 
   const validImages = [
     "http://localhost:5000/profileImages/avatar-default.svg",
@@ -50,9 +61,19 @@ const UserData: React.FC = () => {
     user?.profileimage && validImages.includes(user.profileimage)
       ? defaultImage
       : `http://localhost:5000/${user?.profileimage}`;
+  console.log("profileImage", profileImage);
+  console.log("userprofileImage", user?.profileimage);
 
   const avatar = profileImage || defaultImage;
-  const imageUrl = image ? URL.createObjectURL(image) : avatar;
+  console.log("avatar", avatar);
+
+  const imageUrl = image
+    ? URL.createObjectURL(image)
+    : galleryImage
+    ? `http://localhost:5000/${galleryImage}`
+    : avatar;
+
+  console.log("imageUrl", imageUrl);
 
   const handleOnChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -65,6 +86,24 @@ const UserData: React.FC = () => {
           [fieldName]: event.target.value,
         }
     );
+  };
+  const handleAvatarButton = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    img: string
+  ) => {
+    event.preventDefault();
+    setGalleryImage(img);
+    setUser((prevUser) => {
+      if (prevUser) {
+        return {
+          ...prevUser,
+          profileimage: img,
+        };
+      }
+      return prevUser;
+    });
+    console.log("galleryImage", img);
+    console.log("user.profileimage", img);
   };
 
   const handleOnRadioChange = (
@@ -118,12 +157,21 @@ const UserData: React.FC = () => {
         //   updatedUser && setUser(updatedUser);
         // }
       }
+
+      if (galleryImage && user) {
+        console.log("galleryImage", galleryImage);
+        console.log(user);
+        const currentUser = await userInContextUpdateRequest(user._id, user);
+        console.log("Updated user:", currentUser);
+      }
     } catch (error) {
       console.error("Error:", error);
       alert("Invalid Data submitted");
     }
+
     if (user) {
       const updatedUser = await getUserDataByID(user._id);
+      console.log("updatedUser2", updatedUser);
       updatedUser && setUser(updatedUser);
     }
     navigate("/home");
@@ -216,7 +264,6 @@ const UserData: React.FC = () => {
             <label htmlFor="diverse">d</label>
           </div>
         </div>
-
         <br />
         <br />
         <label htmlFor="username">Username:</label>
@@ -259,16 +306,192 @@ const UserData: React.FC = () => {
         />
         <br />
         <br />
-        <label htmlFor="profileimage">Profile Image URL:</label>
-        <br />
-
-        <input
-          type="file"
-          id="profileimage"
-          name="profileimage"
-          onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label htmlFor="profileimage">Profile Image URL:</label>
+          <br />
+          <input
+            type="file"
+            id="profileimage"
+            name="profileimage"
+            onChange={(e) =>
+              setImage(e.target.files ? e.target.files[0] : null)
+            }
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <br />
+          <br />
+          {/* ************************************************* */}
+          <label htmlFor="gallerySelect">
+            Or pick an avatar from our gallery:
+          </label>
+          <div className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar1.jpg")
+              }
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar1.jpg"
+                alt="avatar1"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar2.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar2.jpg"
+                alt="avatar2"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar3.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar3.jpg"
+                alt="avatar3"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar4.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar4.jpg"
+                alt="avatar4"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar5.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar5.jpg"
+                alt="avatar5"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar6.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar6.jpg"
+                alt="avatar6"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar7.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar7.jpg"
+                alt="avatar7"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar8.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar8.jpg"
+                alt="avatar8"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar9.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar9.jpg"
+                alt="avatar9"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar10.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar10.jpg"
+                alt="avatar10"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar11.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar11.jpg"
+                alt="avatar11"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar12.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar12.jpg"
+                alt="avatar12"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar13.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar13.jpg"
+                alt="avatar13"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar14.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar14.jpg"
+                alt="avatar14"
+              />
+            </button>
+            <button
+              onClick={(e) =>
+                handleAvatarButton(e, "profileImages/avatar15.jpg")
+              }
+              className="w-24 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <img
+                src="http://localhost:5000/profileImages/avatar15.jpg"
+                alt="avatar15"
+              />
+            </button>
+          </div>
+        </div>
         <br />
         <br />
         <label htmlFor="country">Country:</label>
@@ -339,7 +562,6 @@ const UserData: React.FC = () => {
             />
           </div>
         )}
-
         {user?.hasPassword && (
           <button
             onClick={(e) => {
@@ -351,7 +573,6 @@ const UserData: React.FC = () => {
             Change password
           </button>
         )}
-
         {inputVisible && (
           <div>
             <label htmlFor="oldPass">Enter your password:</label>
@@ -394,14 +615,12 @@ const UserData: React.FC = () => {
             />
           </div>
         )}
-
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
           Submit
         </button>
-
         <button
           type="button"
           onClick={() => navigate("/home")}

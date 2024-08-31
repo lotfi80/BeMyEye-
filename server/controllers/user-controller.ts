@@ -192,6 +192,7 @@ export const userProfileUpdate = async (
 ): Promise<Response | void> => {
   try {
     const userId: string = req.params.id;
+    console.log("server/userId", userId);
     const {
       firstname,
       lastname,
@@ -201,6 +202,7 @@ export const userProfileUpdate = async (
       city,
       street,
       sex,
+      profileimage,
     } = req.body;
 
     if (
@@ -218,7 +220,7 @@ export const userProfileUpdate = async (
     }
     const birthdateDate = new Date(birthdate);
 
-    await User.updateOne(
+    const currentUser: IUser | null = await User.findByIdAndUpdate(
       { _id: userId },
       {
         $set: {
@@ -230,12 +232,11 @@ export const userProfileUpdate = async (
           street: street,
           country: country,
           sex: sex,
+          profileimage: profileimage,
         },
       },
       { $upsert: true }
     );
-
-    const currentUser: IUser | null = await User.findById(userId);
     return res.json(currentUser);
   } catch (e) {
     console.error(e);
