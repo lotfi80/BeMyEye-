@@ -80,7 +80,6 @@ const UserData: React.FC = () => {
     // path anpassen wie du im backened hast
     
   };
-  const profileImage = "http://localhost:5000/" + user?.profileimage; 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
@@ -157,11 +156,6 @@ const UserData: React.FC = () => {
         <br />
         <label htmlFor="profileimage">Profile Image URL:</label>
         <br />
-        {user?.profileimage && ( <img 
-          src={profileImage}
-          alt={`Profile image `}
-          className="w-full h-auto object-cover rounded-md shadow-md"
-        />)}
         <input
           type="file"
           id="profileimage"
