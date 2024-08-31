@@ -17,5 +17,5 @@ export interface IUser {
   postlikes: string[];
   hash: string;
   registerDate: Date;
-  sex: string;
+  sex: number;
 }
