@@ -24,17 +24,18 @@ const UserData: React.FC = () => {
     }
   }, [user]);
 
-  console.log(user?.profileimage, "user?.profileimage");
-  const profileImage =
-    user?.profileimage &&
-    user?.profileimage === "avatar-default-svgrepo-com.svg"
-      ? `http://localhost:5000/${user.profileimage}`
-      : null;
-  console.log(profileImage, "profileImage");
+  const validImages = [
+    "http://localhost:5000/profileImages/avatar-default.svg",
+    "http://localhost:5000/profileImages/diverse.png",
+    "http://localhost:5000/profileImages/man.jpg",
+    "http://localhost:5000/profileImages/woman.jpg",
+  ];
 
   let defaultImage: string;
-  console.log(user?.sex, "user?.sex");
   switch (user?.sex) {
+    case 0:
+      defaultImage = "http://localhost:5000/profileImages/diverse.png";
+      break;
     case 1:
       defaultImage = "http://localhost:5000/profileImages/woman.jpg";
       break;
@@ -42,14 +43,15 @@ const UserData: React.FC = () => {
       defaultImage = "http://localhost:5000/profileImages/man.jpg";
       break;
     default:
-      defaultImage =
-        "http://localhost:5000/profileImages/avatar-default-svgrepo-com.svg";
+      defaultImage = "http://localhost:5000/profileImages/avatar-default.svg";
   }
-  // const defaultImage =
-  //   "http://localhost:5000/profileImages/avatar-default-svgrepo-com.svg";
-  console.log(defaultImage, "defaultImage");
+
+  const profileImage =
+    user?.profileimage && validImages.includes(user.profileimage)
+      ? defaultImage
+      : `http://localhost:5000/${user?.profileimage}`;
+
   const avatar = profileImage || defaultImage;
-  console.log(avatar, "avatar");
   const imageUrl = image ? URL.createObjectURL(image) : avatar;
 
   const handleOnChange = (

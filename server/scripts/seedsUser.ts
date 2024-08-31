@@ -3,17 +3,29 @@ import User, { IUser } from "../models/user-model";
 import connectDB from "../service/mongo-start";
 import { createHash } from "crypto";
 
-const names = [
+const namesM = [
   "Max",
-  "Anna",
-  "Lukas",
-  "Laura",
-  "Tim",
-  "Sophie",
   "Paul",
-  "Mia",
+  "Lukas",
+  "Leon",
+  "Tim",
+  "Alexander",
+  "Felix",
   "Jan",
+  "Niklas",
+  "Jonas",
+];
+const namesW = [
+  "Anna",
+  "Maria",
   "Emma",
+  "Hannah",
+  "Sophie",
+  "Mia",
+  "Lisa",
+  "Laura",
+  "Lena",
+  "Julia",
 ];
 const surnames = [
   "Schmidt",
@@ -56,6 +68,7 @@ const streets = [
   "Schloßstraße",
   "Wilhelmstraße",
 ];
+const sexs = [0, 1, 2];
 
 async function createUser(data: Partial<IUser>): Promise<IUser> {
   const user = new User(data);
@@ -75,10 +88,30 @@ async function run() {
     hasPassword: boolean
   ) => {
     for (let i = 1; i <= count; i++) {
-      const firstname = names[Math.floor(Math.random() * names.length)];
+      const sex = hasProfile
+        ? sexs[Math.floor(Math.random() * sexs.length)]
+        : undefined;
+      const firstname =
+        sex === 1
+          ? namesW[Math.floor(Math.random() * namesW.length)]
+          : namesM[Math.floor(Math.random() * namesM.length)];
       const lastname = surnames[Math.floor(Math.random() * surnames.length)];
       const city = cities[Math.floor(Math.random() * cities.length)];
       const street = streets[Math.floor(Math.random() * streets.length)];
+
+      let profileimage: string =
+        "http://localhost:5000/profileImages/avatar-default.svg";
+
+      switch (sex) {
+        case 1:
+          profileimage = "http://localhost:5000/profileImages/woman.jpg";
+          break;
+        case 2:
+          profileimage = "http://localhost:5000/profileImages/man.jpg";
+          break;
+        case 0:
+          profileimage = "http://localhost:5000/profileImages/diverse.png";
+      }
 
       await createUser({
         email: `${type}${i}@example.com`,
@@ -86,11 +119,12 @@ async function run() {
         hasPassword,
         isActivated: true,
         googleId: type.startsWith("g") ? `google_${i}` : undefined,
+        sex: sex,
         firstname: hasProfile ? firstname : undefined,
         lastname: hasProfile ? lastname : undefined,
         username: hasProfile ? `${firstname.toLowerCase()}${i}` : undefined,
         birthdate: hasProfile ? new Date(1980 + i, 0, 1) : undefined,
-        profileimage: hasProfile ? `profileImage${i}.jpg` : undefined,
+        profileimage: profileimage,
         city: hasProfile ? city : undefined,
         street: hasProfile ? street : undefined,
         country: hasProfile ? "Deutschland" : undefined,
