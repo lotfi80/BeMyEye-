@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
+import "..//css/header.css";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();

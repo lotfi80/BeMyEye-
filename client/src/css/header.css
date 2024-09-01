@@ -1,0 +1,13 @@
+body {
+    font-family: arial, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+.bg-white {
+    background-color: rgb(255, 255, 255);
+    
+}
+.bg-white{
+    /* margin: 10px; */
+    background-color: rgb(252, 252, 252);
+}

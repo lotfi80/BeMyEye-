@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../http/api";
+import "../css/styleregister.css"; 
+
 
 import Main from "../components/HomePage/main";
 

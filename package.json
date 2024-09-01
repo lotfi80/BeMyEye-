@@ -7,6 +7,10 @@
     "insert": "ts-node ./server/scripts/categoriesInsert.ts"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@react-google-maps/api": "^2.19.3",
     "@types/cookie-parser": "^1.4.7",
     "@types/jsonwebtoken": "^9.0.6",
@@ -21,6 +25,7 @@
     "env": "^0.0.2",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
+    "ionicons": "^7.4.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.1",
