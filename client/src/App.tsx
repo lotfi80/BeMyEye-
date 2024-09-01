@@ -24,24 +24,24 @@ import PostComponent from "./components/PostComponent";
 import { UserContextSaver, UserContextLoader } from "./components/LocalStorage";
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const user: IUser | undefined = await fetchUser();
-        setIsAuthenticated(!!user);
-      } catch {
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
-  }, []);
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     try {
+  //       const user: IUser | undefined = await fetchUser();
+  //       setIsAuthenticated(!!user);
+  //     } catch {
+  //       setIsAuthenticated(false);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   checkAuth();
+  // }, []);
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
   return (
     <Router>
       <CategoryUserProvider>

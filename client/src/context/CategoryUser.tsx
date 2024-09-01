@@ -9,6 +9,8 @@ interface ContextType {
   setCategories: (categories: Categories[]) => void;
   user: IUser | null;
   setUser: Dispatch<SetStateAction<IUser | null>>;
+  registrationStatus: "none" | "registered";
+  setRegistrationStatus: Dispatch<SetStateAction<"none" | "registered">>;
 }
 
 interface MyProviderProps {
@@ -20,6 +22,8 @@ export const MyContext = createContext<ContextType>({
   setCategories: () => {},
   user: null,
   setUser: () => {},
+  registrationStatus: "none",
+  setRegistrationStatus: () => {},
 });
 
 export const CategoryUserProvider: React.FC<MyProviderProps> = ({
@@ -27,8 +31,20 @@ export const CategoryUserProvider: React.FC<MyProviderProps> = ({
 }) => {
   const [categories, setCategories] = useState<Categories[]>([]);
   const [user, setUser] = useState<IUser | null>(null);
+  const [registrationStatus, setRegistrationStatus] = useState<
+    "none" | "registered"
+  >("none");
   return (
-    <MyContext.Provider value={{ categories, setCategories, user, setUser }}>
+    <MyContext.Provider
+      value={{
+        categories,
+        setCategories,
+        user,
+        setUser,
+        registrationStatus,
+        setRegistrationStatus,
+      }}
+    >
       {children}
     </MyContext.Provider>
   );

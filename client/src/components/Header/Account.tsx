@@ -6,7 +6,7 @@ const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
   return (
     <div>
-      <Link to={`/login`}>Login</Link>
+      <Link to={`/profile/${user?._id}`}>Profile</Link>
     </div>
   );
 };

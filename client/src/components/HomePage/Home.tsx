@@ -15,6 +15,7 @@ const HomeVonNath: React.FC = () => {
     try {
       await logout();
       setUser(null);
+      localStorage.removeItem("userData");
       navigate("/login");
     } catch (error) {
       console.error("Logout failed", error);
