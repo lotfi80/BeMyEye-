@@ -11,13 +11,10 @@ import { Privacy } from "./pages/Privacy";
 import { Location } from "./pages/Location";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
-import { IUser } from "./interfaces/User";
 import GoogleAuthCallback from "./components/GoogleAuthCallback";
 import { Error } from "./pages/Error";
-// ////
 import { CategoryUserProvider } from "./context/CategoryUser";
-// ////
-import Header from "./components/Header/Header";
+import Header from "./components/Header/main";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import PostComponent from "./components/PostComponent";

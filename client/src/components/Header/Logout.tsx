@@ -7,7 +7,7 @@ const getEmailFromLocalStorage = (): string | null => {
   return localStorage.getItem("userEmail");
 };
 
-const HomeVonNath: React.FC = () => {
+const Logout: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
   const navigate = useNavigate();
 
@@ -16,13 +16,10 @@ const HomeVonNath: React.FC = () => {
       await logout();
       setUser(null);
       localStorage.removeItem("userData");
+      navigate("/home");
     } catch (error) {
       console.error("Logout failed", error);
     }
-  };
-
-  const handleLocation = (): void => {
-    navigate("/location");
   };
 
   return (
@@ -32,4 +29,4 @@ const HomeVonNath: React.FC = () => {
   );
 };
 
-export default HomeVonNath;
+export default Logout;

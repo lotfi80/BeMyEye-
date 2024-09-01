@@ -340,3 +340,18 @@ export const getHash = async (
     throw new Error("Invalid Data submitted");
   }
 };
+// **********************************************
+export const getUsers = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/users", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    const data = await response.json();
+    console.log("Users fetched successfully:", data);
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+  }
+};
