@@ -134,7 +134,8 @@ export const getUsers = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    return res.json(["123", "456"]);
+    const users = await User.find();
+    return res.json();
   } catch (e) {
     console.error(e);
     next(e);
