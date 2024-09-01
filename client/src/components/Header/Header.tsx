@@ -6,6 +6,13 @@ import Account from "./Account";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
+  const { registrationStatus, setRegistrationStatus } =
+    useCategoryUserContext();
+
+  useEffect(() => {
+    console.log("User:", user);
+    console.log("Registration status:", registrationStatus);
+  }, [user, registrationStatus]);
 
   return (
     <header className="bg-white w-full py-4 shadow-md h-[15%]">
@@ -30,16 +37,26 @@ const Header: React.FC = () => {
             <Link to={`/profile/${user?._id}`}>My Profile</Link>
           </li>
 
-          {user ? null : (
+          {user ? null : registrationStatus === "none" ? (
             <>
               <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-blue-300 hover:text-white cursor-pointer">
                 <Link to={`/register`}>Register</Link>
               </li>
               <span>or</span>
               <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-blue-300 hover:text-white cursor-pointer">
-                <Account />
+                <Link to={`/login`}>Login</Link>
               </li>
             </>
+          ) : registrationStatus === "registered" ? (
+            <>
+              <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-blue-300 hover:text-white cursor-pointer">
+                <Link to={`/login`}>Login</Link>
+              </li>
+            </>
+          ) : (
+            <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-blue-300 hover:text-white cursor-pointer">
+              <Account />
+            </li>
           )}
         </ul>
       </div>
