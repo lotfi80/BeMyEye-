@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useCategoryUserContext } from "../context/CategoryUser";
+import { useCategoryUserContext } from "../../context/CategoryUser";
+
+import Account from "./Account";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
@@ -27,6 +29,18 @@ const Header: React.FC = () => {
           <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer">
             <Link to={`/profile/${user?._id}`}>My Profile</Link>
           </li>
+
+          {user ? null : (
+            <>
+              <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-blue-300 hover:text-white cursor-pointer">
+                <Link to={`/register`}>Register</Link>
+              </li>
+              <span>or</span>
+              <li className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-blue-300 hover:text-white cursor-pointer">
+                <Account />
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </header>

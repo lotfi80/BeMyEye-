@@ -17,7 +17,7 @@ import { Error } from "./pages/Error";
 // ////
 import { CategoryUserProvider } from "./context/CategoryUser";
 // ////
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import PostComponent from "./components/PostComponent";
