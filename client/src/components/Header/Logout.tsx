@@ -16,7 +16,6 @@ const HomeVonNath: React.FC = () => {
       await logout();
       setUser(null);
       localStorage.removeItem("userData");
-      navigate("/login");
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -28,10 +27,7 @@ const HomeVonNath: React.FC = () => {
 
   return (
     <div>
-      <header>
-        <button onClick={handleLogout}>Logout</button>
-        <button onClick={handleLocation}>Meine Location</button>
-      </header>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
