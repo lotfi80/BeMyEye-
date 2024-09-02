@@ -77,6 +77,8 @@ passport.use(
             const newUser = new User({
               googleId: profile.id,
               email: profile.emails[0].value,
+              profileimage:
+                "http://localhost:5000/profileImages/avatar-default.svg",
             });
             newUser.isActivated = true;
             newUser.hasPassword = false;
