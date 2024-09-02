@@ -23,7 +23,6 @@ const uploadProfileDir = path.join(__dirname, "..", "profileImages");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
-const uploadProfileDir = path.join(__dirname, "..", "profileImages");
 
 const app = express();
 app.use(
@@ -38,7 +37,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // app.use("/users", userRouter);
-app.use("/postImages", express.static(uploadDir));
+
 app.use("/api", userRouter);
 app.use("", googleRouter);
 app.use("/posts", postRouter);

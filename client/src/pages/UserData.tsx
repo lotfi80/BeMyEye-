@@ -17,10 +17,13 @@ const UserData: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [oldPassword, setOldPassword] = useState<string>("");
   const [inputVisible, setInputVisible] = useState<boolean>(false);
+  const [sex, setSex] = useState<number | undefined>(undefined);
 
   console.log("user.profileImage", user?.profileimage);
   useEffect(() => {
-    console.log("User data updated:", user);
+    if (user?.sex !== undefined) {
+      setSex(user?.sex);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -33,12 +36,6 @@ const UserData: React.FC = () => {
     }
   }, [galleryImage]);
 
-  const profileImage = user?.profileimage
-    ? `http://localhost:5000/${user.profileimage}`
-    : null;
-  console.log("profileImage", profileImage);
-  const defaultImage =
-    "http://localhost:5000/profileImages/avatar-default-svgrepo-com.svg";
   const validImages = [
     "http://localhost:5000/profileImages/avatar-default.svg",
     "http://localhost:5000/profileImages/diverse.png",
@@ -69,8 +66,6 @@ const UserData: React.FC = () => {
   console.log("userprofileImage", user?.profileimage);
 
   const avatar = profileImage || defaultImage;
-  console.log("avatar", avatar);
-  const imageUrl = image ? URL.createObjectURL(image) : avatar;
   console.log("avatar", avatar);
 
   const imageUrl = image
@@ -158,12 +153,10 @@ const UserData: React.FC = () => {
 
         await uploadProfileImage(user._id, formData);
 
-        if (user) {
-          const updatedUser = await getUserDataByID(user._id);
-          updatedUser && setUser(updatedUser);
-        }
-        console.log("Profile image uploaded successfully.");
-        console.log("Profile image uploaded successfully:", image);
+        // if (user) {
+        //   const updatedUser = await getUserDataByID(user._id);
+        //   updatedUser && setUser(updatedUser);
+        // }
       }
 
       if (galleryImage && user) {
@@ -224,6 +217,57 @@ const UserData: React.FC = () => {
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <br />
+        <br />
+        <label htmlFor="sex" className="block mb-2">
+          Sex:
+        </label>
+        <div className="flex space-x-4">
+          <div className="flex items-center">
+            <input
+              className="mr-2"
+              type="radio"
+              id="female"
+              name="sex"
+              value="w"
+              checked={sex === 1}
+              onChange={(e) => {
+                handleOnRadioChange(e, 1);
+              }}
+            />
+            <label htmlFor="female">w</label>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="radio"
+              id="male"
+              name="sex"
+              value="m"
+              className="mr-2"
+              checked={sex === 2}
+              onChange={(e) => {
+                handleOnRadioChange(e, 2);
+              }}
+            />
+            <label htmlFor="male">m</label>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="radio"
+              id="diverse"
+              name="sex"
+              value="d"
+              className="mr-2"
+              checked={sex === 0}
+              onChange={(e) => {
+                handleOnRadioChange(e, 0);
+              }}
+            />
+            <label htmlFor="diverse">d</label>
+          </div>
+        </div>
         <br />
         <br />
         <label htmlFor="username">Username:</label>
