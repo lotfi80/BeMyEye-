@@ -17,7 +17,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="bg-white w-full py-4 shadow-md h-[15%] ">
-      <div className="flex space-x-10 justify-end items-center mx-auto max-w-screen-xl ">
+      <div className="flex gap-10 justify-end items-center mx-auto max-w-screen-xl ">
         <div className="mr-auto text-3xl ">BeMyEye</div>
 
         <div
