@@ -27,6 +27,7 @@ export async function userServiceRegistration(
     email,
     password: hashPassword,
     activationLink: activationLink,
+    profileimage: "http://localhost:5000/profileImages/avatar-default.svg",
   });
 
   await sendActivationMessage(
