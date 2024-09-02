@@ -19,6 +19,7 @@ const UserData: React.FC = () => {
   const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [sex, setSex] = useState<number | undefined>(undefined);
 
+  console.log("user.profileImage", user?.profileimage);
   useEffect(() => {
     if (user?.sex !== undefined) {
       setSex(user?.sex);
@@ -168,6 +169,9 @@ const UserData: React.FC = () => {
       console.error("Error:", error);
       alert("Invalid Data submitted");
     }
+    // path anpassen wie du im backened hast
+    
+
 
     if (user) {
       const updatedUser = await getUserDataByID(user._id);

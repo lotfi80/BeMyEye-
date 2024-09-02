@@ -12,7 +12,7 @@ const PostCommentSchema: Schema<IPostComment> = new Schema({
   userid: { type: Schema.Types.ObjectId, ref: "User", required: true },
   comment: { type: String, required: true },
   commentDate: { type: Date, default: Date.now },
-});
+}, { timestamps: true });
 
 export const PostComment = model<IPostComment>(
   "PostComment",

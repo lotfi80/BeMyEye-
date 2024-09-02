@@ -1,23 +1,24 @@
-import React, { useState } from "react";
 
+import React, { useState } from "react";
 import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
 import SearchBar from "./searchBar";
 import DistanceList from "./distance";
 
-const libraries: Libraries = ["places"];
 
+const libraries: Libraries = ["places"];
 function ContainerSearch() {
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
   const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
   };
-
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
+      console.log(place ,' hello place');
+      console.log(place.geometry?.location?.lat(), place.geometry?.location?.lng());
+      console.log(place.name)
       setSearchTerm(place.formatted_address || "");
       console.log(searchTerm);
     } else {
@@ -28,7 +29,9 @@ function ContainerSearch() {
   return (
     <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
       <div className="w-[40%] h-[20%] bg-gray-100 p-4 flex items-center">
-        <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+        <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} 
+        options={{fields: ["formatted_address", "geometry", "name"]}}
+        >
           <input
             type="text"
             placeholder="enter Sity"
@@ -49,5 +52,4 @@ function ContainerSearch() {
     </LoadScript>
   );
 }
-
 export default ContainerSearch;

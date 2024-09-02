@@ -11,6 +11,6 @@ const PostImageSchema: Schema<IPostImage> = new Schema({
     ref: "Post",
   },
   image: { type: String, required: true },
-});
+}, { timestamps: true });
 
 export const PostImage = model<IPostImage>("PostImage", PostImageSchema);
