@@ -16,8 +16,9 @@ import { Error } from "./pages/Error";
 import { CategoryUserProvider } from "./context/CategoryUser";
 import Header from "./components/Header/main";
 import Home from "./pages/Home";
+// import PostWindow from "./pages/PostWindow";
 import Footer from "./components/Footer";
-import PostComponent from "./components/PostComponent";
+import PostForm from "./pages/PostForm";
 import { UserContextSaver, UserContextLoader } from "./components/LocalStorage";
 
 const App: React.FC = () => {
@@ -57,7 +58,7 @@ const App: React.FC = () => {
             />
             <Route path="/profile/:id" element={<UserData />} />
 
-            <Route path="/posts" element={<PostComponent />} />
+            <Route path="/posts" element={<PostForm />} />
             <Route path="/location" element={<Location />} />
 
             <Route path="/privacy" element={<Privacy />} />
