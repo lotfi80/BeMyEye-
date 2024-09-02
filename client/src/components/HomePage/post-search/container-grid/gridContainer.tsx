@@ -104,7 +104,7 @@ function GridContainer() {
         >
           <h2 className="text-lg font-bold">{post.title}</h2>
           <p>{post.description}</p>
-          <p>{post.city}</p>
+          <p>{post.address}</p>
           <p>{post.body}</p>
           {post.postimage && post.postimage.length > 0 && (
             <div className="flex flex-wrap gap-2">

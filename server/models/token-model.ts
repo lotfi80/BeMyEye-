@@ -15,7 +15,7 @@ const TokenSchema = new Schema({
     type: String,
     required: true,
   },
-});
+}, { timestamps: true });
 
 const Token = mongoose.model<IToken>("Token", TokenSchema);
 export default Token;

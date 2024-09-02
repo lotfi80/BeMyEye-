@@ -53,7 +53,7 @@ const UserSchema = new Schema({
   postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   hash: { type: String, default: null },
   registerDate: { type: Date, default: Date.now },
-});
+}, { timestamps: true });
 
 const User = mongoose.model<IUser>("User", UserSchema);
 export default User;
