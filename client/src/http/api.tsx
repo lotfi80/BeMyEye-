@@ -349,8 +349,12 @@ export const getUsers = async () => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
     const data = await response.json();
     console.log("Users fetched successfully:", data);
+    return data;
   } catch (error) {
     console.error("Failed to fetch users:", error);
   }

@@ -135,7 +135,7 @@ export const getUsers = async (
 ): Promise<Response | void> => {
   try {
     const users = await User.find();
-    return res.json();
+    return res.json(users);
   } catch (e) {
     console.error(e);
     next(e);
