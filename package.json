@@ -6,7 +6,8 @@
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "insert": "ts-node ./server/scripts/categoriesInsert.ts",
     "start": "ts-node ./server/scripts/seedsUser.ts",
-    "defImage": "ts-node ./server/scripts/defaultImage.ts"
+    "defImage": "ts-node ./server/scripts/defaultImage.ts",
+    "privacy": "ts-node ./server/scripts/privacyZumUser.ts"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.19.3",

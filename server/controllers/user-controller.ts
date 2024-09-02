@@ -204,6 +204,7 @@ export const userProfileUpdate = async (
       street,
       sex,
       profileimage,
+      privacy,
     } = req.body;
 
     if (
@@ -234,6 +235,14 @@ export const userProfileUpdate = async (
           country: country,
           sex: sex,
           profileimage: profileimage,
+          privacy: {
+            email: privacy.email,
+            firstname: privacy.firstname,
+            lastname: privacy.lastname,
+            birthdate: privacy.birthdate,
+            country: privacy.country,
+            city: privacy.city,
+          },
         },
       },
       { $upsert: true }

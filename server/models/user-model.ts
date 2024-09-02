@@ -21,7 +21,14 @@ export interface IUser extends Document {
   registerDate: Date;
   googleId: string;
   sex: number;
-  privacy: boolean[];
+  privacy: {
+    email: boolean;
+    firstname: boolean;
+    lastname: boolean;
+    birthdate: boolean;
+    country: boolean;
+    city: boolean;
+  };
 }
 
 const UserSchema = new Schema(
@@ -57,7 +64,14 @@ const UserSchema = new Schema(
     hash: { type: String, default: null },
     sex: { type: Number },
     registerDate: { type: Date, default: Date.now },
-    privacy: [{ type: Boolean, default: true }],
+    privacy: {
+      email: { type: Boolean },
+      firstname: { type: Boolean },
+      lastname: { type: Boolean },
+      birthdate: { type: Boolean },
+      country: { type: Boolean },
+      city: { type: Boolean },
+    },
   },
   { timestamps: true }
 );

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getUsers } from "../../http/api";
 import { IUser } from "../../interfaces/User";
+import {
+  CategoryUserProvider,
+  useCategoryUserContext,
+} from "../../context/CategoryUser";
 
 const Table: React.FC = () => {
   const [arrayAllUsers, setArrayAllUsers] = useState<IUser[] | void>([]);
   const [sortedUsers, setSortedUsers] = useState<IUser[] | void>([]);
+  // const [user] = useCategoryUserContext();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -95,16 +100,24 @@ const Table: React.FC = () => {
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {user.firstname}
+                  {user.privacy.email ? user.email : ""}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.lastname}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {formatDate(user.birthdate)}
+                  {user.privacy.firstname ? user.firstname : ""}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.country}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.city}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.privacy.lastname ? user.lastname : ""}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.privacy.country ? user.country : ""}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {user.privacy.city ? user.city : ""}
+                </td>
               </tr>
             ))
           ) : (

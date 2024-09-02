@@ -2,28 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 import Logout from "./Logout";
+import { IUser } from "../../interfaces/User";
+import { userInContextUpdateRequest, getUserDataByID } from "../../http/api";
 
 const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isPrivacy, setIsPrivacy] = useState(false);
-
-  interface IInfoCheck {
-    email: boolean;
-    firstname: boolean;
-    lastname: boolean;
-    birthdate: boolean;
-    country: boolean;
-    city: boolean;
-  }
-  const [infoCheck, setInfoCheck] = useState<IInfoCheck>({
-    email: true,
-    firstname: true,
-    lastname: true,
-    birthdate: true,
-    country: true,
-    city: true,
-  });
 
   const userImage = user?.profileimage?.includes("http")
     ? user?.profileimage
@@ -33,9 +18,31 @@ const Account: React.FC = () => {
     setShowDropdown(true);
   };
 
-  const handleCheckboxChange = (event: React.FormEvent, name: any) => {
-    setInfoCheck({ ...infoCheck, [name]: !infoCheck[name] });
-    console.log("HandleCheckboxChange: ", name);
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    name: keyof IUser["privacy"]
+  ) => {
+    setUser((prev: IUser | any) => ({
+      ...prev,
+      privacy: {
+        ...prev.privacy,
+        [name]: !prev.privacy[name],
+      },
+    }));
+    console.log("User:", user?.privacy);
+  };
+
+  const handleOnButtonClick = async () => {
+    try {
+      if (user) {
+        await userInContextUpdateRequest(user._id, user);
+        console.log("User data submitted:", user.privacy);
+        const saveduser = await getUserDataByID(user._id);
+        console.log("User data saved:", saveduser);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -58,15 +65,15 @@ const Account: React.FC = () => {
       {showDropdown && (
         <>
           <div className="fixed top-0 right-0 bottom-0 left-0 bg-black opacity-80 "></div>
-          <div className="fixed text-black z-50 top-20 right-10 w-1/4 h-auto p-5 bg-white  shadow-md hover:text-black flex flex-col gap-5">
-            <div className="flex flex-row gap-10 justify-evenly items-top">
+          <div className="fixed text-black z-50 top-20 right-10 w-1/4 h-auto p-5 bg-white  shadow-md hover:text-black flex flex-col gap-3">
+            <div className="flex flex-row gap-8 justify-evenly items-top">
               <img
                 src={userImage}
                 alt="profileimage"
-                className="w-28 h-28 object-cover rounded-full "
+                className="w-24 h-24 object-cover rounded-full "
               />
               <div className="flex flex-col justify-evenly">
-                <p className="text-3xl">{user?.username}</p>
+                <p className="text-2xl">{user?.username}</p>
                 <p className="text-xl">{`Posts: ${user?.birthdate}`}</p>{" "}
                 {/* Hier wird das posts anzahl angezeigt */}
                 <p className="text-xl">Likes:</p>
@@ -96,7 +103,7 @@ const Account: React.FC = () => {
                       type="checkbox"
                       name="email"
                       id="email"
-                      checked={infoCheck.email}
+                      checked={user?.privacy.email}
                       onChange={(e) => {
                         handleCheckboxChange(e, `email`);
                       }}
@@ -109,7 +116,7 @@ const Account: React.FC = () => {
                       type="checkbox"
                       name="firstname"
                       id="firstname"
-                      checked={infoCheck.firstname}
+                      checked={user?.privacy.firstname}
                       onChange={(e) => {
                         handleCheckboxChange(e, "firstname");
                       }}
@@ -122,7 +129,7 @@ const Account: React.FC = () => {
                       type="checkbox"
                       name="lastname"
                       id="lastname"
-                      checked={infoCheck.lastname}
+                      checked={user?.privacy.lastname}
                       onChange={(e) => {
                         handleCheckboxChange(e, "lastname");
                       }}
@@ -135,7 +142,7 @@ const Account: React.FC = () => {
                       type="checkbox"
                       name="birthdate"
                       id="birthdate"
-                      checked={infoCheck.birthdate}
+                      checked={user?.privacy.birthdate}
                       onChange={(e) => {
                         handleCheckboxChange(e, "birthdate");
                       }}
@@ -148,7 +155,7 @@ const Account: React.FC = () => {
                       type="checkbox"
                       name="country"
                       id="country"
-                      checked={infoCheck.country}
+                      checked={user?.privacy.country}
                       onChange={(e) => {
                         handleCheckboxChange(e, "country");
                       }}
@@ -161,12 +168,19 @@ const Account: React.FC = () => {
                       type="checkbox"
                       name="city"
                       id="city"
-                      checked={infoCheck.city}
+                      checked={user?.privacy.city}
                       onChange={(e) => {
                         handleCheckboxChange(e, "city");
                       }}
                     />
                   </label>
+                  <button
+                    type="button"
+                    className="border border-1 border-green-800"
+                    onClick={handleOnButtonClick}
+                  >
+                    Save
+                  </button>
                 </div>
               )}
             </div>

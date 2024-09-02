@@ -245,7 +245,6 @@ export const userInContextUpdateRequest = async (
       console.error("Server response error:", message);
       throw new Error("Failed to create form");
     }
-    console.log("User submitted successfully:", message);
   } catch (error) {
     console.error("Error:", error);
     throw new Error("Invalid Data submitted");
