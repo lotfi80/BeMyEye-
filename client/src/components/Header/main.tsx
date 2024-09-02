@@ -20,9 +20,9 @@ const Header: React.FC = () => {
       <div className="flex gap-10 justify-end items-center mx-auto max-w-screen-xl ">
         <div className="mr-auto">
           <img
-            src="../../../public/Screenshot from 2024-09-02 03-03-43.png"
+            src="Screenshot from 2024-09-02 03-03-43.png"
             alt=""
-            className="h-24 w-auto"
+            className="h-20 w-auto"
           />
         </div>
         {/* <div className="mr-auto text-3xl ">BeMyEye</div> */}
