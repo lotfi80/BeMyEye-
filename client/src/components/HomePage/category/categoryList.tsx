@@ -1,8 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { useCategoryUserContext } from "../../../context/CategoryUser";
+// import React, { useEffect, useState } from "react";
+// import { useCategoryUserContext } from "../../../context/CategoryUser";
+
+// const CategoryList: React.FC = () => {
+//   const { categories, setCategories } = useCategoryUserContext();
+//   const [loading, setLoading] = useState<boolean>(true);
+//   const [error, setError] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     const fetchCategories = async () => {
+//       try {
+//         const response = await fetch("http://localhost:5000/categories/", {
+//           method: "GET",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           credentials: "include",
+//         });
+//         if (!response.ok) {
+//           throw new Error("Netzwerkantwort war nicht ok");
+//         }
+//         console.log(response);
+//         const data = await response.json();
+//         setCategories(data);
+//         setLoading(false);
+//       } catch (error) {
+//         setError("Fehler beim Abrufen der Kategorien");
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchCategories();
+//   }, []);
+
+//   if (loading) return <p>Lädt...</p>;
+//   if (error) return <p>{error}</p>;
+
+//   return (
+//     <div className="flex flex-wrap gap-4 p-4">
+//       {categories.map((category) => (
+//         <div
+//           key={category._id}
+//           className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors"
+//         >
+//           {category.name}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default CategoryList;
+// CategoryList.tsx
+// categoryList.tsx
+// components/category/categoryList.tsx
+import React, { useEffect, useState } from 'react';
+import { useCategoryUserContext } from '../../../context/CategoryUser';
 
 const CategoryList: React.FC = () => {
-  const { categories, setCategories } = useCategoryUserContext();
+  const { categories, setCategories, selectedCategory, setSelectedCategory } = useCategoryUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,22 +72,25 @@ const CategoryList: React.FC = () => {
           credentials: "include",
         });
         if (!response.ok) {
-          throw new Error("Netzwerkantwort war nicht ok");
+          throw new Error("Network response was not ok");
         }
-        console.log(response);
         const data = await response.json();
         setCategories(data);
         setLoading(false);
       } catch (error) {
-        setError("Fehler beim Abrufen der Kategorien");
+        setError("Error fetching categories");
         setLoading(false);
       }
     };
 
     fetchCategories();
-  }, []);
+  }, [setCategories]);
 
-  if (loading) return <p>Lädt...</p>;
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
+  };
+
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
@@ -40,7 +98,10 @@ const CategoryList: React.FC = () => {
       {categories.map((category) => (
         <div
           key={category._id}
-          className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors"
+          onClick={() => handleCategoryClick(category._id)}
+          className={`bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors ${
+            selectedCategory === category._id ? "bg-black text-white" : ""
+          }`}
         >
           {category.name}
         </div>

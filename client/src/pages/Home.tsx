@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Category from "../components/HomePage/category/category";
-import Container from "../components/HomePage/post-search/container";
+import Container from "../components/HomePage/post-search/container-grid/container";
 
 export const Home: React.FC = () => {
   const [id, setID] = useState("");

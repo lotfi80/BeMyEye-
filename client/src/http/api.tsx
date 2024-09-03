@@ -256,11 +256,16 @@ export const userInContextUpdateRequest = async (
 
 export const getAllPosts = async (
   page: number = 1,
-  limit: number = 9
+  limit: number = 9,
+  categoryId?: string
 ): Promise<any> => {
   try {
-    const response = await fetch(
-      `http://localhost:5000/posts?page=${page}&limit=${limit}`,
+    let url = `http://localhost:5000/posts?page=${page}&limit=${limit}`;
+    if (categoryId){
+      url += `&categoryId=${categoryId}`;
+
+    }
+    const response = await fetch( url,
       {
         method: "GET",
         headers: {
@@ -278,7 +283,7 @@ export const getAllPosts = async (
     return data;
   } catch (error) {
     console.error("Failed to fetch posts:", error);
-    return [];
+    return{posts: []};
   }
 };
 // ****************************************************************

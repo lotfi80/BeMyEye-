@@ -23,6 +23,7 @@ export interface IPost extends Document {
 }
 
 const PostSchema: Schema<IPost> = new Schema({
+  
   userid: { type: Schema.Types.ObjectId, ref: "User", required: true },
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -49,5 +50,6 @@ const PostSchema: Schema<IPost> = new Schema({
   postDate: { type: Date, default: Date.now },
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
 }, { timestamps: true });
+PostSchema.index({ location: '2dsphere' });
 
 export const Post = mongoose.model<IPost>("Post", PostSchema);

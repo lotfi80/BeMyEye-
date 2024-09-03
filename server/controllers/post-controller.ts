@@ -50,38 +50,70 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
     next(e);
   }
 };
-export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
-  // const products = await Product.find({
-  //   location: {
-  //       $near: {
-  //           $geometry: {
-  //               type: "Point",
-  //               coordinates: [parseFloat(lng), parseFloat(lat)]
-  //           },
-  //           $maxDistance: 5000 
-  //       }
-  //   }
-// });
+
+
+
+export const getFilteredPosts = async (req: Request, res: Response) => {
   try {
+    const { lat, lng, maxDistance } = req.query;
+    console.log(req.query , 'test query');
+
+    let query: any = {};
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 9;
+        const limit = parseInt(req.query.limit as string) || 9;
+        const categoryId = req.query.categoryId as string;
+        const skip = (page - 1) * limit;
+        if (categoryId) {
+          query = { category: categoryId };
+        }
 
-    const skip = (page - 1) * limit;
- 
-    const posts = await Post.find()
-    .populate("userid").populate("category").populate("postimage")
-    .skip(skip).limit(limit).sort({ createdAt: -1 });
-    const totalPosts = await Post.countDocuments();
+    if (lat && lng && maxDistance) {
+      const maxDistanceInMeters = parseInt(maxDistance as string) * 1000; // convert km to meters
 
-    const totalPages = Math.ceil(totalPosts / limit);
-    res.status(200).send({ 
-      posts,
-      currentPage: page,
-      totalPages,
-      totalPosts,
-    });
-  } catch (e) {
-    console.error(e);
-    next(e);
+      query.location = {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng as string), parseFloat(lat as string)]
+          },
+          $maxDistance: 550
+        }
+      };
+    }
+
+  
+
+    console.log(query, 'test query after');
+    // const posts = await Post.find({
+    //   location:
+    //     { $near :
+    //        {
+    //          $geometry: { type: "Point",  coordinates: [ 6.7824545, 51.2230411 ] },
+    //         //  $minDistance: 1000,
+    //          $maxDistance: 200
+    //        }
+    //     }
+    // }
+      
+    //   ) 
+   const posts = await Post.find(query)
+
+        .populate("userid")
+        .populate("category")
+        .populate("postimage")
+        .skip(skip).limit(limit).sort({ createdAt: -1 });
+        const totalPosts = await Post.countDocuments(query);
+    
+        const totalPages = Math.ceil(totalPosts / limit);
+        res.status(200).send({ 
+          posts,
+          currentPage: page,
+          totalPages,
+          totalPosts,
+        });
+
+    // res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching posts", error });
   }
 };

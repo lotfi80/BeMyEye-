@@ -1,40 +1,59 @@
 
 import React, { useState } from "react";
 import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
-import SearchBar from "./searchBar";
 import DistanceList from "./distance";
-
+import { useCategoryUserContext } from "../../../../context/CategoryUser";
 
 const libraries: Libraries = ["places"];
+
+
+
 function ContainerSearch() {
+  const {setLongFilter, setLatFilter} = useCategoryUserContext();
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
+
   const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
   };
+
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      console.log(place ,' hello place');
+      console.log(place, ' hello place');
       console.log(place.geometry?.location?.lat(), place.geometry?.location?.lng());
-      console.log(place.name)
+      console.log(place.name);
       setSearchTerm(place.formatted_address || "");
+      setLongFilter(place.geometry?.location?.lng() || null);
+      setLatFilter(place.geometry?.location?.lat() || null);
       console.log(searchTerm);
     } else {
       console.log("Error");
     }
   };
+
+  const onDistanceSelect = (distance: number) => {
+    setSelectedDistance(distance);
+    console.log(`Selected distance: ${distance} km`);
+  };
+
   const apiKey = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
+
   return (
-    <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
+    <div>
+
+       <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
       <div className="w-[40%] h-[20%] bg-gray-100 p-4 flex items-center">
-        <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} 
-        options={{fields: ["formatted_address", "geometry", "name"]}}
+        <Autocomplete 
+          onLoad={onLoad} 
+          onPlaceChanged={onPlaceChanged}
+          options={{ fields: ["formatted_address", "geometry", "name"] }}
         >
           <input
             type="text"
-            placeholder="enter Sity"
+            placeholder="Enter City"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
@@ -50,6 +69,13 @@ function ContainerSearch() {
         <DistanceList />
       </div>
     </LoadScript>
+    <button
+    // onClick={}
+    >search</button>
+    </div>
+   
+
   );
 }
+
 export default ContainerSearch;
