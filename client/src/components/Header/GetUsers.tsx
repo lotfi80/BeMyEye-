@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Table from "./Table";
+import Table from "./Table/Table";
 
 const GetUsers: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
