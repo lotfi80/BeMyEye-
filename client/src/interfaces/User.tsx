@@ -18,4 +18,12 @@ export interface IUser {
   hash: string;
   registerDate: Date;
   sex: number;
+  privacy: {
+    email: boolean;
+    firstname: boolean;
+    lastname: boolean;
+    birthdate: boolean;
+    country: boolean;
+    city: boolean;
+  };
 }

@@ -16,8 +16,9 @@ import { Error } from "./pages/Error";
 import { CategoryUserProvider } from "./context/CategoryUser";
 import Header from "./components/Header/main";
 import Home from "./pages/Home";
+// import PostWindow from "./pages/PostWindow";
 import Footer from "./components/Footer";
-import PostForm from "./components/PostForm";
+import PostForm from "./pages/PostForm";
 import { UserContextSaver, UserContextLoader } from "./components/LocalStorage";
 
 const App: React.FC = () => {

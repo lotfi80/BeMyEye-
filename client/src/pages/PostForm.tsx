@@ -185,7 +185,7 @@ const PostComponent: React.FC = () => {
         </select>
         <input
           type="file"
-          multiple = {true}
+          multiple={true}
           onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
