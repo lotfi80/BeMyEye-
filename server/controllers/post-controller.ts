@@ -63,8 +63,8 @@ export const createPost = async (
 
 export const getFilteredPosts = async (req: Request, res: Response) => {
   try {
-    const { lat, lng, maxDistance } = req.query;
-    // console.log(req.query, "test query");
+    const { lat, long: lng, maxDistance } = req.query;
+    console.log(req.query, "test query");
 
     let query: any = {};
     const page = parseInt(req.query.page as string) || 1;
@@ -76,6 +76,7 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     }
 
     if (lat && lng && maxDistance) {
+      console.log('lat long', lat, lng);
       const maxDistanceInMeters = parseInt(maxDistance as string) * 1000; // convert km to meters
 
       query.location = {
@@ -102,7 +103,9 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     //     }
     // }
     //   )
-
+    const totalPosts = await Post.find(query);
+    console.log('totalPosts', totalPosts);
+    
     const posts = await Post.find(query)
       .populate("userid")
       .populate("category")
@@ -112,9 +115,10 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
       .sort({ createdAt: -1 });
 
     delete query.location;
-    const totalPosts = await Post.countDocuments(query);
+    // const totalPosts = await Post.countDocuments(query);
+    // console.log('totalPosts', totalPosts);
 
-    const totalPages = Math.ceil(totalPosts / limit);
+    const totalPages = Math.ceil(totalPosts.length / limit);
     res.status(200).send({
       posts,
       currentPage: page,
