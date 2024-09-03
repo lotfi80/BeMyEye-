@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 import Logout from "./Logout";
+import CloseButton from "../CloseButton";
 import { IUser } from "../../interfaces/User";
 import { userInContextUpdateRequest, getUserDataByID } from "../../http/api";
 
@@ -15,7 +16,7 @@ const Account: React.FC = () => {
     : `http://localhost:5000/${user?.profileimage}`;
 
   const handleOnLinkClick = () => {
-    setShowDropdown(true);
+    setShowDropdown(!showDropdown);
   };
 
   const handleCheckboxChange = (
@@ -48,9 +49,7 @@ const Account: React.FC = () => {
   return (
     <>
       <div
-        className={`flex items-center space-x-2 relative cursor-pointer ${
-          showDropdown ? "z-50" : ""
-        }`}
+        className={`flex items-center space-x-2 relative cursor-pointer `}
         onClick={(e) => {
           setShowDropdown(!showDropdown);
         }}
@@ -64,9 +63,12 @@ const Account: React.FC = () => {
       </div>
       {showDropdown && (
         <>
-          <div className="fixed top-0 right-0 bottom-0 left-0 bg-black opacity-80 "></div>
+          <div className="fixed mr-0 top-0 right-0 left-0 bottom-0 z-40 backdrop-blur-sm backdrop-brightness-50"></div>
+
           <div className="fixed text-black z-50 top-20 right-10 w-1/4 h-auto p-5 bg-white  shadow-md hover:text-black flex flex-col gap-3">
             <div className="flex flex-row gap-8 justify-evenly items-top">
+              <CloseButton setFunction={() => setShowDropdown(!showDropdown)} />
+
               <img
                 src={userImage}
                 alt="profileimage"

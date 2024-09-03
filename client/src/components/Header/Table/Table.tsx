@@ -103,7 +103,7 @@ const Table: React.FC = () => {
   ];
 
   return (
-    <div className="p-2 text-xs">
+    <div className="p-2 pt-10 text-xs">
       <table className="min-w-full divide-y divide-gray-400">
         <thead className="bg-gray-100">
           <tr>
