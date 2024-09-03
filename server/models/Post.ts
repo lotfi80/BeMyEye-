@@ -7,8 +7,8 @@ export interface IPost extends Document {
   longtitute: string;
   latitute: string;
   location: {
-    type: string;
-    coordinates: [number];
+    type: "Point";
+    coordinates: number[];
   };
   city: string;
   street: string;
@@ -50,6 +50,7 @@ const PostSchema: Schema<IPost> = new Schema({
   postDate: { type: Date, default: Date.now },
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
 }, { timestamps: true });
+
 PostSchema.index({ location: '2dsphere' });
 
 export const Post = mongoose.model<IPost>("Post", PostSchema);
