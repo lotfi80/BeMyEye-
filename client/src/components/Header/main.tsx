@@ -5,6 +5,7 @@ import { useCategoryUserContext } from "../../context/CategoryUser";
 import AccountButton from "./AccountButton";
 import GetUsers from "./GetUsers";
 import Permission from "../Permission";
+import Blind from "../Blind";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();

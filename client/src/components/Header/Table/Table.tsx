@@ -4,12 +4,14 @@ import { IUser } from "../../../interfaces/User";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
+import { Button } from "./Button";
 
 const Table: React.FC = () => {
   const [arrayAllUsers, setArrayAllUsers] = useState<IUser[] | void>([]);
   const [sortedUsers, setSortedUsers] = useState<IUser[] | void>([]);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<string>("username");
+  const [isZoomed, setIsZoomed] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -41,16 +43,6 @@ const Table: React.FC = () => {
 
     sortData();
   }, [arrayAllUsers, order, orderBy]);
-
-  const handleRequestSort = (property: string) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrderBy(property);
-    console.log(isAsc);
-    console.log(order);
-    setOrder(isAsc ? "desc" : "asc");
-    console.log(property);
-    console.log(order);
-  };
 
   function userImage(user: any): string {
     const userImage = user?.profileimage?.includes("http")
@@ -102,6 +94,16 @@ const Table: React.FC = () => {
     },
   ];
 
+  const handleRequestSort = (property: string) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrderBy(property);
+    console.log(isAsc);
+    console.log(order);
+    setOrder(isAsc ? "desc" : "asc");
+    console.log(property);
+    console.log(order);
+  };
+
   return (
     <div className="p-2 pt-10 text-xs">
       <table className="min-w-full divide-y divide-gray-400">
@@ -140,27 +142,60 @@ const Table: React.FC = () => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200 ">
+        <tbody className="bg-white divide-y divide-gray-200">
           {sortedUsers ? (
             sortedUsers.map((user: any) => (
-              <tr key={user._id}>
-                <td className="py-1">
-                  <img
-                    src={`${userImage(user)}`}
-                    alt="avatar"
-                    className="w-8 h-8 object-cover"
-                  />
-                </td>
-                <td>{user.username}</td>
-                <td>{user.privacy.email ? user.email : ""}</td>
-                <td>{user.privacy.firstname ? user.firstname : ""}</td>
-                <td>{user.privacy.lastname ? user.lastname : ""}</td>
-                <td>
-                  {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
-                </td>
-                <td>{user.privacy.country ? user.country : ""}</td>
-                <td>{user.privacy.city ? user.city : ""}</td>
-              </tr>
+              <>
+                <tr
+                  key={user._id}
+                  className={`hover:bg-gray-200 ${
+                    isZoomed === user._id
+                      ? "h-16 align-top bg-gray-200 text-lg leading-10"
+                      : "h-8 align-middle"
+                  }`}
+                  onClick={(e) =>
+                    setIsZoomed((prevId) =>
+                      prevId === user._id ? null : user._id
+                    )
+                  }
+                >
+                  <td className="py-1">
+                    <img
+                      src={`${userImage(user)}`}
+                      alt="avatar"
+                      className="w-8 h-8 object-cover"
+                    />
+                  </td>
+                  <td>{user.privacy.email ? user.email : ""}</td>
+                  <td>{user.privacy.firstname ? user.firstname : ""}</td>
+                  <td>{user.privacy.lastname ? user.lastname : ""}</td>
+                  <td>
+                    {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
+                  </td>
+                  <td>{user.privacy.country ? user.country : ""}</td>
+                  <td>{user.privacy.city ? user.city : ""}</td>
+                </tr>
+                {isZoomed === user._id && (
+                  <tr>
+                    <td colSpan={7} className="p-4 bg-gray-200">
+                      <div className="flex flex-row justify-center gap-x-32">
+                        <Button
+                          onClick={() => {
+                            setIsZoomed(null);
+                          }}
+                          text="View Posts"
+                        ></Button>
+                        <Button
+                          onClick={() => {
+                            setIsZoomed(null);
+                          }}
+                          text="Send Message"
+                        ></Button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </>
             ))
           ) : (
             <tr>

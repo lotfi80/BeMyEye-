@@ -5,7 +5,7 @@ import {
   passwordUpdate,
   getUserDataByID,
   // findUserIDByToken,
-  // deleteUser,// wir brauchen das
+  deleteUser,
   getUsers,
 } from "../controllers/user-controller";
 // import multer from "multer";
@@ -26,7 +26,7 @@ userRouter.post(
 );
 
 userRouter.put("/passwordUpdate/:id", passwordUpdate);
-// userRouter.delete("/user/:id", deleteUser); // wir brauchen das
+userRouter.delete("/user/:id", deleteUser);
 userRouter.get("/users", getUsers);
 
 export default userRouter;

@@ -1,6 +1,7 @@
 import React from "react";
 import CloseButton from "./CloseButton";
 import { Link } from "react-router-dom";
+import Blind from "./Blind";
 
 interface PermissionProps {
   showPermission: boolean;
@@ -14,7 +15,7 @@ const Permission: React.FC<PermissionProps> = ({
   if (!showPermission) return null;
   return (
     <>
-      <div className="fixed mr-0 top-0 right-0 left-0 bottom-0 z-40 backdrop-blur-sm backdrop-brightness-50"></div>
+      <Blind />
 
       <div
         className={`

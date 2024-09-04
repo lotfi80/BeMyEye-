@@ -9,6 +9,9 @@ import { validationResult } from "express-validator";
 import { ITokensWithID } from "../interfaces/ITokensWithID";
 import User, { IUser } from "../models/user-model";
 import Token from "../models/token-model";
+import { Post } from "../models/Post";
+import { PostComment } from "../models/PostComments";
+
 import { validateAccessToken } from "../service/token-service";
 import { createHash } from "crypto";
 
@@ -336,6 +339,25 @@ export const passwordUpdate = async (
     // }
 
     return res.json(hashPassword);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// *****************************************************
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    console.log("server/userId", userId);
+    await Post.findByIdAndDelete(userId);
+    await PostComment.findByIdAndDelete(userId);
+    await Token.findByIdAndDelete(userId);
+    await User.findByIdAndDelete(userId);
+    return res.json({ message: "User deleted" });
   } catch (e) {
     console.error(e);
     next(e);
