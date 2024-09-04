@@ -3,17 +3,18 @@ import React, { useState } from "react";
 import { LoadScript, Autocomplete, Libraries } from "@react-google-maps/api";
 import DistanceList from "./distance";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
+import CategoryList from "../../category/categoryList";
 
 const libraries: Libraries = ["places"];
 
 
 
 function ContainerSearch() {
-  const {setLongFilter, setLatFilter} = useCategoryUserContext();
+  const {setLongFilter, setLatFilter,setSelectedDistance} = useCategoryUserContext();
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
+  // const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
 
   const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
@@ -28,24 +29,26 @@ function ContainerSearch() {
       setSearchTerm(place.formatted_address || "");
       setLongFilter(place.geometry?.location?.lng() || null);
       setLatFilter(place.geometry?.location?.lat() || null);
+      setSelectedDistance(5);
       console.log(searchTerm);
     } else {
       console.log("Error");
     }
   };
 
-  const onDistanceSelect = (distance: number) => {
-    setSelectedDistance(distance);
-    console.log(`Selected distance: ${distance} km`);
-  };
+  // const onDistanceSelect = (distance: number) => {
+  //   setSelectedDistance(distance);
+  //   console.log(`Selected distance: ${distance} km`);
+  // };
 
   const apiKey = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
 
   return (
-    <div>
+    <div >
 
        <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
-      <div className="w-[40%] h-[20%] bg-gray-100 p-4 flex items-center">
+        <div className="flex">
+           <div className="w-[40%] h-[20%] bg-gray-100 p-4 flex items-center">
         <Autocomplete 
           onLoad={onLoad} 
           onPlaceChanged={onPlaceChanged}
@@ -68,10 +71,14 @@ function ContainerSearch() {
       <div className="w-[60%] h-[20%] bg-white p-4 flex items-center">
         <DistanceList />
       </div>
+        </div>
+     
     </LoadScript>
-    <button
+    <CategoryList />
+
+    {/* <button
     // onClick={}
-    >search</button>
+    >search</button> */}
     </div>
    
 

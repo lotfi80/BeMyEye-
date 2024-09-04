@@ -1,33 +1,35 @@
-import React, { useState } from "react";
+// Auskommentiert weil es eventuell unnötig ist und nicht mehr existiert
 
-interface SearchBarProps {
-  onSearch: (city: string) => void;
-}
+// import React, { useState } from "react";
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+// interface SearchBarProps {
+//   onSearch: (city: string) => void;
+// }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+// const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+//   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = () => {
-    onSearch(searchTerm);
-  };
+//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setSearchTerm(e.target.value);
+//   };
 
-  return (
-    <div className="w-[30%] p-2 border border-gray-300 rounded">
-      <input
-        type="text"
-        placeholder="Enter city..."
-        value={searchTerm}
-        onChange={handleInputChange}
-        onBlur={handleSearch} // Ruft die Filterung auf, wenn der Benutzer die Eingabe beendet.
-        className="p-2 border border-gray-300 rounded w-full"
-      />
-      <button> search </button>
-    </div>
-  );
-};
+//   const handleSearch = () => {
+//     onSearch(searchTerm);
+//   };
 
-export default SearchBar;
+//   return (
+//     <div className="w-[30%] p-2 border border-gray-300 rounded">
+//       <input
+//         type="text"
+//         placeholder="Enter city..."
+//         value={searchTerm}
+//         onChange={handleInputChange}
+//         onBlur={handleSearch} 
+//         className="p-2 border border-gray-300 rounded w-full"
+//       />
+//       <button> search </button>
+//     </div>
+//   );
+// };
+
+// export default SearchBar;

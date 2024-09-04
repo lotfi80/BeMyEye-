@@ -31,22 +31,27 @@ const DistanceList: React.FC = () => {
 
   return (
     <div className="flex flex-row flex-wrap gap-4 h-full w-[70%] ">
+     
       <button
-        onClick={() => setSelectedDistance(5)}
-        className="bg-gray-200 px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors"
-      >
-        Mehr als 5 km
-      </button>
+  onClick={() => setSelectedDistance(5)}
+  className={`px-4 py-2 rounded-md cursor-pointer transition-colors ${
+    selectedDistance === 5 ? 'bg-black text-white' : 'bg-gray-200 hover:bg-black hover:text-white'
+  }`}
+>
+  Mehr als 5 km
+</button>
       <button
         onClick={() => setSelectedDistance(10)}
-        className="bg-gray-200 px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors"
-      >
+        className={`px-4 py-2 rounded-md cursor-pointer transition-colors ${
+          selectedDistance === 10 ? 'bg-black text-white' : 'bg-gray-200 hover:bg-black hover:text-white'
+        }`}      >
         Mehr als 10 km
       </button>
       <button
         onClick={() => setSelectedDistance(20)}
-        className="bg-gray-200 px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors"
-      >
+        className={`px-4 py-2 rounded-md cursor-pointer transition-colors ${
+          selectedDistance === 20 ? 'bg-black text-white' : 'bg-gray-200 hover:bg-black hover:text-white'
+        }`}      >
         Mehr als 20 km
       </button>
     </div>
