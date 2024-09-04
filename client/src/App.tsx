@@ -8,7 +8,7 @@ import ActivationSuccess from "./pages/ActivationSuccess";
 import RegisterForm from "./pages/RegisterForm";
 import LoginForm from "./pages/LoginForm";
 import { Privacy } from "./pages/Privacy";
-import { Location } from "./pages/Location";
+// import { Location } from "./pages/Location";
 import TermOfService from "./pages/TermOfService";
 import UserData from "./pages/UserData";
 import GoogleAuthCallback from "./components/GoogleAuthCallback";
@@ -22,24 +22,7 @@ import PostForm from "./pages/PostForm";
 import { UserContextSaver, UserContextLoader } from "./components/LocalStorage";
 
 const App: React.FC = () => {
-  // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  // const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     try {
-  //       const user: IUser | undefined = await fetchUser();
-  //       setIsAuthenticated(!!user);
-  //     } catch {
-  //       setIsAuthenticated(false);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   checkAuth();
-  // }, []);
-
-  // if (loading) return <div>Loading...</div>;
   return (
     <Router>
       <CategoryUserProvider>
@@ -59,7 +42,7 @@ const App: React.FC = () => {
             <Route path="/profile/:id" element={<UserData />} />
 
             <Route path="/posts" element={<PostForm />} />
-            <Route path="/location" element={<Location />} />
+            {/* <Route path="/location" element={<Location />} /> */}
 
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/term" element={<TermOfService />} />
