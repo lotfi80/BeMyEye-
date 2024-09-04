@@ -1,12 +1,23 @@
-import React from "react";
-import CategoryList from "./categoryList";
+// // Category.tsx
+// // Category.tsx
+// // components/container-searchbar/containerSearch.tsx
+// import React from 'react';
+// import { useCategoryUserContext } from '../../../context/CategoryUser';
+// import CategoryList from './categoryList';
+// // import { Categories } from '../../../types/types';
 
-function Category() {
-  return (
-    <div className="w-[40%] h-full bg-gray-200">
-      <CategoryList />
-    </div>
-  );
-}
+// const ContainerSearch: React.FC = () => {
+//   // const { selectedCategory } = useCategoryUserContext();
 
-export default Category;
+//   return (
+//     <div>
+//       {/* <p>Selected Category: {selectedCategory}</p> */}
+//       <CategoryList />
+//       {/* Hier kannst du basierend auf selectedCategory Filter-Logik implementieren */}
+
+//     </div>
+//   );
+// };
+
+// export default ContainerSearch;
+
