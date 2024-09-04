@@ -90,7 +90,7 @@ export const getPosts = async (
       .populate("postimage")
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ postDate: -1 });
     const totalPosts = await Post.countDocuments();
 
     const totalPages = Math.ceil(totalPosts / limit);

@@ -12,7 +12,7 @@ const categoeries = [
   { name: "Klamotten" },
   { name: "Shuhen" },
   { name: "Sport & Freizeit" },
-  { name: "Kunst & Handwerk " },
+  { name: "Kunst & Handwerk" },
 ];
 const categoriesInsert = async () => {
   try {

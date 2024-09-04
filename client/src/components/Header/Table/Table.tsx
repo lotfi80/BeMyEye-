@@ -166,6 +166,7 @@ const Table: React.FC = () => {
                       className="w-8 h-8 object-cover"
                     />
                   </td>
+                  <td>{user.username}</td>
                   <td>{user.privacy.email ? user.email : ""}</td>
                   <td>{user.privacy.firstname ? user.firstname : ""}</td>
                   <td>{user.privacy.lastname ? user.lastname : ""}</td>
@@ -177,7 +178,7 @@ const Table: React.FC = () => {
                 </tr>
                 {isZoomed === user._id && (
                   <tr>
-                    <td colSpan={7} className="p-4 bg-gray-200">
+                    <td colSpan={8} className="p-4 bg-gray-200">
                       <div className="flex flex-row justify-center gap-x-32">
                         <Button
                           onClick={() => {
