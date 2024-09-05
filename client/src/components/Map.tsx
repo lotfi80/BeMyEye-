@@ -1,32 +1,66 @@
-import React, { useEffect, useState } from "react";
 
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
-interface MapProps {
-  latitude: number | null;
-  longitude: number | null;
+import React from 'react';
+import { GoogleMap, LoadScript, MarkerF, Libraries } from '@react-google-maps/api';
+import {useCategoryUserContext} from "../context/CategoryUser";
+
+const containerStyle = {
+  width: '100%',
+  height: '100vh'
+};
+
+const center = {
+  lat: 51.1657,  
+  lng: 10.4515, 
+};
+
+
+const libraries : Libraries = ['places'];
+
+
+ const Map: React.FC<{}> = () => {
+  const { 
+    latFilter,
+    longFilter,
+    setLatFilter,
+    setLongFilter,
+    posts,
+    zoomMap,
+  } = useCategoryUserContext();
+  const center = {
+    lat: latFilter ? latFilter : 51.1657,  
+    lng: longFilter ? longFilter : 10.4515, 
+  };
+  const locations = posts.map((post) => ({
+    lat: parseFloat(post.latitute),
+    lng: parseFloat(post.longtitute),
+  }))
+
+  const handleClick = (event:any) => {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+    // setMarkerPosition({ lat, lng });
+    setLatFilter(lat);
+    setLongFilter(lng);
+    console.log("Latitude: ", lat, "Longitude: ", lng);
+  };
+  return (
+    <LoadScript
+      googleMapsApiKey="AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg"
+      libraries={libraries} 
+    >
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoomMap}
+        onClick={handleClick}
+      >
+        {locations.map((location, index) => (
+          <MarkerF key={index} position={location} />
+        ))}
+      </GoogleMap>
+    </LoadScript>
+  )
 }
 
-const Map: React.FC<MapProps> = ({ latitude, longitude }) => {
-  const mapContainerStyle = {
-    height: "400px",
-    width: "100%",
-  };
-
-  const center = {
-    lat: latitude || 0,
-    lng: longitude || 0,
-  };
-
-  const apiKey = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
-  return (
-    <LoadScript googleMapsApiKey={apiKey}>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        center={center}
-        zoom={16}
-      ></GoogleMap>
-    </LoadScript>
-  );
-};
-export default Map;
+export default React.memo(Map);

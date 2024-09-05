@@ -1,12 +1,15 @@
-import React from "react";
-import CategoryList from "./categoryList";
 
-function Category() {
+
+import React from 'react'
+
+import Map from '../../Map'
+
+function category( ) {
   return (
-    <div className="w-[40%] h-full bg-gray-200">
-      <CategoryList />
+    <div>
+        <Map />
     </div>
-  );
+  )
 }
 
-export default Category;
+export default category
