@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useCategoryUserContext } from "../../../context/CategoryUser";
+
+import React, { useEffect, useState } from 'react';
+import { useCategoryUserContext } from '../../../context/CategoryUser';
 
 const CategoryList: React.FC = () => {
-  const { categories, setCategories, selectedCategory, setSelectedCategory } =
-    useCategoryUserContext();
+  const { categories, setCategories, selectedCategory, setSelectedCategory } = useCategoryUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { GoogleMap, LoadScript, Marker, Libraries } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, MarkerF, Libraries } from '@react-google-maps/api';
 import {useCategoryUserContext} from "../context/CategoryUser";
 
 const containerStyle = {
@@ -14,16 +14,28 @@ const center = {
   lng: 10.4515, 
 };
 
+
 const libraries : Libraries = ['places'];
 
 
-
  const Map: React.FC<{}> = () => {
-  const { latFilter, longFilter, setLatFilter, setLongFilter } = useCategoryUserContext();
+  const { 
+    latFilter,
+    longFilter,
+    setLatFilter,
+    setLongFilter,
+    posts,
+    zoomMap,
+  } = useCategoryUserContext();
   const center = {
     lat: latFilter ? latFilter : 51.1657,  
     lng: longFilter ? longFilter : 10.4515, 
   };
+  const locations = posts.map((post) => ({
+    lat: parseFloat(post.latitute),
+    lng: parseFloat(post.longtitute),
+  }))
+
   const handleClick = (event:any) => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
@@ -40,10 +52,12 @@ const libraries : Libraries = ['places'];
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={zoomMap}
         onClick={handleClick}
       >
-        <Marker position={center} />
+        {locations.map((location, index) => (
+          <MarkerF key={index} position={location} />
+        ))}
       </GoogleMap>
     </LoadScript>
   )

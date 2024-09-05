@@ -1,14 +1,15 @@
-import React from "react";
-// import Location from '../../../pages/Location'
-import Map from "../../Map";
 
-function category() {
+
+import React from 'react'
+
+import Map from '../../Map'
+
+function category( ) {
   return (
     <div>
-      {/* <Location />  */}
-      <Map />
+        <Map />
     </div>
-  );
+  )
 }
 
-export default category;
+export default category

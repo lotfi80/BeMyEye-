@@ -84,6 +84,8 @@ import { StreamState } from "http2";
 interface ContextType {
   categories: Categories[];
   setCategories: (categories: Categories[]) => void;
+  posts: any[];
+  setPosts: (posts: any[]) => void;
   user: IUser | null;
   setUser: Dispatch<SetStateAction<IUser | null>>;
   registrationStatus: "none" | "registered";
@@ -96,6 +98,8 @@ interface ContextType {
   setLongFilter: Dispatch<SetStateAction<number | null>>;
   latFilter: number | null;
   setLatFilter: Dispatch<SetStateAction<number | null>>;
+  zoomMap: number;
+  setZoomMap: (zoomMap: number) => void;
 }
 
 interface MyProviderProps {
@@ -105,6 +109,8 @@ interface MyProviderProps {
 export const MyContext = createContext<ContextType>({
   categories: [],
   setCategories: () => {},
+  posts: [],
+  setPosts: () => {},
   user: null,
   setUser: () => {},
   registrationStatus: "none",
@@ -117,12 +123,15 @@ export const MyContext = createContext<ContextType>({
   setLongFilter: () => {},
   latFilter: null,
   setLatFilter: () => {},
+  zoomMap: 6,
+  setZoomMap: () => {},
 });
 
 export const CategoryUserProvider: React.FC<MyProviderProps> = ({
   children,
 }) => {
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
   const [user, setUser] = useState<IUser | null>(null);
   const [registrationStatus, setRegistrationStatus] = useState<
     "none" | "registered"
@@ -131,12 +140,15 @@ export const CategoryUserProvider: React.FC<MyProviderProps> = ({
   const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
   const [longFilter, setLongFilter] = useState<number | null>(null);
   const [latFilter, setLatFilter] = useState<number | null>(null);
+  const [zoomMap, setZoomMap] = useState<number>(6);
   
   return (
     <MyContext.Provider
       value={{
         categories,
         setCategories,
+        posts,
+        setPosts,
         user,
         setUser,
         registrationStatus,
@@ -149,8 +161,8 @@ export const CategoryUserProvider: React.FC<MyProviderProps> = ({
         setLongFilter,
         latFilter,
         setLatFilter,
-
-
+        zoomMap,
+        setZoomMap,
       }}
     >
       {children}
