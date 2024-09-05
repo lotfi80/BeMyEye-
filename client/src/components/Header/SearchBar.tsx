@@ -1,6 +1,10 @@
 import React from "react";
 
-const SearchBar = (onChange) => {
+interface props {
+  onChange: () => void;
+}
+
+const SearchBar = ({ onChange }) => {
   return (
     <div className="absolute left-5 top-4">
       <form className="form relative">

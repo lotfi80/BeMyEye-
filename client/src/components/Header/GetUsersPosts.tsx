@@ -4,7 +4,7 @@ import { Button } from "./Table/Button";
 
 interface TableProps {
   postsVisible: boolean;
-  posts: any;
+  posts: any[];
   setPostsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setTableVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -22,20 +22,23 @@ const GetUsersPost: React.FC<TableProps> = ({
     const date = new Date(dateString);
     return date.toLocaleDateString();
   }
-  if (!postsVisible) return null;
+
   return (
     <>
-      <div className="absolute top-5 left-5">
+      <div className="absolute top-5 left-5 ">
         <Button
           onClick={() => {
             setPostsVisible(false);
             setTableVisible(true);
           }}
           text="Back"
-        ></Button>
+        />
       </div>
-      <table className="min-w-full divide-y divide-gray-400">
-        <thead className="bg-gray-100">
+      <table
+        className="min-w-full divide-y divide-gray-400
+       "
+      >
+        <thead className="bg-gray-100 ">
           {/* <tr>{user.username}</tr> */}
           <tr>
             <TableHeadCell>Post Title</TableHeadCell>
@@ -44,7 +47,7 @@ const GetUsersPost: React.FC<TableProps> = ({
             <TableHeadCell>Post Date</TableHeadCell>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 p-5">
           {posts
             ? posts.map((post) => (
                 <tr key={post._id}>
@@ -57,10 +60,15 @@ const GetUsersPost: React.FC<TableProps> = ({
                           : `http://localhost:5000/${post.postimage[0].image}`
                       }
                       alt="postimage"
-                      className="w-16 h-16 object-cover my-4"
+                      className="w-16 h-16 object-cover my-4 "
                     />
                   </td>
-                  <td>{post.description}</td>
+                  <td
+                    className="max-w-md break-words 
+"
+                  >
+                    {post.description}
+                  </td>
                   <td>{formatDate(post.postDate)}</td>
                 </tr>
               ))

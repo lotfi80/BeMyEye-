@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 
 import AccountButton from "./AccountButton";
-import GetUsers from "./GetUsers";
+import GetUsersButton from "./GetUsersButton";
 import Permission from "../Permission";
 
 const Header: React.FC = () => {
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
 
-        <GetUsers permission={permission} setPermission={setPermission} />
+        <GetUsersButton permission={permission} setPermission={setPermission} />
 
         {user ? null : registrationStatus === "none" ? (
           <>

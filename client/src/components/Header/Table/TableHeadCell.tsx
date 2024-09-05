@@ -10,7 +10,13 @@ const TableHeadCell: React.FC<TableCellProps> = ({
   children,
 }) => {
   return (
-    <th className=" text-left  font-medium text-gray-500 uppercase tracking-wider">
+    <th
+      className=" text-left  
+    font-medium text-gray-500
+     uppercase
+     my-10
+    "
+    >
       {children}
     </th>
   );
