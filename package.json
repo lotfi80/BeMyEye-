@@ -7,9 +7,12 @@
     "insert": "ts-node ./server/scripts/categoriesInsert.ts",
     "start": "ts-node ./server/scripts/seedsUser.ts",
     "defImage": "ts-node ./server/scripts/defaultImage.ts",
-    "privacy": "ts-node ./server/scripts/privacyZumUser.ts"
+    "privacy": "ts-node ./server/scripts/privacyZumUser.ts",
+    "posts": "ts-node ./server/scripts/seedsPosts.ts"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@react-google-maps/api": "^2.19.3",
     "@types/cookie-parser": "^1.4.7",
     "@types/jsonwebtoken": "^9.0.6",

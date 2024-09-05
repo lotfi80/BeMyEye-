@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Post, IPost } from "../models/Post";
+import { PostComment, IPostComment } from "../models/PostComments";
 import { PostImage, IPostImage } from "../models/PostImages";
 import User from "../models/user-model";
 
@@ -76,7 +77,7 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     }
 
     if (lat && lng && maxDistance) {
-      console.log('lat long', lat, lng);
+      console.log("lat long", lat, lng);
       const maxDistanceInMeters = parseInt(maxDistance as string) * 1000; // convert km to meters
 
       query.location = {
@@ -104,8 +105,8 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     // }
     //   )
     const totalPosts = await Post.find(query);
-    console.log('totalPosts', totalPosts);
-    
+    console.log("totalPosts", totalPosts);
+
     const posts = await Post.find(query)
       .populate("userid")
       .populate("category")
@@ -128,5 +129,86 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching posts", error });
+  }
+};
+// ****************************************************************
+export const createComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postid, userid, content } = req.body;
+  try {
+    const newComment: IPostComment = await PostComment.create({
+      postid,
+      userid,
+      content,
+    });
+    console.log(newComment);
+
+    const post = await Post.findByIdAndUpdate(postid, {
+      $push: { postcomments: newComment._id },
+    });
+
+    res
+      .status(201)
+      .json({ message: "Comment successfully created", newComment });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+export const getComments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { postid } = req.body;
+    const comments = await PostComment.find({ postid: postid }).populate(
+      "userid"
+    );
+    res.status(200).json(comments);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+export const updateComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { content } = req.body;
+  try {
+    const comment = await PostComment.findByIdAndUpdate(
+      {
+        _id: id,
+      },
+      { $set: { content: content } }
+    );
+
+    res.status(200).json({ message: "Comment updated successfully", comment });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+export const deleteComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    const comment = await PostComment.findByIdAndDelete(id);
+    res.status(200).json({ message: "Comment deleted successfully", comment });
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 };

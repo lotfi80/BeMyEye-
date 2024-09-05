@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useCategoryUserContext } from "../../context/CategoryUser";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
 import Logout from "./Logout";
-import { IUser } from "../../interfaces/User";
-import { userInContextUpdateRequest, getUserDataByID } from "../../http/api";
+import DeleteAcc from "./DeleteAcc";
+import CloseButton from "../../CloseButton";
+import { IUser } from "../../../interfaces/User";
+import { userInContextUpdateRequest, getUserDataByID } from "../../../http/api";
+import Blind from "../../Blind";
+import GetMyPosts from "./GetMyPosts";
 
 const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isPrivacy, setIsPrivacy] = useState(false);
+  const [wantChange, setWantChange] = useState(false);
 
   const userImage = user?.profileimage?.includes("http")
     ? user?.profileimage
     : `http://localhost:5000/${user?.profileimage}`;
 
   const handleOnLinkClick = () => {
-    setShowDropdown(true);
+    setShowDropdown(!showDropdown);
   };
 
   const handleCheckboxChange = (
@@ -38,6 +43,7 @@ const Account: React.FC = () => {
         await userInContextUpdateRequest(user._id, user);
         console.log("User data submitted:", user.privacy);
         const saveduser = await getUserDataByID(user._id);
+        setWantChange(!wantChange);
         console.log("User data saved:", saveduser);
       }
     } catch (e) {
@@ -48,9 +54,7 @@ const Account: React.FC = () => {
   return (
     <>
       <div
-        className={`flex items-center space-x-2 relative cursor-pointer ${
-          showDropdown ? "z-50" : ""
-        }`}
+        className={`flex items-center space-x-2  cursor-pointer `}
         onClick={(e) => {
           setShowDropdown(!showDropdown);
         }}
@@ -64,9 +68,16 @@ const Account: React.FC = () => {
       </div>
       {showDropdown && (
         <>
-          <div className="fixed top-0 right-0 bottom-0 left-0 bg-black opacity-80 "></div>
+          <Blind />
           <div className="fixed text-black z-50 top-20 right-10 w-1/4 h-auto p-5 bg-white  shadow-md hover:text-black flex flex-col gap-3">
             <div className="flex flex-row gap-8 justify-evenly items-top">
+              <CloseButton
+                setFunction={() => {
+                  setShowDropdown(!showDropdown);
+                  setIsPrivacy(false);
+                }}
+              />
+
               <img
                 src={userImage}
                 alt="profileimage"
@@ -74,15 +85,14 @@ const Account: React.FC = () => {
               />
               <div className="flex flex-col justify-evenly">
                 <p className="text-2xl">{user?.username}</p>
-                <p className="text-xl">{`Posts: ${user?.birthdate}`}</p>{" "}
+                <p className="text-base">{`Posts: ${user?.birthdate}`}</p>{" "}
                 {/* Hier wird das posts anzahl angezeigt */}
-                <p className="text-xl">Likes:</p>
+                <p className="text-base">Likes:</p>
               </div>
             </div>
             <hr />
-            <Link to={`/profile/${user?._id}`} onClick={handleOnLinkClick}>
-              My Posts
-            </Link>
+            <GetMyPosts />
+
             <Link to="/location" onClick={handleOnLinkClick}>
               My Location
             </Link>
@@ -90,12 +100,16 @@ const Account: React.FC = () => {
               Profile
             </Link>
             <div className="flex flex-row  justify-start">
-              <div className="w-1/3" onClick={(e) => setIsPrivacy(!isPrivacy)}>
+              <div
+                className="w-1/3 cursor-pointer"
+                onClick={(e) => setIsPrivacy(!isPrivacy)}
+              >
                 Privacy
               </div>
               {isPrivacy && (
                 <div className="flex flex-col gap-2 text-sm">
                   Display This Information to Other Users:
+                  <hr />
                   <label htmlFor="email">
                     Email
                     <input
@@ -104,6 +118,7 @@ const Account: React.FC = () => {
                       name="email"
                       id="email"
                       checked={user?.privacy.email}
+                      disabled={!wantChange}
                       onChange={(e) => {
                         handleCheckboxChange(e, `email`);
                       }}
@@ -117,6 +132,7 @@ const Account: React.FC = () => {
                       name="firstname"
                       id="firstname"
                       checked={user?.privacy.firstname}
+                      disabled={!wantChange}
                       onChange={(e) => {
                         handleCheckboxChange(e, "firstname");
                       }}
@@ -130,6 +146,7 @@ const Account: React.FC = () => {
                       name="lastname"
                       id="lastname"
                       checked={user?.privacy.lastname}
+                      disabled={!wantChange}
                       onChange={(e) => {
                         handleCheckboxChange(e, "lastname");
                       }}
@@ -143,6 +160,7 @@ const Account: React.FC = () => {
                       name="birthdate"
                       id="birthdate"
                       checked={user?.privacy.birthdate}
+                      disabled={!wantChange}
                       onChange={(e) => {
                         handleCheckboxChange(e, "birthdate");
                       }}
@@ -156,6 +174,7 @@ const Account: React.FC = () => {
                       name="country"
                       id="country"
                       checked={user?.privacy.country}
+                      disabled={!wantChange}
                       onChange={(e) => {
                         handleCheckboxChange(e, "country");
                       }}
@@ -169,6 +188,7 @@ const Account: React.FC = () => {
                       name="city"
                       id="city"
                       checked={user?.privacy.city}
+                      disabled={!wantChange}
                       onChange={(e) => {
                         handleCheckboxChange(e, "city");
                       }}
@@ -176,16 +196,21 @@ const Account: React.FC = () => {
                   </label>
                   <button
                     type="button"
-                    className="border border-1 border-green-800"
+                    className="border-2 border-green-500
+                     hover:bg-green-500 hover:text-white rounded-md
+                      active:bg-green-700"
                     onClick={handleOnButtonClick}
                   >
-                    Save
+                    {wantChange ? "Save" : "Change"}
                   </button>
                 </div>
               )}
             </div>
             <hr />
-            <Logout />
+            <div className="grid grid-cols-2  justify-start">
+              <Logout />
+              <DeleteAcc />
+            </div>
           </div>
         </>
       )}

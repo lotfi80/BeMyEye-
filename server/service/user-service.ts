@@ -28,6 +28,14 @@ export async function userServiceRegistration(
     password: hashPassword,
     activationLink: activationLink,
     profileimage: "http://localhost:5000/profileImages/avatar-default.svg",
+    privacy: {
+      email: true,
+      firstname: true,
+      lastname: true,
+      birthdate: true,
+      city: true,
+      country: true,
+    },
   });
 
   await sendActivationMessage(
