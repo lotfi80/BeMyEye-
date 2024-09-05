@@ -7,6 +7,7 @@ import CloseButton from "../CloseButton";
 import { IUser } from "../../interfaces/User";
 import { userInContextUpdateRequest, getUserDataByID } from "../../http/api";
 import Blind from "../Blind";
+import GetMyPosts from "./GetMyPosts";
 
 const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
@@ -90,9 +91,8 @@ const Account: React.FC = () => {
               </div>
             </div>
             <hr />
-            <Link to={`/profile/${user?._id}`} onClick={handleOnLinkClick}>
-              My Posts
-            </Link>
+            <GetMyPosts />
+
             <Link to="/location" onClick={handleOnLinkClick}>
               My Location
             </Link>

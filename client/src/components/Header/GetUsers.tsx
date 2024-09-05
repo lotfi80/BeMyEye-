@@ -4,6 +4,7 @@ import Table from "./Table/Table";
 import CloseButton from "../CloseButton";
 import Permission from "../Permission";
 import Blind from "../Blind";
+import SearchBar from "./SearchBar";
 
 interface PermissionProps {
   permission: boolean;
@@ -31,6 +32,7 @@ const GetUsers: React.FC<PermissionProps> = ({ permission, setPermission }) => {
           <div className="fixed mr-0 top-0 right-0 w-full h-full flex justify-center items-center z-50">
             <div className="w-3/4 h-3/4 bg-white p-5 shadow-md overflow-auto relative">
               <Table />
+              <SearchBar />
               <CloseButton setFunction={() => setShowTable(false)} />
             </div>
           </div>

@@ -5,7 +5,6 @@ import { useCategoryUserContext } from "../../context/CategoryUser";
 import AccountButton from "./AccountButton";
 import GetUsers from "./GetUsers";
 import Permission from "../Permission";
-import Blind from "../Blind";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
@@ -63,20 +62,6 @@ const Header: React.FC = () => {
         </div>
 
         <GetUsers permission={permission} setPermission={setPermission} />
-
-        <div className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer">
-          <Link
-            to="/logout"
-            onClick={(e) => {
-              if (!permission) {
-                e.preventDefault();
-                setShowPermission(true);
-              }
-            }}
-          >
-            get my posts
-          </Link>
-        </div>
 
         {user ? null : registrationStatus === "none" ? (
           <>

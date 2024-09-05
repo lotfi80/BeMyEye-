@@ -280,6 +280,31 @@ export const getAllPosts = async (
     return [];
   }
 };
+// **********************************************************************
+export const getPostByUser = async (userid: string): Promise<any> => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/posts?userid=${userid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
+
+    const data = await response.json();
+    console.log("API response: users posts", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch posts:", error);
+    return [];
+  }
+};
 // ****************************************************************
 export const uploadProfileImage = async (
   id: string,

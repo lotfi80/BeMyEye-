@@ -83,14 +83,20 @@ export const getPosts = async (
     const limit = parseInt(req.query.limit as string) || 9;
 
     const skip = (page - 1) * limit;
+    const userid = req.query.userid;
+    const posts = userid
+      ? await Post.find({ userid: userid })
+          .populate("userid")
+          .populate("category")
+          .populate("postimage")
+      : await Post.find()
+          .populate("userid")
+          .populate("category")
+          .populate("postimage")
+          .skip(skip)
+          .limit(limit)
+          .sort({ postDate: -1 });
 
-    const posts = await Post.find()
-      .populate("userid")
-      .populate("category")
-      .populate("postimage")
-      .skip(skip)
-      .limit(limit)
-      .sort({ postDate: -1 });
     const totalPosts = await Post.countDocuments();
 
     const totalPages = Math.ceil(totalPosts / limit);

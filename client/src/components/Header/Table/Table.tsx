@@ -5,6 +5,8 @@ import { IUser } from "../../../interfaces/User";
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
+import { getPostByUser } from "../../../http/api";
+import GetUsersPosts from "../GetUsersPosts";
 
 const Table: React.FC = () => {
   const [arrayAllUsers, setArrayAllUsers] = useState<IUser[] | void>([]);
@@ -12,6 +14,9 @@ const Table: React.FC = () => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<string>("username");
   const [isZoomed, setIsZoomed] = useState<string | null>(null);
+  const [postsVisible, setPostsVisible] = useState<boolean>(false);
+  const [tableVisible, setTableVisible] = useState<boolean>(true);
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -104,109 +109,128 @@ const Table: React.FC = () => {
     console.log(order);
   };
 
+  const handleButtonViewPosts = async (property: any) => {
+    setIsZoomed(null);
+    const posts = await getPostByUser(property._id);
+    setPosts(posts.posts);
+    setPostsVisible(true);
+    setTableVisible(false);
+  };
+  const handleButtonSendMessage = (property: string) => {
+    setIsZoomed(null);
+  };
+
   return (
     <div className="p-2 pt-10 text-xs">
-      <table className="min-w-full divide-y divide-gray-400">
-        <thead className="bg-gray-100">
-          <tr>
-            {headCells.map((headCell) => (
-              <TableHeadCell
-                key={headCell.id}
-                sortDirection={orderBy === headCell.id ? order : false}
-              >
-                <TableSortLabel
-                  active={orderBy === headCell.id ? true : false}
-                  direction={orderBy === headCell.id ? order : "asc"}
-                  createSortHandler={() => handleRequestSort(headCell.id)}
-                >
-                  {orderBy === headCell.id ? (
-                    <Box>
-                      {order === "desc" ? (
-                        <img
-                          src="arrow-down-solid.svg"
-                          alt=""
-                          style={{ visibility: "visible" }}
-                        />
-                      ) : (
-                        <img
-                          src="arrow-up-solid.svg"
-                          alt=""
-                          style={{ visibility: "visible" }}
-                        />
-                      )}
-                    </Box>
-                  ) : null}
-                  <span>{headCell.label}</span>
-                </TableSortLabel>
-              </TableHeadCell>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {sortedUsers ? (
-            sortedUsers.map((user: any) => (
-              <>
-                <tr
-                  key={user._id}
-                  className={`hover:bg-gray-200 ${
-                    isZoomed === user._id
-                      ? "h-16 align-top bg-gray-200 text-lg leading-10"
-                      : "h-8 align-middle"
-                  }`}
-                  onClick={(e) =>
-                    setIsZoomed((prevId) =>
-                      prevId === user._id ? null : user._id
-                    )
-                  }
-                >
-                  <td className="py-1">
-                    <img
-                      src={`${userImage(user)}`}
-                      alt="avatar"
-                      className="w-8 h-8 object-cover"
-                    />
-                  </td>
-                  <td>{user.username}</td>
-                  <td>{user.privacy.email ? user.email : ""}</td>
-                  <td>{user.privacy.firstname ? user.firstname : ""}</td>
-                  <td>{user.privacy.lastname ? user.lastname : ""}</td>
-                  <td>
-                    {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
-                  </td>
-                  <td>{user.privacy.country ? user.country : ""}</td>
-                  <td>{user.privacy.city ? user.city : ""}</td>
-                </tr>
-                {isZoomed === user._id && (
-                  <tr>
-                    <td colSpan={8} className="p-4 bg-gray-200">
-                      <div className="flex flex-row justify-center gap-x-32">
-                        <Button
-                          onClick={() => {
-                            setIsZoomed(null);
-                          }}
-                          text="View Posts"
-                        ></Button>
-                        <Button
-                          onClick={() => {
-                            setIsZoomed(null);
-                          }}
-                          text="Send Message"
-                        ></Button>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </>
-            ))
-          ) : (
+      {tableVisible && (
+        <table className="min-w-full divide-y divide-gray-400">
+          <thead className="bg-gray-100">
             <tr>
-              <td colSpan={8} className=" py-4 text-center">
-                No users found
-              </td>
+              {headCells.map((headCell) => (
+                <TableHeadCell
+                  key={headCell.id}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                >
+                  <TableSortLabel
+                    active={orderBy === headCell.id ? true : false}
+                    direction={orderBy === headCell.id ? order : "asc"}
+                    createSortHandler={() => handleRequestSort(headCell.id)}
+                  >
+                    {orderBy === headCell.id ? (
+                      <Box>
+                        {order === "desc" ? (
+                          <img
+                            src="arrow-down-solid.svg"
+                            alt=""
+                            style={{ visibility: "visible" }}
+                          />
+                        ) : (
+                          <img
+                            src="arrow-up-solid.svg"
+                            alt=""
+                            style={{ visibility: "visible" }}
+                          />
+                        )}
+                      </Box>
+                    ) : null}
+                    <span>{headCell.label}</span>
+                  </TableSortLabel>
+                </TableHeadCell>
+              ))}
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {sortedUsers ? (
+              sortedUsers.map((user: any) => (
+                <>
+                  <tr
+                    key={user._id}
+                    className={`hover:bg-gray-200 ${
+                      isZoomed === user._id
+                        ? "h-16 align-top bg-gray-200 text-lg leading-10"
+                        : "h-8 align-middle"
+                    }`}
+                    onClick={(e) =>
+                      setIsZoomed((prevId) =>
+                        prevId === user._id ? null : user._id
+                      )
+                    }
+                  >
+                    <td className="py-1">
+                      <img
+                        src={`${userImage(user)}`}
+                        alt="avatar"
+                        className="w-8 h-8 object-cover"
+                      />
+                    </td>
+                    <td>{user.username}</td>
+                    <td>{user.privacy.email ? user.email : ""}</td>
+                    <td>{user.privacy.firstname ? user.firstname : ""}</td>
+                    <td>{user.privacy.lastname ? user.lastname : ""}</td>
+                    <td>
+                      {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
+                    </td>
+                    <td>{user.privacy.country ? user.country : ""}</td>
+                    <td>{user.privacy.city ? user.city : ""}</td>
+                  </tr>
+                  {isZoomed === user._id && (
+                    <tr>
+                      <td colSpan={8} className="p-4 bg-gray-200">
+                        <div className="flex flex-row justify-center gap-x-32">
+                          <Button
+                            onClick={() => {
+                              handleButtonViewPosts(user);
+                            }}
+                            text="View Posts"
+                          ></Button>
+                          <Button
+                            onClick={() => {
+                              handleButtonSendMessage(user);
+                            }}
+                            text="Send Message"
+                          ></Button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8} className=" py-4 text-center">
+                  No users found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      )}
+      <GetUsersPosts
+        postsVisible={postsVisible}
+        posts={posts}
+        setPostsVisible={setPostsVisible}
+        setTableVisible={setTableVisible}
+      />
     </div>
   );
 };
