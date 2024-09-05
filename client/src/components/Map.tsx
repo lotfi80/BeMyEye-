@@ -6,7 +6,7 @@ import {useCategoryUserContext} from "../context/CategoryUser";
 
 const containerStyle = {
   width: '100%',
-  height: '100vh'
+  height: '100%'
 };
 
 const center = {
@@ -45,6 +45,8 @@ const libraries : Libraries = ['places'];
     console.log("Latitude: ", lat, "Longitude: ", lng);
   };
   return (
+    <div className="w-full h-full p-4 bg-white rounded-lg shadow-md">
+
     <LoadScript
       googleMapsApiKey="AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg"
       libraries={libraries} 
@@ -60,6 +62,8 @@ const libraries : Libraries = ['places'];
         ))}
       </GoogleMap>
     </LoadScript>
+    </div>
+
   )
 }
 
