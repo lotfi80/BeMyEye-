@@ -260,18 +260,15 @@ export const getAllPosts = async (
 ): Promise<any> => {
   try {
     let url = `http://localhost:5000/posts?page=${page}&limit=${limit}`;
-    if (categoryId){
+    if (categoryId) {
       url += `&categoryId=${categoryId}`;
-
     }
-    const response = await fetch( url,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch posts");
@@ -282,7 +279,7 @@ export const getAllPosts = async (
     return data;
   } catch (error) {
     console.error("Failed to fetch posts:", error);
-    return{posts: []};
+    return { posts: [] };
   }
 };
 // **********************************************************************
@@ -406,3 +403,4 @@ export const deleteUser = async (id: string) => {
     console.error("Failed to delete user:", error);
   }
 };
+// ************************************************

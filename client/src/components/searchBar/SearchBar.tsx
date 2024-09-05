@@ -1,10 +1,12 @@
 import React from "react";
 
 interface props {
-  onChange: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputValues: string;
+  setInputValues: any;
 }
 
-const SearchBar = ({ onChange }) => {
+const SearchBar = ({ onChange, inputValues, setInputValues }) => {
   return (
     <div className="absolute left-5 top-4">
       <form className="form relative">
@@ -34,11 +36,13 @@ const SearchBar = ({ onChange }) => {
           placeholder="Search..."
           required
           type="text"
+          value={inputValues}
           onChange={onChange}
         />
         <button
           type="reset"
           className="absolute right-3 -translate-y-1/2 top-1/2 p-1"
+          onClick={() => setInputValues("")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

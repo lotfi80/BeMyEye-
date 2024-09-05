@@ -363,3 +363,20 @@ export const deleteUser = async (
     next(e);
   }
 };
+// ****************************************************************
+export const getUserDataByField = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const fieldName: string = req.params.field;
+    const value: string = req.params.value;
+    const query = { [fieldName]: { $regex: `^${value}`, $options: "i" } };
+    const users: IUser[] = await User.find(query);
+    return res.json(users);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
