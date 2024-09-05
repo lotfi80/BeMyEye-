@@ -1,9 +1,12 @@
 import React from "react";
+import  { useState } from "react";
+
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
 
 const DistanceList: React.FC = () => {
   const { selectedDistance, setSelectedDistance } = useCategoryUserContext();
 
+ 
   return (
     <div className="flex flex-row flex-wrap gap-4 h-full w-[70%] ">
      
