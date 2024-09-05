@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useCategoryUserContext } from "../../context/CategoryUser";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
 import Logout from "./Logout";
 import DeleteAcc from "./DeleteAcc";
-import CloseButton from "../CloseButton";
-import { IUser } from "../../interfaces/User";
-import { userInContextUpdateRequest, getUserDataByID } from "../../http/api";
-import Blind from "../Blind";
+import CloseButton from "../../CloseButton";
+import { IUser } from "../../../interfaces/User";
+import { userInContextUpdateRequest, getUserDataByID } from "../../../http/api";
+import Blind from "../../Blind";
 import GetMyPosts from "./GetMyPosts";
 
 const Account: React.FC = () => {

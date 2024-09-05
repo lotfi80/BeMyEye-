@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../http/api";
-import { useCategoryUserContext } from "../../context/CategoryUser";
+import { logout } from "../../../http/api";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
 
 const getEmailFromLocalStorage = (): string | null => {
   return localStorage.getItem("userEmail");

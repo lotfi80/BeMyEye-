@@ -20,7 +20,7 @@ const closeButton: React.FC<CloseButtonProps> = ({ setFunction }) => {
           handleClose();
         }}
       >
-        <img src="xmark-solid.svg" alt="close" />
+        <img src="/xmark-solid.svg" alt="close" />
       </div>
     </>
   );

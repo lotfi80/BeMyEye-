@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteUser } from "../../http/api";
-import { useCategoryUserContext } from "../../context/CategoryUser";
-import Blind from "../Blind";
+import { deleteUser } from "../../../http/api";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
+import Blind from "../../Blind";
 
 interface deleteUserProps {
   warning: boolean;

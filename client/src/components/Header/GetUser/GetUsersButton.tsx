@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import Table from "./Table/TableView";
-import CloseButton from "../CloseButton";
-import Permission from "../Permission";
-import Blind from "../Blind";
-import { Search } from "./Search";
+import CloseButton from "../../CloseButton";
+import Permission from "../../Permission";
+import Blind from "../../Blind";
 import GetUsersWindow from "./GetUsersWindow";
 
 interface PermissionProps {
@@ -33,7 +31,6 @@ const GetUsers: React.FC<PermissionProps> = ({ permission, setPermission }) => {
           <div className="fixed mr-0 top-0 right-0 w-full h-full flex justify-center items-center z-50">
             <div className="w-3/4 h-3/4 bg-white p-5 shadow-md overflow-auto relative">
               <GetUsersWindow />
-              <Search />
               <CloseButton setFunction={() => setShowTable(false)} />
             </div>
           </div>

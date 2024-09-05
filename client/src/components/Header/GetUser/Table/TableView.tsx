@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getUsers } from "../../../http/api";
-import { IUser } from "../../../interfaces/User";
+import { getUsers } from "../../../../http/api";
+import { IUser } from "../../../../interfaces/User";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
@@ -37,7 +37,6 @@ const TableView: React.FC<props> = ({
         console.error(e);
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -140,13 +139,13 @@ const TableView: React.FC<props> = ({
                   <Box>
                     {order === "desc" ? (
                       <img
-                        src="arrow-down-solid.svg"
+                        src="/arrow-down-solid.svg"
                         alt=""
                         style={{ visibility: "visible" }}
                       />
                     ) : (
                       <img
-                        src="arrow-up-solid.svg"
+                        src="/arrow-up-solid.svg"
                         alt=""
                         style={{ visibility: "visible" }}
                       />

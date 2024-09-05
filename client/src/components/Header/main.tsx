@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 
-import AccountButton from "./AccountButton";
-import GetUsersButton from "./GetUsersButton";
+import AccountButton from "./AccountButton/AccountButton";
+import GetUsersButton from "./GetUser/GetUsersButton";
 import Permission from "../Permission";
 
 const Header: React.FC = () => {
@@ -33,19 +33,12 @@ const Header: React.FC = () => {
         <div className="mr-auto">
           <Link to="/home">
             <img
-              src="Screenshot from 2024-09-02 03-03-43.png"
+              src="/Screenshot from 2024-09-02 03-03-43.png"
               alt=""
               className="h-20 w-auto"
             />
           </Link>
         </div>
-
-        {/* <div
-          className="bg-gray-200 text-black px-4 py-2  
-        rounded-md hover:bg-black hover:text-white cursor-pointer"
-        >
-          <Link to="/home">Home</Link>
-        </div> */}
 
         <div className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer ">
           <Link

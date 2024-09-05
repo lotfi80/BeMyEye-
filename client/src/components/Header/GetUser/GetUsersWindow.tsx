@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import TableView from "./Table/TableView";
 import GetUsersPosts from "./GetUsersPosts";
-import { getPostByUser } from "../../http/api";
-import { IUser } from "../../interfaces/User";
+import { getPostByUser } from "../../../http/api";
+import { IUser } from "../../../interfaces/User";
+import { Search } from "../../searchBar/Search";
 
 const GetUsersWindow: React.FC = () => {
   const [postsVisible, setPostsVisible] = useState<boolean>(false);
@@ -29,12 +30,15 @@ const GetUsersWindow: React.FC = () => {
   return (
     <div className="p-2 pt-10 text-xs">
       {tableVisible && (
-        <TableView
-          isZoomed={isZoomed}
-          setIsZoomed={setIsZoomed}
-          handleButtonViewPosts={handleButtonViewPosts}
-          handleButtonSendMessage={handleButtonSendMessage}
-        />
+        <>
+          <Search />
+          <TableView
+            isZoomed={isZoomed}
+            setIsZoomed={setIsZoomed}
+            handleButtonViewPosts={handleButtonViewPosts}
+            handleButtonSendMessage={handleButtonSendMessage}
+          />
+        </>
       )}
       {postsVisible && (
         <GetUsersPosts

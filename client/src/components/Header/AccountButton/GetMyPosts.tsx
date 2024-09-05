@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import GetUsersPosts from "./GetUsersPosts";
-import { useCategoryUserContext } from "../../context/CategoryUser";
-import { getPostByUser } from "../../http/api";
-import CloseButton from "../CloseButton";
-import Blind from "../Blind";
+import GetUsersPosts from "../GetUser/GetUsersPosts";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
+import { getPostByUser } from "../../../http/api";
+import CloseButton from "../../CloseButton";
+import Blind from "../../Blind";
 
 const GetMyPosts: React.FC = () => {
   const [postsVisible, setPostsVisible] = useState<boolean>(false);

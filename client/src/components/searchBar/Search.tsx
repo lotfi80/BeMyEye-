@@ -4,7 +4,7 @@ import { DropDown } from "./DropDown.js";
 import SearchBar from "./SearchBar.js";
 import { getUserDataByID } from "../../http/api.js";
 import { IUser } from "../../interfaces/User.js";
-import GetMyPosts from "./GetMyPosts.js";
+import GetMyPosts from "../Header/AccountButton/GetMyPosts.js";
 
 export const Search = () => {
   const [isDropDown, setIsDropDown] = useState<boolean>(false);
