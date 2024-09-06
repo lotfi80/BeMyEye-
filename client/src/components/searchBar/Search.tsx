@@ -2,30 +2,32 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { DropDown } from "./DropDown.js";
 import SearchBar from "./SearchBar.js";
-import { getUsers } from "../../http/api.js";
 import { IUser } from "../../interfaces/User.js";
-import GetMyPosts from "../Header/AccountButton/GetMyPosts.js";
 
-export const Search = () => {
+interface props {
+  setIsSearchActive: any;
+  isSearchActive: boolean;
+  allUsers: IUser[];
+  setWriteInSearchBarResults: any;
+  writeInSearchBarResults: any;
+  setSearchResults: any;
+  postVisible: boolean;
+}
+
+export const Search: React.FC<props> = ({
+  setIsSearchActive,
+  isSearchActive,
+  setWriteInSearchBarResults,
+  writeInSearchBarResults,
+  allUsers,
+  setSearchResults,
+  postVisible,
+}) => {
   const [isDropDown, setIsDropDown] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState<string | any>([]);
-  const [allUsers, setAllUsers] = useState<IUser[]>([]);
   const [inputValues, setInputValues] = useState<string>("");
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const allUsers = await getUsers();
-        setAllUsers(allUsers);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchUsers();
-  }, []);
-
   const handleOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchResults([]);
+    setWriteInSearchBarResults([]);
     setInputValues(event.target.value);
     if (event.target.value.length > 0) {
       setIsDropDown(true);
@@ -72,20 +74,36 @@ export const Search = () => {
             }
           }
         }
-        setSearchResults(results);
+        setWriteInSearchBarResults(results);
       }
     } else setIsDropDown(false);
   };
 
+  useEffect(() => {
+    const searchResult: Partial<IUser>[] = allUsers.filter((user: IUser) => {
+      return (
+        user.username?.toLowerCase().startsWith(inputValues.toLowerCase()) ||
+        user.firstname?.toLowerCase().startsWith(inputValues.toLowerCase()) ||
+        user.lastname?.toLowerCase().startsWith(inputValues.toLowerCase()) ||
+        user.city?.toLowerCase().startsWith(inputValues.toLowerCase())
+      );
+    });
+    setSearchResults(searchResult);
+  }, [isSearchActive]);
+
   return (
     <>
-      <SearchBar
-        onChange={handleOnChange}
-        inputValues={inputValues}
-        setInputValues={setInputValues}
-      />
+      {postVisible || (
+        <SearchBar
+          onChange={handleOnChange}
+          inputValues={inputValues}
+          setInputValues={setInputValues}
+          setIsSearchActive={setIsSearchActive}
+          setIsDropDown={setIsDropDown}
+        />
+      )}
       <DropDown
-        children={searchResults}
+        children={writeInSearchBarResults}
         isDropDown={isDropDown}
         setIsDropDown={setIsDropDown}
         setInputValues={setInputValues}
@@ -93,9 +111,3 @@ export const Search = () => {
     </>
   );
 };
-
-// export const DisplayOfSearchingByName = ({ searchResults }) => {
-//   return searchResults?.results?.map((item) => {
-//     return <GetMyPosts />;
-//   });
-// };

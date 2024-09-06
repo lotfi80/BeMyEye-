@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import GetUsersPosts from "../GetUser/GetUsersPosts";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
-import { getPostByUser } from "../../../http/api";
+import { getUsersPost } from "../../../http/api";
 import CloseButton from "../../CloseButton";
 import Blind from "../../Blind";
 
@@ -16,10 +16,8 @@ const GetMyPosts: React.FC = () => {
       try {
         console.log("User:", user);
         if (user) {
-          const userPosts = await getPostByUser(user._id);
-          setPosts(userPosts.posts);
-          console.log("User posts:", posts);
-          console.log(postsVisible);
+          const userPosts = await getUsersPost(user._id);
+          setPosts(userPosts);
         }
       } catch (e) {
         console.error(e);

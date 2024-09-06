@@ -131,6 +131,22 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching posts", error });
   }
 };
+
+// ****************************************************************
+export const getUserPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  const userid: string = req.params.id;
+  try {
+    const posts = await Post.find({ userid: userid }).populate("postimage");
+    res.status(200).json(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error fetching posts", e });
+  }
+};
 // ****************************************************************
 export const createComment = async (
   req: Request,

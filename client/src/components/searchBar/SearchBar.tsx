@@ -2,15 +2,31 @@ import React from "react";
 
 interface props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
   inputValues: string;
   setInputValues: any;
+  setIsSearchActive: any;
+  setIsDropDown: any;
 }
 
-const SearchBar = ({ onChange, inputValues, setInputValues }) => {
+const SearchBar = ({
+  onChange,
+  inputValues,
+  setInputValues,
+  setIsSearchActive,
+  setIsDropDown,
+}) => {
   return (
     <div className="absolute left-5 top-4">
       <form className="form relative">
-        <button className="absolute left-2 -translate-y-1/2 top-1/2 p-1">
+        <button
+          className="absolute left-2 -translate-y-1/2 top-1/2 p-1"
+          onClick={(e) => {
+            e.preventDefault();
+            setIsSearchActive(true);
+            setIsDropDown(false);
+          }}
+        >
           <svg
             width="17"
             height="16"
@@ -42,7 +58,12 @@ const SearchBar = ({ onChange, inputValues, setInputValues }) => {
         <button
           type="reset"
           className="absolute right-3 -translate-y-1/2 top-1/2 p-1"
-          onClick={() => setInputValues("")}
+          onClick={(e) => {
+            e.preventDefault();
+            setInputValues("");
+            setIsSearchActive(false);
+            setIsDropDown(false);
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

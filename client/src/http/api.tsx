@@ -404,3 +404,26 @@ export const deleteUser = async (id: string) => {
   }
 };
 // ************************************************
+// Nath
+export const getUsersPost = async (userid: string) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/get/${userid}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
+
+    const data = await response.json();
+    console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch posts:", error);
+    return [];
+  }
+};

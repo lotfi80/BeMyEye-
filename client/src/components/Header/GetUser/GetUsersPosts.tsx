@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TableHeadCell from "./Table/TableHeadCell";
 import { Button } from "./Table/Button";
 
 interface TableProps {
-  postsVisible: boolean;
   posts: any[];
+  postsVisible: boolean;
   setPostsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setTableVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
   posts,
-  postsVisible,
   setPostsVisible,
   setTableVisible,
 }) => {
@@ -39,7 +38,6 @@ const GetUsersPost: React.FC<TableProps> = ({
        "
       >
         <thead className="bg-gray-100 ">
-          {/* <tr>{user.username}</tr> */}
           <tr>
             <TableHeadCell>Post Title</TableHeadCell>
             <TableHeadCell>Image</TableHeadCell>

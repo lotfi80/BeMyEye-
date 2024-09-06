@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { getUsers } from "../../../../http/api";
 import { IUser } from "../../../../interfaces/User";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
-import GetUsersPosts from "../GetUsersPosts";
 
 interface props {
   isZoomed: string | null;
   setIsZoomed: React.Dispatch<React.SetStateAction<string | null>>;
   handleButtonSendMessage: (user: IUser) => void;
   handleButtonViewPosts: (user: IUser) => void;
+  isSearchActive: boolean;
+  allUsers: Array<IUser>;
+  tableVisible: boolean;
+  searchResults: Array<Partial<IUser>>;
 }
 
 const TableView: React.FC<props> = ({
@@ -19,30 +21,20 @@ const TableView: React.FC<props> = ({
   setIsZoomed,
   handleButtonViewPosts,
   handleButtonSendMessage,
+  isSearchActive,
+  allUsers,
+  tableVisible,
+  searchResults,
 }) => {
-  const [arrayAllUsers, setArrayAllUsers] = useState<IUser[] | void>([]);
-  const [sortedUsers, setSortedUsers] = useState<IUser[] | void>([]);
+  const [sortedUsers, setSortedUsers] = useState<IUser[]>([]);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<string>("username");
-  const [postsVisible, setPostsVisible] = useState<boolean>(false);
-  const [tableVisible, setTableVisible] = useState<boolean>(true);
-  const [posts, setPosts] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const allUsers = await getUsers();
-        setArrayAllUsers(allUsers);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchUsers();
-  }, []);
-
+  //Sort Data by
   useEffect(() => {
     const sortData = () => {
-      const sorted = arrayAllUsers?.slice().sort((a, b) => {
+      console.log(allUsers, "allusers: ");
+      const sorted = allUsers?.slice().sort((a, b) => {
         if (!a[orderBy] && b[orderBy]) return 1;
         if (a[orderBy] && !b[orderBy]) return -1;
         if (!a[orderBy] && !b[orderBy]) return 0;
@@ -56,8 +48,8 @@ const TableView: React.FC<props> = ({
     };
 
     sortData();
-  }, [arrayAllUsers, order, orderBy]);
-
+  }, [allUsers, order, orderBy]);
+  // ****************************************************************
   function userImage(user: any): string {
     const userImage = user?.profileimage?.includes("http")
       ? user?.profileimage
@@ -107,7 +99,7 @@ const TableView: React.FC<props> = ({
       label: "city",
     },
   ];
-
+  // ****************************************************************
   const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === "asc";
     setOrderBy(property);
@@ -117,7 +109,11 @@ const TableView: React.FC<props> = ({
     console.log(property);
     console.log(order);
   };
-
+  // ***  ****************************************************************
+  const arrayForTable = isSearchActive
+    ? searchResults.slice(0)
+    : sortedUsers.slice(0);
+  // *********************************************************************
   if (!tableVisible) {
     return null;
   }
@@ -158,9 +154,10 @@ const TableView: React.FC<props> = ({
           ))}
         </tr>
       </thead>
+
       <tbody className="bg-white divide-y divide-gray-200">
-        {sortedUsers ? (
-          sortedUsers.map((user: any, index: number) => (
+        {arrayForTable ? (
+          arrayForTable.map((user: any, index: number) => (
             <>
               <tr
                 key={user._id}

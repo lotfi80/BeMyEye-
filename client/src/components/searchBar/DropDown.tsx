@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
-import Blind from "../Blind";
-import { IUser } from "../../interfaces/User";
+import React from "react";
 
 interface props {
   children: any[];
