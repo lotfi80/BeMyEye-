@@ -5,6 +5,8 @@ import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
 
+import "./userCard.css";
+
 interface props {
   isZoomed: string | null;
   setIsZoomed: React.Dispatch<React.SetStateAction<string | null>>;
@@ -109,7 +111,9 @@ const TableView: React.FC<props> = ({
     console.log(property);
     console.log(order);
   };
+
   // ***  ****************************************************************
+  console.log("sortedUsers", sortedUsers);
   const arrayForTable = isSearchActive
     ? searchResults.slice(0)
     : sortedUsers.slice(0);
@@ -159,48 +163,96 @@ const TableView: React.FC<props> = ({
         {arrayForTable ? (
           arrayForTable.map((user: any, index: number) => (
             <>
-              <tr
-                key={user._id}
-                className={`hover:bg-gray-200 ${
-                  isZoomed === user._id
-                    ? "h-16 align-top bg-gray-200 text-lg leading-10"
-                    : "h-8 align-middle"
-                }`}
-                onClick={(e) =>
-                  setIsZoomed((prevId) =>
-                    prevId === user._id ? null : user._id
-                  )
-                }
-              >
-                <td className="py-1">
-                  <img
-                    src={`${userImage(user)}`}
-                    alt="avatar"
-                    className="w-8 h-8 object-cover"
-                  />
-                </td>
-                <td>{user.username}</td>
-                <td>{user.privacy.email ? user.email : ""}</td>
-                <td>{user.privacy.firstname ? user.firstname : ""}</td>
-                <td>{user.privacy.lastname ? user.lastname : ""}</td>
-                <td>
-                  {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
-                </td>
-                <td>{user.privacy.country ? user.country : ""}</td>
-                <td>{user.privacy.city ? user.city : ""}</td>
-              </tr>
+              {isZoomed === user._id || (
+                <tr
+                  key={user._id}
+                  className={`hover:bg-gray-200 "h-8 align-middle"
+               `}
+                  onClick={(e) => {
+                    setIsZoomed((prevId) =>
+                      prevId === user._id ? null : user._id
+                    );
+                    setTimeout(() => {
+                      const row = document.querySelector(
+                        `[data-user-id='${user._id}']`
+                      );
+                      if (row) {
+                        row.scrollIntoView({
+                          behavior: "smooth",
+                          block: "center",
+                        });
+                      }
+                    }, 100);
+                  }}
+                >
+                  <td className="py-1">
+                    <img
+                      src={`${userImage(user)}`}
+                      alt="avatar"
+                      className="w-8 h-8 object-cover"
+                    />
+                  </td>
+                  <td>{user.username}</td>
+                  <td>{user.privacy.email ? user.email : ""}</td>
+                  <td>{user.privacy.firstname ? user.firstname : ""}</td>
+                  <td>{user.privacy.lastname ? user.lastname : ""}</td>
+                  <td>
+                    {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
+                  </td>
+                  <td>{user.privacy.country ? user.country : ""}</td>
+                  <td>{user.privacy.city ? user.city : ""}</td>
+                </tr>
+              )}
+
               {isZoomed === user._id && (
-                <tr>
-                  <td colSpan={8} className="p-4 bg-gray-200">
-                    <div className="flex flex-row justify-center gap-x-32">
-                      <Button
-                        onClick={() => handleButtonViewPosts(user)}
-                        text="View Posts"
-                      ></Button>
-                      <Button
-                        onClick={() => handleButtonSendMessage(user)}
-                        text="Send Message"
-                      ></Button>
+                <tr
+                  data-user-id={user._id}
+                  onClick={(e) =>
+                    setIsZoomed((prevId) =>
+                      prevId === user._id ? null : user._id
+                    )
+                  }
+                >
+                  <td colSpan={8} className="p-4 bg-gray-200 w-full ">
+                    <div className="userCard">
+                      <img src={`${userImage(user)}`} alt="avatar" />
+                      <p className="name">{user.username}</p>
+                      <p className="address">
+                        {user.privacy.city ? user.city : ""},{" "}
+                        {user.privacy.country ? user.country : ""}
+                      </p>
+                      <div className="data">
+                        <p>{user.privacy.email ? user.email : ""}</p>
+                        <br />
+                        <p>
+                          {user.privacy.firstname ? user.firstname : ""}{" "}
+                          {user.privacy.lastname ? user.lastname : ""}
+                        </p>
+                        <br />
+                        <p>
+                          {user.privacy.birthdate
+                            ? formatDate(user.birthdate)
+                            : ""}
+                        </p>
+                      </div>
+                      <div className="button viewPosts">
+                        <Button
+                          onClick={() => handleButtonViewPosts(user)}
+                          text="View Posts"
+                        ></Button>
+                      </div>
+                      <div className="button sendMessage">
+                        <Button
+                          onClick={() => handleButtonSendMessage(user)}
+                          text="Send Message"
+                        ></Button>
+                      </div>
+                      <div className="button follow">
+                        <Button
+                          onClick={() => handleButtonSendMessage(user)}
+                          text="Follow"
+                        ></Button>
+                      </div>
                     </div>
                   </td>
                 </tr>

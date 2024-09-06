@@ -8,7 +8,7 @@ interface ButtonProps {
 export const Button: React.FC<ButtonProps> = ({ onClick, text }) => {
   return (
     <div
-      className="py-2 px-4 
+      className="py-2 
     text-gray-600 hover:text-green-600 font-bold  align-middle
      border-2  border-green-600 rounded"
     >
