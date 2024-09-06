@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
 import Logout from "./Logout";
 import DeleteAcc from "./DeleteAcc";
 import CloseButton from "../../CloseButton";
 import { IUser } from "../../../interfaces/User";
-import { userInContextUpdateRequest, getUserDataByID } from "../../../http/api";
+import { IPost } from "../../../interfaces/Post";
+import {
+  userInContextUpdateRequest,
+  getUserDataByID,
+  getUsersPost,
+} from "../../../http/api";
 import Blind from "../../Blind";
 import GetMyPosts from "./GetMyPosts";
 
@@ -14,6 +19,22 @@ const Account: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isPrivacy, setIsPrivacy] = useState(false);
   const [wantChange, setWantChange] = useState(false);
+  const [postCount, setPostCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchPostsCount = async () => {
+      try {
+        if (user) {
+          const userPosts: IPost[] = await getUsersPost(user._id);
+          const count: number = userPosts.length;
+          setPostCount(count);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchPostsCount();
+  }, []);
 
   const userImage = user?.profileimage?.includes("http")
     ? user?.profileimage
@@ -85,7 +106,7 @@ const Account: React.FC = () => {
               />
               <div className="flex flex-col justify-evenly">
                 <p className="text-2xl">{user?.username}</p>
-                <p className="text-base">{`Posts: ${user?.birthdate}`}</p>{" "}
+                <p className="text-base">{`Posts: ${postCount}`}</p>{" "}
                 {/* Hier wird das posts anzahl angezeigt */}
                 <p className="text-base">Likes:</p>
               </div>
