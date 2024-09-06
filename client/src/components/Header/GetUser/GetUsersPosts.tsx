@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import TableHeadCell from "./Table/TableHeadCell";
 import { Button } from "./Table/Button";
+import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
+import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
 
 interface TableProps {
   posts: any[];
   postsVisible: boolean;
   setPostsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setTableVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isMyPost: boolean;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
   posts,
   setPostsVisible,
   setTableVisible,
+  isMyPost,
 }) => {
   function formatDate(dateString: any): string {
     if (!dateString) {
@@ -48,7 +52,7 @@ const GetUsersPost: React.FC<TableProps> = ({
         <tbody className="bg-white divide-y divide-gray-200 p-5">
           {posts
             ? posts.map((post) => (
-                <tr key={post._id}>
+                <tr key={post._id} className="hover:bg-gray-200">
                   <td>{post.title}</td>
                   <td>
                     <img
@@ -68,6 +72,16 @@ const GetUsersPost: React.FC<TableProps> = ({
                     {post.description}
                   </td>
                   <td>{formatDate(post.postDate)}</td>
+                  {isMyPost && (
+                    <>
+                      <td>
+                        <EditButton />
+                      </td>
+                      <td>
+                        <DeleteButton />
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))
             : null}

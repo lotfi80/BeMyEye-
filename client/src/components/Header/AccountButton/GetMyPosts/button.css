@@ -1,0 +1,7 @@
+.icon path {
+  fill: gray;
+}
+
+.icon:hover path {
+  fill: red;
+}

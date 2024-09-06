@@ -17,6 +17,7 @@ const GetUsersWindow: React.FC = () => {
     string[] | null
   >([]);
   const [searchResults, setSearchResults] = useState<Partial<IUser>[]>([]);
+  const [isMyPost, setIsMyPost] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -77,6 +78,7 @@ const GetUsersWindow: React.FC = () => {
           postsVisible={postsVisible}
           setPostsVisible={setPostsVisible}
           setTableVisible={setTableVisible}
+          isMyPost={isMyPost}
         />
       )}
     </div>

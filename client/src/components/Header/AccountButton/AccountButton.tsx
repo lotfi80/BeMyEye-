@@ -12,7 +12,7 @@ import {
   getUsersPost,
 } from "../../../http/api";
 import Blind from "../../Blind";
-import GetMyPosts from "./GetMyPosts";
+import GetMyPosts from "./GetMyPosts/GetMyPosts";
 
 const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
@@ -20,6 +20,7 @@ const Account: React.FC = () => {
   const [isPrivacy, setIsPrivacy] = useState(false);
   const [wantChange, setWantChange] = useState(false);
   const [postCount, setPostCount] = useState<number>(0);
+  const [isMyPost, setIsMyPost] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPostsCount = async () => {
@@ -112,7 +113,7 @@ const Account: React.FC = () => {
               </div>
             </div>
             <hr />
-            <GetMyPosts />
+            <GetMyPosts isMyPost={isMyPost} />
 
             <Link to="/location" onClick={handleOnLinkClick}>
               My Location

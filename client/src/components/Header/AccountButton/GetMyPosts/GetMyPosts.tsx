@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import GetUsersPosts from "../GetUser/GetUsersPosts";
-import { useCategoryUserContext } from "../../../context/CategoryUser";
-import { getUsersPost } from "../../../http/api";
-import CloseButton from "../../CloseButton";
-import Blind from "../../Blind";
+import GetUsersPosts from "../../GetUser/GetUsersPosts";
+import { useCategoryUserContext } from "../../../../context/CategoryUser";
+import { getUsersPost } from "../../../../http/api";
+import CloseButton from "../../../CloseButton";
+import Blind from "../../../Blind";
 
-const GetMyPosts: React.FC = () => {
+interface props {
+  isMyPost: boolean;
+}
+
+const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
   const [postsVisible, setPostsVisible] = useState<boolean>(false);
   const [tableVisible, setTableVisible] = useState<boolean>(false);
   const [posts, setPosts] = useState<any[]>([]);
@@ -47,8 +51,13 @@ const GetMyPosts: React.FC = () => {
                 posts={posts}
                 setPostsVisible={setPostsVisible}
                 setTableVisible={setTableVisible}
+                isMyPost={isMyPost}
               />
-              <CloseButton setFunction={() => setPostsVisible(false)} />
+              <CloseButton
+                setFunction={() => {
+                  setPostsVisible(false);
+                }}
+              />
             </div>
           </div>
         </>
