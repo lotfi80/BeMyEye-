@@ -39,6 +39,7 @@
 .userCard .data {
   grid-area: data;
   justify-self: left;
+  align-self: end;
   font-size: 1rem;
   margin: 0;
 }

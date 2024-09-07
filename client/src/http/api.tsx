@@ -427,3 +427,51 @@ export const getUsersPost = async (userid: string) => {
     return [];
   }
 };
+// ****************************************************************
+export const notifyFollowers = async (userId: string) => {
+  try {
+    const response = await fetch("http://localhost:5000/message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: JSON.stringify({
+        userId,
+        message: `User ${userId} posted a new post`,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    console.log("Notifications sent successfully");
+  } catch (error) {
+    console.error("Failed to notify followers:", error);
+  }
+};
+// ****************************************************************
+export const makeFollower = async (userId: string, followingId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${userId}/follow`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ followingId }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to follow user");
+    }
+
+    console.log("User followed successfully");
+  } catch (error) {
+    console.error("Failed to follow user:", error);
+  }
+};

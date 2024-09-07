@@ -29,6 +29,8 @@ export interface IUser extends Document {
     country: boolean;
     city: boolean;
   };
+  followers: mongoose.Types.ObjectId[];
+  following: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema(
@@ -72,6 +74,8 @@ const UserSchema = new Schema(
       country: { type: Boolean },
       city: { type: Boolean },
     },
+    followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

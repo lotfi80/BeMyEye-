@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TableView from "./Table/TableView";
 import GetUsersPosts from "./GetUsersPosts";
-import { getUsersPost } from "../../../http/api";
+import { getUsersPost, makeFollower } from "../../../http/api";
 import { IUser } from "../../../interfaces/User";
 import { Search } from "../../searchBar/Search";
 import { getUsers } from "../../../http/api";
@@ -47,6 +47,20 @@ const GetUsersWindow: React.FC = () => {
     setIsZoomed(null);
   };
 
+  const handleButtonFollow = async (
+    accountOwner: IUser | null,
+    user: IUser
+  ) => {
+    try {
+      if (accountOwner) {
+        await makeFollower(accountOwner._id, user._id);
+        console.log("Followed", accountOwner._id, user._id);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
   return (
     <div className="p-2 pt-10 text-xs">
       <>
@@ -67,6 +81,7 @@ const GetUsersWindow: React.FC = () => {
           setIsZoomed={setIsZoomed}
           handleButtonViewPosts={handleButtonViewPosts}
           handleButtonSendMessage={handleButtonSendMessage}
+          handleButtonFollow={handleButtonFollow}
           isSearchActive={isSearchActive}
           searchResults={searchResults}
         />

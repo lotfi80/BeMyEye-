@@ -380,3 +380,33 @@ export const getUserDataByField = async (
     next(e);
   }
 };
+// ****************************************************************
+export const makeFollower = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const { followingId } = req.body;
+    const userId = req.params.id;
+    console.log(followingId, userId);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $push: { following: followingId } },
+      { new: true }
+    );
+    const updatedFollower = await User.findByIdAndUpdate(
+      followingId,
+      {
+        $push: { followers: userId },
+      },
+      { new: true }
+    );
+    console.log("Updated user followers:", updatedFollower);
+
+    return res.json({ message: "Follower added" });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: "Error adding follower" });
+  }
+};

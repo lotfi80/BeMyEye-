@@ -4,6 +4,7 @@ import { IUser } from "../../../../interfaces/User";
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
+import { useCategoryUserContext } from "../../../../context/CategoryUser";
 
 import "./userCard.css";
 
@@ -12,6 +13,7 @@ interface props {
   setIsZoomed: React.Dispatch<React.SetStateAction<string | null>>;
   handleButtonSendMessage: (user: IUser) => void;
   handleButtonViewPosts: (user: IUser) => void;
+  handleButtonFollow: (accountOwner: IUser | null, user: IUser) => void;
   isSearchActive: boolean;
   allUsers: Array<IUser>;
   tableVisible: boolean;
@@ -23,6 +25,7 @@ const TableView: React.FC<props> = ({
   setIsZoomed,
   handleButtonViewPosts,
   handleButtonSendMessage,
+  handleButtonFollow,
   isSearchActive,
   allUsers,
   tableVisible,
@@ -31,6 +34,7 @@ const TableView: React.FC<props> = ({
   const [sortedUsers, setSortedUsers] = useState<IUser[]>([]);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<string>("username");
+  const { user: accountOwner } = useCategoryUserContext();
 
   //Sort Data by
   useEffect(() => {
@@ -113,7 +117,6 @@ const TableView: React.FC<props> = ({
   };
 
   // ***  ****************************************************************
-  console.log("sortedUsers", sortedUsers);
   const arrayForTable = isSearchActive
     ? searchResults.slice(0)
     : sortedUsers.slice(0);
@@ -222,8 +225,6 @@ const TableView: React.FC<props> = ({
                         {user.privacy.country ? user.country : ""}
                       </p>
                       <div className="data">
-                        <p>{user.privacy.email ? user.email : ""}</p>
-                        <br />
                         <p>
                           {user.privacy.firstname ? user.firstname : ""}{" "}
                           {user.privacy.lastname ? user.lastname : ""}
@@ -234,6 +235,9 @@ const TableView: React.FC<props> = ({
                             ? formatDate(user.birthdate)
                             : ""}
                         </p>
+                        <br />
+                        <p>{user.privacy.email ? user.email : ""}</p>
+                        <br />
                       </div>
                       <div className="button viewPosts">
                         <Button
@@ -249,7 +253,7 @@ const TableView: React.FC<props> = ({
                       </div>
                       <div className="button follow">
                         <Button
-                          onClick={() => handleButtonSendMessage(user)}
+                          onClick={() => handleButtonFollow(accountOwner, user)}
                           text="Follow"
                         ></Button>
                       </div>

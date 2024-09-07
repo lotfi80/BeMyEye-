@@ -8,7 +8,8 @@
     "start": "ts-node ./server/scripts/seedsUser.ts",
     "defImage": "ts-node ./server/scripts/defaultImage.ts",
     "privacy": "ts-node ./server/scripts/privacyZumUser.ts",
-    "posts": "ts-node ./server/scripts/seedsPosts.ts"
+    "posts": "ts-node ./server/scripts/seedsPosts.ts",
+    "follow": "ts-node ./server/scripts/follow.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",

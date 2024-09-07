@@ -10,6 +10,7 @@ import categoryRouter from "./router/categoriesRouters";
 import postRouter from "./router/postRouters";
 import mapRouter from "./router/mapRouters";
 import authRouter from "./router/authRouters";
+import messageRouter from "./router/messageRouters";
 
 import passport from "./service/passport-service";
 // import indexRouter from "./router/index";
@@ -44,6 +45,8 @@ app.use("/posts", postRouter);
 app.use("/categories", categoryRouter);
 app.use("/map", mapRouter);
 app.use("/auth", authRouter);
+//Nath: neu Router fuer messaging
+app.use("/message", messageRouter);
 app.use("/profileImages", express.static(uploadProfileDir));
 app.use("/postImages", express.static(uploadDir));
 
