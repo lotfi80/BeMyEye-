@@ -125,7 +125,9 @@ const Following: React.FC = () => {
                         />
                         <div className="checkmark" />
                         <span className="tooltip">
-                          I don't want to follow anymore
+                          {!unfollowQueue.has(follow._id)
+                            ? "I don't want to follow anymore"
+                            : "No, I want to follow again"}
                         </span>
                       </label>
                       <hr />
