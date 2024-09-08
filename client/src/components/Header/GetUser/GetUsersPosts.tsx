@@ -10,6 +10,8 @@ interface TableProps {
   setPostsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setTableVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isMyPost: boolean;
+  setIsZoomed: React.Dispatch<React.SetStateAction<string | null>>;
+  currentUser: string;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
@@ -17,6 +19,8 @@ const GetUsersPost: React.FC<TableProps> = ({
   setPostsVisible,
   setTableVisible,
   isMyPost,
+  setIsZoomed,
+  currentUser,
 }) => {
   function formatDate(dateString: any): string {
     if (!dateString) {
@@ -28,14 +32,15 @@ const GetUsersPost: React.FC<TableProps> = ({
 
   return (
     <>
-      <div className="absolute top-5 left-5 ">
-        <Button
-          onClick={() => {
-            setPostsVisible(false);
-            setTableVisible(true);
-          }}
-          text="Back"
-        />
+      <div
+        className="absolute top-5 left-5 "
+        onClick={() => {
+          setPostsVisible(false);
+          setTableVisible(true);
+          setIsZoomed(currentUser);
+        }}
+      >
+        <Button text="Back" />
       </div>
       <table
         className="min-w-full divide-y divide-gray-400

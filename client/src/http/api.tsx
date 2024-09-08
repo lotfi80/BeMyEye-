@@ -475,3 +475,27 @@ export const makeFollower = async (userId: string, followingId: string) => {
     console.error("Failed to follow user:", error);
   }
 };
+// ****************************************************************
+export const deleteFollower = async (userId: string, followingId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${userId}/follow`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ followingId }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to unfollow user");
+    }
+
+    console.log("User unfollowed successfully");
+  } catch (error) {
+    console.error("Failed to unfollow user:", error);
+  }
+};

@@ -8,6 +8,7 @@ import {
   getUsers,
   getUserDataByField,
   makeFollower,
+  deleteFollower,
 } from "../controllers/user-controller";
 import { profileImagesUpload } from "../service/multer-service";
 
@@ -24,6 +25,7 @@ userRouter.post(
 );
 userRouter.delete("/user/:id", deleteUser);
 userRouter.post("/user/:id/follow", makeFollower);
+userRouter.put("/user/:id/follow", deleteFollower);
 
 userRouter.get("/user/:field/:value", getUserDataByField);
 

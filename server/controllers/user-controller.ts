@@ -410,3 +410,33 @@ export const makeFollower = async (
     return res.status(500).json({ message: "Error adding follower" });
   }
 };
+// ****************************************************************
+export const deleteFollower = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const { followingId } = req.body;
+    const userId = req.params.id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { following: followingId } },
+      { new: true }
+    );
+    const updatedFollower = await User.findByIdAndUpdate(
+      followingId,
+      {
+        $pull: { followers: userId },
+      },
+      { new: true }
+    );
+    console.log("Updated user followers:", updatedFollower);
+
+    return res.json({ message: "Follower deleted" });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: "Error deleting follower" });
+  }
+};

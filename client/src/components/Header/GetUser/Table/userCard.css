@@ -47,15 +47,36 @@
 .button {
   width: 100%;
   height: auto;
-  padding: 0.5rem;
   justify-self: center;
   text-align: center;
   font-size: 1rem;
   margin: 0;
+  color: gray;
+  font-weight: bold;
+  border: solid 2px green;
+  border-radius: 5px;
 }
+
+.button:hover {
+  background-color: green;
+  color: white;
+}
+
 .button.viewPosts {
   grid-area: butV;
 }
 .button.sendMessage {
   grid-area: butM;
 }
+.button.follow {
+  grid-area: butF;
+}
+.button.followed {
+  grid-area: butF;
+  background-color: green;
+  color: white;
+}
+
+/* py-2 
+   hover:text-green-600  
+     border-2  border-green-600 rounded" */

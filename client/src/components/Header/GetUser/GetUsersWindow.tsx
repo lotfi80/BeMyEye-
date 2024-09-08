@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TableView from "./Table/TableView";
 import GetUsersPosts from "./GetUsersPosts";
-import { getUsersPost, makeFollower } from "../../../http/api";
+import { getUsersPost, makeFollower, deleteFollower } from "../../../http/api";
 import { IUser } from "../../../interfaces/User";
 import { Search } from "../../searchBar/Search";
 import { getUsers } from "../../../http/api";
@@ -10,6 +10,7 @@ const GetUsersWindow: React.FC = () => {
   const [postsVisible, setPostsVisible] = useState<boolean>(false);
   const [tableVisible, setTableVisible] = useState<boolean>(true);
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
+  const [currentUser, setCurrentUser] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([]);
   const [isZoomed, setIsZoomed] = useState<string | null>(null);
   const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
@@ -54,8 +55,22 @@ const GetUsersWindow: React.FC = () => {
     try {
       if (accountOwner) {
         await makeFollower(accountOwner._id, user._id);
-        console.log("Followed", accountOwner._id, user._id);
       }
+      setIsZoomed(user._id); //*********** */
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  const handleButtonUnFollow = async (
+    accountOwner: IUser | null,
+    user: IUser
+  ) => {
+    try {
+      if (accountOwner) {
+        await deleteFollower(accountOwner._id, user._id);
+      }
+      setIsZoomed(user._id); //*********** */
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -82,8 +97,10 @@ const GetUsersWindow: React.FC = () => {
           handleButtonViewPosts={handleButtonViewPosts}
           handleButtonSendMessage={handleButtonSendMessage}
           handleButtonFollow={handleButtonFollow}
+          handleButtonUnFollow={handleButtonUnFollow}
           isSearchActive={isSearchActive}
           searchResults={searchResults}
+          setCurrentUser={setCurrentUser}
         />
       </>
 
@@ -94,6 +111,8 @@ const GetUsersWindow: React.FC = () => {
           setPostsVisible={setPostsVisible}
           setTableVisible={setTableVisible}
           isMyPost={isMyPost}
+          setIsZoomed={setIsZoomed}
+          currentUser={currentUser}
         />
       )}
     </div>

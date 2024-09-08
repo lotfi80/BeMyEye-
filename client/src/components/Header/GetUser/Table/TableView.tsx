@@ -5,6 +5,7 @@ import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
+import { getUserDataByID } from "../../../../http/api";
 
 import "./userCard.css";
 
@@ -14,10 +15,12 @@ interface props {
   handleButtonSendMessage: (user: IUser) => void;
   handleButtonViewPosts: (user: IUser) => void;
   handleButtonFollow: (accountOwner: IUser | null, user: IUser) => void;
+  handleButtonUnFollow: (accountOwner: IUser | null, user: IUser) => void;
   isSearchActive: boolean;
   allUsers: Array<IUser>;
   tableVisible: boolean;
   searchResults: Array<Partial<IUser>>;
+  setCurrentUser: (userid: string) => void;
 }
 
 const TableView: React.FC<props> = ({
@@ -26,15 +29,18 @@ const TableView: React.FC<props> = ({
   handleButtonViewPosts,
   handleButtonSendMessage,
   handleButtonFollow,
+  handleButtonUnFollow,
   isSearchActive,
   allUsers,
   tableVisible,
   searchResults,
+  setCurrentUser,
 }) => {
   const [sortedUsers, setSortedUsers] = useState<IUser[]>([]);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<string>("username");
   const { user: accountOwner } = useCategoryUserContext();
+  const [isFollowed, setIsFollowed] = useState<boolean | undefined>(false);
 
   //Sort Data by
   useEffect(() => {
@@ -115,6 +121,31 @@ const TableView: React.FC<props> = ({
     console.log(property);
     console.log(order);
   };
+  // ****************************************************************
+  const handleZoomClick = async (user: IUser) => {
+    {
+      try {
+        const data = await getUserDataByID(user._id);
+        if (accountOwner) {
+          const followed = data?.followers.includes(accountOwner._id);
+          setIsFollowed(followed);
+        }
+      } catch {
+        (error) => console.log(error);
+      }
+      setCurrentUser(user._id);
+      setIsZoomed((prevId) => (prevId === user._id ? null : user._id));
+      setTimeout(() => {
+        const row = document.querySelector(`[data-user-id='${user._id}']`);
+        if (row) {
+          row.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 100);
+    }
+  };
 
   // ***  ****************************************************************
   const arrayForTable = isSearchActive
@@ -171,22 +202,7 @@ const TableView: React.FC<props> = ({
                   key={user._id}
                   className={`hover:bg-gray-200 "h-8 align-middle"
                `}
-                  onClick={(e) => {
-                    setIsZoomed((prevId) =>
-                      prevId === user._id ? null : user._id
-                    );
-                    setTimeout(() => {
-                      const row = document.querySelector(
-                        `[data-user-id='${user._id}']`
-                      );
-                      if (row) {
-                        row.scrollIntoView({
-                          behavior: "smooth",
-                          block: "center",
-                        });
-                      }
-                    }, 100);
-                  }}
+                  onClick={() => handleZoomClick(user)}
                 >
                   <td className="py-1">
                     <img
@@ -239,24 +255,41 @@ const TableView: React.FC<props> = ({
                         <p>{user.privacy.email ? user.email : ""}</p>
                         <br />
                       </div>
-                      <div className="button viewPosts">
-                        <Button
-                          onClick={() => handleButtonViewPosts(user)}
-                          text="View Posts"
-                        ></Button>
+                      <div
+                        className="button viewPosts"
+                        onClick={() => handleButtonViewPosts(user)}
+                      >
+                        <Button text="View Posts"></Button>
                       </div>
-                      <div className="button sendMessage">
-                        <Button
-                          onClick={() => handleButtonSendMessage(user)}
-                          text="Send Message"
-                        ></Button>
+                      <div
+                        className="button sendMessage"
+                        onClick={() => handleButtonSendMessage(user)}
+                      >
+                        <Button text="Send Message"></Button>
                       </div>
-                      <div className="button follow">
-                        <Button
-                          onClick={() => handleButtonFollow(accountOwner, user)}
-                          text="Follow"
-                        ></Button>
-                      </div>
+                      {isFollowed || (
+                        <div
+                          className="button follow"
+                          onClick={() => {
+                            handleButtonFollow(accountOwner, user);
+                            setIsFollowed(true);
+                          }}
+                        >
+                          <Button text="Follow"></Button>
+                        </div>
+                      )}
+
+                      {isFollowed && (
+                        <div
+                          className="button followed"
+                          onClick={() => {
+                            handleButtonUnFollow(accountOwner, user);
+                            setIsFollowed(false);
+                          }}
+                        >
+                          <Button text="Followed!"></Button>
+                        </div>
+                      )}
                     </div>
                   </td>
                 </tr>
