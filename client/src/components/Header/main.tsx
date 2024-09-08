@@ -14,18 +14,12 @@ const Header: React.FC = () => {
   const [showPermission, setShowPermission] = useState(false);
 
   useEffect(() => {
-    console.log("User:", user);
-    console.log("Registration status:", registrationStatus);
-
     if (user === null) {
       setPermission(false);
     } else {
       setPermission(true);
     }
   }, [user]);
-
-  console.log("Permission:", permission);
-  console.log("Show permission:", showPermission);
 
   return (
     <header className="bg-white w-full py-4 shadow-md h-[15%] ">

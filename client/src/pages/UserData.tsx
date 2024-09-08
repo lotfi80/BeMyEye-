@@ -19,7 +19,6 @@ const UserData: React.FC = () => {
   const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [sex, setSex] = useState<number | undefined>(undefined);
 
-  console.log("user.profileImage", user?.profileimage);
   useEffect(() => {
     if (user?.sex !== undefined) {
       setSex(user?.sex);
@@ -27,7 +26,6 @@ const UserData: React.FC = () => {
   }, [user]);
 
   useEffect(() => {
-    console.log("galleryImage updated", galleryImage);
     if (user && galleryImage) {
       setUser({
         ...user,
@@ -62,19 +60,14 @@ const UserData: React.FC = () => {
     user?.profileimage && validImages.includes(user.profileimage)
       ? defaultImage
       : `http://localhost:5000/${user?.profileimage}`;
-  console.log("profileImage", profileImage);
-  console.log("userprofileImage", user?.profileimage);
 
   const avatar = profileImage || defaultImage;
-  console.log("avatar", avatar);
 
   const imageUrl = image
     ? URL.createObjectURL(image)
     : galleryImage
     ? `http://localhost:5000/${galleryImage}`
     : avatar;
-
-  console.log("imageUrl", imageUrl);
 
   const handleOnChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -103,8 +96,6 @@ const UserData: React.FC = () => {
       }
       return prevUser;
     });
-    console.log("galleryImage", img);
-    console.log("user.profileimage", img);
   };
 
   const handleOnRadioChange = (
@@ -160,8 +151,6 @@ const UserData: React.FC = () => {
       }
 
       if (galleryImage && user) {
-        console.log("galleryImage", galleryImage);
-        console.log(user);
         const currentUser = await userInContextUpdateRequest(user._id, user);
         console.log("Updated user:", currentUser);
       }
@@ -170,12 +159,9 @@ const UserData: React.FC = () => {
       alert("Invalid Data submitted");
     }
     // path anpassen wie du im backened hast
-    
-
 
     if (user) {
       const updatedUser = await getUserDataByID(user._id);
-      console.log("updatedUser2", updatedUser);
       updatedUser && setUser(updatedUser);
     }
     navigate("/home");

@@ -5,7 +5,7 @@ import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
-import { getUserDataByID } from "../../../http/api";
+import { getFollow_ } from "../../../http/api";
 
 import "./userCard.css";
 
@@ -44,8 +44,11 @@ const TableView: React.FC<props> = ({
 
   //Sort Data by
   useEffect(() => {
+    console.log("isFollowed", isFollowed);
+  }, [isFollowed]);
+
+  useEffect(() => {
     const sortData = () => {
-      console.log(allUsers, "allusers: ");
       const sorted = allUsers?.slice().sort((a, b) => {
         if (!a[orderBy] && b[orderBy]) return 1;
         if (a[orderBy] && !b[orderBy]) return -1;
@@ -115,38 +118,31 @@ const TableView: React.FC<props> = ({
   const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === "asc";
     setOrderBy(property);
-    console.log(isAsc);
-    console.log(order);
     setOrder(isAsc ? "desc" : "asc");
-    console.log(property);
-    console.log(order);
   };
   // ****************************************************************
   const handleZoomClick = async (user: IUser) => {
-    {
+    if (accountOwner) {
       try {
-        const data = await getUserDataByID(user._id);
-        if (accountOwner) {
-          const followed = data?.followers.some(
-            (follower: IUser) => follower._id === accountOwner._id
-          );
-          setIsFollowed(followed);
-        }
-      } catch {
-        (error) => console.log(error);
+        const data = await getFollow_(accountOwner._id);
+        const following = data?.following.some((u) => u._id === user._id);
+        setIsFollowed(following);
+      } catch (error) {
+        console.log(error);
       }
-      setCurrentUser(user._id);
-      setIsZoomed((prevId) => (prevId === user._id ? null : user._id));
-      setTimeout(() => {
-        const row = document.querySelector(`[data-user-id='${user._id}']`);
-        if (row) {
-          row.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-        }
-      }, 100);
     }
+
+    setCurrentUser(user._id);
+    setIsZoomed((prevId) => (prevId === user._id ? null : user._id));
+    setTimeout(() => {
+      const row = document.querySelector(`[data-user-id='${user._id}']`);
+      if (row) {
+        row.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 100);
   };
 
   // ***  ****************************************************************

@@ -23,17 +23,14 @@ export default function Privacy({ isPrivacy, setIsPrivacy }: props) {
         [name]: !prev.privacy[name],
       },
     }));
-    console.log("User:", user?.privacy);
   };
 
   const handleOnButtonClick = async () => {
     try {
       if (user) {
         await userInContextUpdateRequest(user._id, user);
-        console.log("User data submitted:", user.privacy);
         const saveduser = await getUserDataByID(user._id);
         setWantChange(!wantChange);
-        console.log("User data saved:", saveduser);
       }
     } catch (e) {
       console.error(e);

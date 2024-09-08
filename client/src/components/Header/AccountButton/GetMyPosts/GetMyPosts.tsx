@@ -18,7 +18,6 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log("User:", user);
         if (user) {
           const userPosts = await getUsersPost(user._id);
           setPosts(userPosts);
