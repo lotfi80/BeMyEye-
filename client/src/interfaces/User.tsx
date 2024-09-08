@@ -26,6 +26,6 @@ export interface IUser {
     country: boolean;
     city: boolean;
   };
-  followers: string[];
-  following: string[];
+  followers: IUser[];
+  following: IUser[];
 }

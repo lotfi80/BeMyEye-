@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
+
+import GetMyPosts from "./GetMyPosts/GetMyPosts";
+import Following from "./Following";
+import Privacy from "./Privacy";
 import Logout from "./Logout";
 import DeleteAcc from "./DeleteAcc";
+
 import CloseButton from "../../CloseButton";
-import { IUser } from "../../../interfaces/User";
-import { IPost } from "../../../interfaces/Post";
-import {
-  userInContextUpdateRequest,
-  getUserDataByID,
-  getUsersPost,
-} from "../../../http/api";
 import Blind from "../../Blind";
-import GetMyPosts from "./GetMyPosts/GetMyPosts";
+
+import { IPost } from "../../../interfaces/Post";
+import { getUsersPost } from "../../../http/api";
 
 const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isPrivacy, setIsPrivacy] = useState(false);
-  const [wantChange, setWantChange] = useState(false);
   const [postCount, setPostCount] = useState<number>(0);
   const [isMyPost, setIsMyPost] = useState<boolean>(true);
 
@@ -43,34 +42,6 @@ const Account: React.FC = () => {
 
   const handleOnLinkClick = () => {
     setShowDropdown(!showDropdown);
-  };
-
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    name: keyof IUser["privacy"]
-  ) => {
-    setUser((prev: IUser | any) => ({
-      ...prev,
-      privacy: {
-        ...prev.privacy,
-        [name]: !prev.privacy[name],
-      },
-    }));
-    console.log("User:", user?.privacy);
-  };
-
-  const handleOnButtonClick = async () => {
-    try {
-      if (user) {
-        await userInContextUpdateRequest(user._id, user);
-        console.log("User data submitted:", user.privacy);
-        const saveduser = await getUserDataByID(user._id);
-        setWantChange(!wantChange);
-        console.log("User data saved:", saveduser);
-      }
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   return (
@@ -108,126 +79,16 @@ const Account: React.FC = () => {
               <div className="flex flex-col justify-evenly">
                 <p className="text-2xl">{user?.username}</p>
                 <p className="text-base">{`Posts: ${postCount}`}</p>{" "}
-                {/* Hier wird das posts anzahl angezeigt */}
                 <p className="text-base">Likes:</p>
               </div>
             </div>
             <hr />
             <GetMyPosts isMyPost={isMyPost} />
-
-            <Link to="/location" onClick={handleOnLinkClick}>
-              My Location
-            </Link>
+            <Following />
             <Link to={`/profile/${user?._id}`} onClick={handleOnLinkClick}>
               Profile
             </Link>
-            <div className="flex flex-row  justify-start">
-              <div
-                className="w-1/3 cursor-pointer"
-                onClick={(e) => setIsPrivacy(!isPrivacy)}
-              >
-                Privacy
-              </div>
-              {isPrivacy && (
-                <div className="flex flex-col gap-2 text-sm">
-                  Display This Information to Other Users:
-                  <hr />
-                  <label htmlFor="email">
-                    Email
-                    <input
-                      className="ml-2"
-                      type="checkbox"
-                      name="email"
-                      id="email"
-                      checked={user?.privacy.email}
-                      disabled={!wantChange}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, `email`);
-                      }}
-                    />
-                  </label>
-                  <label htmlFor="firstname">
-                    Firstname
-                    <input
-                      className="ml-2"
-                      type="checkbox"
-                      name="firstname"
-                      id="firstname"
-                      checked={user?.privacy.firstname}
-                      disabled={!wantChange}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, "firstname");
-                      }}
-                    />
-                  </label>
-                  <label htmlFor="lastname">
-                    Lastname
-                    <input
-                      className="ml-2"
-                      type="checkbox"
-                      name="lastname"
-                      id="lastname"
-                      checked={user?.privacy.lastname}
-                      disabled={!wantChange}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, "lastname");
-                      }}
-                    />
-                  </label>
-                  <label htmlFor="birthdate">
-                    Birthday
-                    <input
-                      className="ml-2"
-                      type="checkbox"
-                      name="birthdate"
-                      id="birthdate"
-                      checked={user?.privacy.birthdate}
-                      disabled={!wantChange}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, "birthdate");
-                      }}
-                    />
-                  </label>
-                  <label htmlFor="country">
-                    Country
-                    <input
-                      className="ml-2"
-                      type="checkbox"
-                      name="country"
-                      id="country"
-                      checked={user?.privacy.country}
-                      disabled={!wantChange}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, "country");
-                      }}
-                    />
-                  </label>
-                  <label htmlFor="city">
-                    City
-                    <input
-                      className="ml-2"
-                      type="checkbox"
-                      name="city"
-                      id="city"
-                      checked={user?.privacy.city}
-                      disabled={!wantChange}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, "city");
-                      }}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className="border-2 border-green-500
-                     hover:bg-green-500 hover:text-white rounded-md
-                      active:bg-green-700"
-                    onClick={handleOnButtonClick}
-                  >
-                    {wantChange ? "Save" : "Change"}
-                  </button>
-                </div>
-              )}
-            </div>
+            <Privacy isPrivacy={isPrivacy} setIsPrivacy={setIsPrivacy} />
             <hr />
             <div className="grid grid-cols-2  justify-start">
               <Logout />

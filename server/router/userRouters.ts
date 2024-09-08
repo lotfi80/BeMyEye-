@@ -9,13 +9,14 @@ import {
   getUserDataByField,
   makeFollower,
   deleteFollower,
+  getFollow_,
 } from "../controllers/user-controller";
 import { profileImagesUpload } from "../service/multer-service";
 
 const userRouter = express.Router();
-
+// **************************************************
 userRouter.get("/users", getUsers);
-
+// **************************************************
 userRouter.get("/user/:id", getUserDataByID);
 userRouter.put("/user/:id", userProfileUpdate);
 userRouter.post(
@@ -24,9 +25,11 @@ userRouter.post(
   userProfileImageUpdate
 );
 userRouter.delete("/user/:id", deleteUser);
+// **************************************************
 userRouter.post("/user/:id/follow", makeFollower);
 userRouter.put("/user/:id/follow", deleteFollower);
-
+userRouter.get("/user/:id/follow", getFollow_);
+// **************************************************
 userRouter.get("/user/:field/:value", getUserDataByField);
 
 userRouter.put("/passwordUpdate/:id", passwordUpdate);

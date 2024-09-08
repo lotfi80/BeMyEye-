@@ -38,7 +38,7 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
           setPostsVisible(true);
         }}
       >
-        Get My Posts
+        My Posts
       </div>
 
       {postsVisible && (

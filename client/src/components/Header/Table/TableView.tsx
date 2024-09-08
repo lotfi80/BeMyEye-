@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { IUser } from "../../../../interfaces/User";
+import { IUser } from "../../../interfaces/User";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
-import { useCategoryUserContext } from "../../../../context/CategoryUser";
-import { getUserDataByID } from "../../../../http/api";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
+import { getUserDataByID } from "../../../http/api";
 
 import "./userCard.css";
 
@@ -127,7 +127,9 @@ const TableView: React.FC<props> = ({
       try {
         const data = await getUserDataByID(user._id);
         if (accountOwner) {
-          const followed = data?.followers.includes(accountOwner._id);
+          const followed = data?.followers.some(
+            (follower: IUser) => follower._id === accountOwner._id
+          );
           setIsFollowed(followed);
         }
       } catch {

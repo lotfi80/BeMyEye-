@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TableHeadCell from "./Table/TableHeadCell";
-import { Button } from "./Table/Button";
+import TableHeadCell from "../Table/TableHeadCell";
+import { Button } from "../Table/Button";
 import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
 
@@ -10,8 +10,8 @@ interface TableProps {
   setPostsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setTableVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isMyPost: boolean;
-  setIsZoomed: React.Dispatch<React.SetStateAction<string | null>>;
-  currentUser: string;
+  setIsZoomed?: React.Dispatch<React.SetStateAction<string | null>>;
+  currentUser?: string;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
@@ -19,8 +19,8 @@ const GetUsersPost: React.FC<TableProps> = ({
   setPostsVisible,
   setTableVisible,
   isMyPost,
-  setIsZoomed,
-  currentUser,
+  setIsZoomed = () => {},
+  currentUser = null,
 }) => {
   function formatDate(dateString: any): string {
     if (!dateString) {

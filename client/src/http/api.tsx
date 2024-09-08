@@ -476,6 +476,30 @@ export const makeFollower = async (userId: string, followingId: string) => {
   }
 };
 // ****************************************************************
+export const getFollow_ = async (userId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${userId}/follow`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch followers");
+    }
+
+    const data = await response.json();
+    console.log("Followers fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch followers:", error);
+  }
+};
+// ****************************************************************
 export const deleteFollower = async (userId: string, followingId: string) => {
   try {
     const response = await fetch(

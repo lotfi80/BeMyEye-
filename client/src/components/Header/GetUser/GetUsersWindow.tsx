@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import TableView from "./Table/TableView";
+import TableView from "../Table/TableView";
 import GetUsersPosts from "./GetUsersPosts";
 import { getUsersPost, makeFollower, deleteFollower } from "../../../http/api";
 import { IUser } from "../../../interfaces/User";

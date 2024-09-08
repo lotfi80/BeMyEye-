@@ -402,7 +402,6 @@ export const makeFollower = async (
       },
       { new: true }
     );
-    console.log("Updated user followers:", updatedFollower);
 
     return res.json({ message: "Follower added" });
   } catch (e) {
@@ -438,5 +437,22 @@ export const deleteFollower = async (
   } catch (e) {
     console.error(e);
     return res.status(500).json({ message: "Error deleting follower" });
+  }
+};
+// ******************************************************
+export const getFollow_ = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId = req.params.id;
+    const userData = await User.findById(userId)
+      .populate("followers")
+      .populate("following");
+    return res.json(userData);
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 };
