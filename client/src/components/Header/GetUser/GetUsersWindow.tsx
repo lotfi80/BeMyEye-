@@ -5,12 +5,15 @@ import { getUsersPost, makeFollower, deleteFollower } from "../../../http/api";
 import { IUser } from "../../../interfaces/User";
 import { Search } from "../../searchBar/Search";
 import { getUsers } from "../../../http/api";
+import WriteMessage from "../WriteMessage";
 
 const GetUsersWindow: React.FC = () => {
   const [postsVisible, setPostsVisible] = useState<boolean>(false);
   const [tableVisible, setTableVisible] = useState<boolean>(true);
+  const [letterVisible, setLetterVisible] = useState<boolean>(false);
+
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
-  const [currentUser, setCurrentUser] = useState<string>("");
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   const [posts, setPosts] = useState<any[]>([]);
   const [isZoomed, setIsZoomed] = useState<string | null>(null);
   const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
@@ -46,6 +49,8 @@ const GetUsersWindow: React.FC = () => {
 
   const handleButtonSendMessage = (user: IUser) => {
     setIsZoomed(null);
+    setCurrentUser(user);
+    setLetterVisible(true);
   };
 
   const handleButtonFollow = async (
@@ -115,6 +120,8 @@ const GetUsersWindow: React.FC = () => {
           currentUser={currentUser}
         />
       )}
+
+      {letterVisible && <WriteMessage currentRecipient={currentUser} />}
     </div>
   );
 };

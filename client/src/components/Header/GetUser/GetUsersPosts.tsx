@@ -3,6 +3,7 @@ import TableHeadCell from "../Table/TableHeadCell";
 import { Button } from "../Table/Button";
 import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
+import { IUser } from "../../../interfaces/User";
 
 interface TableProps {
   posts: any[];
@@ -11,7 +12,7 @@ interface TableProps {
   setTableVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isMyPost: boolean;
   setIsZoomed?: React.Dispatch<React.SetStateAction<string | null>>;
-  currentUser?: string;
+  currentUser?: IUser | null;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
@@ -35,9 +36,11 @@ const GetUsersPost: React.FC<TableProps> = ({
       <div
         className="absolute top-5 left-5 "
         onClick={() => {
-          setPostsVisible(false);
-          setTableVisible(true);
-          setIsZoomed(currentUser);
+          if (currentUser) {
+            setPostsVisible(false);
+            setTableVisible(true);
+            setIsZoomed(currentUser?._id);
+          }
         }}
       >
         <Button text="Back" />

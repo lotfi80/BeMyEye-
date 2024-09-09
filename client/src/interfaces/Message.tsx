@@ -4,6 +4,7 @@ interface IMessage {
   recipient: string[];
   message: string;
   subject: string;
+  attachments: string[];
   date: Date;
   isRead: boolean;
   // sender: IUser;

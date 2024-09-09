@@ -9,7 +9,7 @@ const sendMessage = async (
   next: NextFunction
 ): Promise<Response | void> => {
   const senderId = req.params.id;
-  const { recipients, message, subject } = req.body;
+  const { recipients, message, subject, attachments } = req.body;
 
   if (!Array.isArray(recipients) || recipients.length === 0) {
     return res.status(400).send("Recipients must be a non-empty array.");
@@ -21,6 +21,7 @@ const sendMessage = async (
       recipient: recipients,
       message: message,
       subject: subject,
+      attachments: attachments,
       isRead: false,
     });
     newMessage.save();
@@ -120,6 +121,23 @@ export const deleteMessage = async (
     );
 
     return res.status(200).json("message successfully deleted");
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Internal server error");
+  }
+};
+// ****************************************************************
+export const attachmentUpload = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
+  const attachment = req.file;
+  try {
+    if (!attachment) {
+      return res.status(400).send("No attachment found");
+    }
+    const fileUrl = `/attachments/${attachment.filename}`;
+    return res.status(200).json({ fileUrl });
   } catch (err) {
     console.error(err);
     return res.status(500).send("Internal server error");

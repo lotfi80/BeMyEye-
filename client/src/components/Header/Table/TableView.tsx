@@ -20,7 +20,7 @@ interface props {
   allUsers: Array<IUser>;
   tableVisible: boolean;
   searchResults: Array<Partial<IUser>>;
-  setCurrentUser: (userid: string) => void;
+  setCurrentUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 const TableView: React.FC<props> = ({
@@ -132,7 +132,7 @@ const TableView: React.FC<props> = ({
       }
     }
 
-    setCurrentUser(user._id);
+    setCurrentUser(user);
     setIsZoomed((prevId) => (prevId === user._id ? null : user._id));
     setTimeout(() => {
       const row = document.querySelector(`[data-user-id='${user._id}']`);

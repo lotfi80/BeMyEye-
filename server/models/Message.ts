@@ -6,7 +6,9 @@ export interface IMessage extends Document {
   recipient: mongoose.Types.ObjectId[];
   message: string;
   subject: string;
+  attachments: string[];
   isRead: boolean;
+
   createdAt: Date;
 }
 
@@ -17,6 +19,7 @@ const MessageSchema = new Schema(
     message: { type: String },
     subject: { type: String },
     isRead: { type: Boolean, default: false },
+    attachments: [{ type: String }],
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

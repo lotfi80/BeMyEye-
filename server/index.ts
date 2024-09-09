@@ -47,6 +47,7 @@ app.use("/map", mapRouter);
 app.use("/auth", authRouter);
 //Nath: neu Router fuer messaging
 app.use("/messages", messageRouter);
+
 app.use("/profileImages", express.static(uploadProfileDir));
 app.use("/postImages", express.static(uploadDir));
 

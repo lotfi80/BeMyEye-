@@ -1,29 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./writeMessage.css";
-import Blind60 from "../Blind60";
 import { useCategoryUserContext } from "../../context/CategoryUser";
-import { sendMessage } from "../../http/api";
+import { attachmentUpload, getUsersByField, sendMessage } from "../../http/api";
+import { IUser } from "../../interfaces/User";
 
 interface props {
-  currentRecipient: string;
+  currentRecipient: IUser | null;
+}
+interface UploadResponse {
+  fileUrl: string;
 }
 
 const WriteMessage: React.FC<props> = ({ currentRecipient }) => {
-  const [recipients, setRecipients] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const [recipients, setRecipients] = useState(
+    currentRecipient?.username || ""
+  );
+  const [subject, setSubject] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const { user } = useCategoryUserContext();
+  const [attachments, setAttachments] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (currentRecipient?.username) {
+      setRecipients(currentRecipient.username);
+    }
+  }, [currentRecipient]);
+
+  useEffect(() => {
+    console.log("attachment", attachments);
+  }, [attachments]);
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const newFormData = new FormData();
+    newFormData.append("attachments", file);
+    console.log("newFormData", newFormData);
+    try {
+      const response = await attachmentUpload(newFormData);
+      if (!response) throw new Error("No response from server");
+      console.log("File uploaded successfully:", response);
+      setAttachments((prev) => [...prev, response.fileUrl]);
+    } catch (err) {
+      console.error("File upload failed:", err);
+    }
+  };
 
   const handleSend = async () => {
     if (!user) return;
     try {
-      await sendMessage(user._id, recipients.split(","), message, subject);
+      if (recipients) {
+        const recipientUsernames = recipients
+          .split(",")
+          .map((username) => username.trim())
+          .filter((username) => username.length > 0);
+
+        const recipientPromises = recipientUsernames.map(async (username) => {
+          try {
+            const recipientData = await getUsersByField("username", username);
+            if (recipientData) {
+              return recipientData[0]._id;
+            } else {
+              console.error(`No ID found for username: ${username}`);
+              return null;
+            }
+          } catch (error) {
+            console.error(`Error fetching user ${username}:`, error);
+            return null;
+          }
+        });
+
+        const newArrayOfRecipients = (
+          await Promise.all(recipientPromises)
+        ).filter((id) => id !== null);
+        console.log("newArrayOfRecipients", newArrayOfRecipients);
+        await sendMessage(
+          user._id,
+          newArrayOfRecipients,
+          message,
+          subject,
+          attachments
+        );
+      }
     } catch (err) {
       console.log(err);
       console.log({ recipients, subject, message });
     }
   };
-  console.log("WriteMessage rendered");
   return (
     <>
       {/* <Blind60 /> */}
@@ -35,7 +100,6 @@ const WriteMessage: React.FC<props> = ({ currentRecipient }) => {
           <input
             type="text"
             placeholder="Enter recipient usernames separated by commas"
-            defaultValue={currentRecipient}
             value={recipients}
             onChange={(e) => setRecipients(e.target.value)}
             className="input"
@@ -56,9 +120,15 @@ const WriteMessage: React.FC<props> = ({ currentRecipient }) => {
             className="textarea"
           />
           <div className="buttonContainer">
-            <button type="button" className="button">
+            <label className="button">
               Attach Files
-            </button>
+              <input
+                type="file"
+                onChange={handleFileUpload}
+                className="hiddenInput"
+              />
+            </label>
+
             <button type="button" onClick={handleSend} className="button">
               Send
             </button>

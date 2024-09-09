@@ -527,7 +527,8 @@ export const sendMessage = async (
   senderId: string,
   recipients: string[],
   message: string,
-  subject: string
+  subject: string,
+  attachments: string[]
 ) => {
   try {
     const response = await fetch(
@@ -538,7 +539,7 @@ export const sendMessage = async (
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        body: JSON.stringify({ recipients, message, subject }),
+        body: JSON.stringify({ recipients, message, subject, attachments }),
       }
     );
 
@@ -641,5 +642,48 @@ export const deleteMessage = async (messageId: string) => {
     console.log("Message deleted successfully");
   } catch (error) {
     console.error("Failed to delete message:", error);
+  }
+};
+// ***********************************************************
+export const getUsersByField = async (field: string, value: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/user/${field}/${value}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
+    const data = await response.json();
+    console.log("Users fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+  }
+};
+// ****************************************************************
+export const attachmentUpload = async (attachments: FormData) => {
+  try {
+    const response = await fetch(`http://localhost:5000/messages/attachment`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: attachments,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload attachments");
+    }
+
+    console.log("Attachments uploaded successfully");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to upload attachments:", error);
   }
 };

@@ -60,3 +60,8 @@ div.screen {
   font-size: 12px;
   margin-top: 10px;
 }
+.hiddenInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
