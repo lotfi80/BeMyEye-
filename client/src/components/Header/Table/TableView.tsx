@@ -6,13 +6,13 @@ import { TableSortLabel, Box } from "./TableSortLabel";
 import { Button } from "./Button";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
 import { getFollow_ } from "../../../http/api";
+import WriteMessage from "../WriteMessage";
 
 import "./userCard.css";
 
 interface props {
   isZoomed: string | null;
   setIsZoomed: React.Dispatch<React.SetStateAction<string | null>>;
-  handleButtonSendMessage: (user: IUser) => void;
   handleButtonViewPosts: (user: IUser) => void;
   handleButtonFollow: (accountOwner: IUser | null, user: IUser) => void;
   handleButtonUnFollow: (accountOwner: IUser | null, user: IUser) => void;
@@ -20,6 +20,7 @@ interface props {
   allUsers: Array<IUser>;
   tableVisible: boolean;
   searchResults: Array<Partial<IUser>>;
+  currentUser: IUser | null;
   setCurrentUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
@@ -27,7 +28,6 @@ const TableView: React.FC<props> = ({
   isZoomed,
   setIsZoomed,
   handleButtonViewPosts,
-  handleButtonSendMessage,
   handleButtonFollow,
   handleButtonUnFollow,
   isSearchActive,
@@ -35,12 +35,14 @@ const TableView: React.FC<props> = ({
   tableVisible,
   searchResults,
   setCurrentUser,
+  currentUser,
 }) => {
   const [sortedUsers, setSortedUsers] = useState<IUser[]>([]);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<string>("username");
   const { user: accountOwner } = useCategoryUserContext();
   const [isFollowed, setIsFollowed] = useState<boolean | undefined>(false);
+  const [letterVisible, setLetterVisible] = useState<boolean>(false);
 
   //Sort Data by
   useEffect(() => {
@@ -145,6 +147,12 @@ const TableView: React.FC<props> = ({
     }, 100);
   };
 
+  const handleButtonSendMessage = (user: IUser) => {
+    setIsZoomed(null);
+    setCurrentUser(user);
+    setLetterVisible(true);
+  };
+
   // ***  ****************************************************************
   const arrayForTable = isSearchActive
     ? searchResults.slice(0)
@@ -224,68 +232,90 @@ const TableView: React.FC<props> = ({
               {isZoomed === user._id && (
                 <tr
                   data-user-id={user._id}
-                  onClick={(e) =>
+                  onClick={(e) => {
                     setIsZoomed((prevId) =>
                       prevId === user._id ? null : user._id
-                    )
-                  }
+                    );
+                  }}
                 >
                   <td colSpan={8} className="p-4 bg-gray-200 w-full ">
                     <div className="userCard">
-                      <img src={`${userImage(user)}`} alt="avatar" />
-                      <p className="name">{user.username}</p>
-                      <p className="address">
-                        {user.privacy.city ? user.city : ""},{" "}
-                        {user.privacy.country ? user.country : ""}
-                      </p>
-                      <div className="data">
-                        <p>
-                          {user.privacy.firstname ? user.firstname : ""}{" "}
-                          {user.privacy.lastname ? user.lastname : ""}
-                        </p>
-                        <br />
-                        <p>
-                          {user.privacy.birthdate
-                            ? formatDate(user.birthdate)
-                            : ""}
-                        </p>
-                        <br />
-                        <p>{user.privacy.email ? user.email : ""}</p>
-                        <br />
+                      <div className="left">
+                        <img src={`${userImage(user)}`} alt="avatar" />
+                        {isFollowed || (
+                          <div
+                            className="button"
+                            onClick={() => {
+                              handleButtonFollow(accountOwner, user);
+                              setIsFollowed(true);
+                            }}
+                          >
+                            <Button text="Follow"></Button>
+                          </div>
+                        )}
+                        {isFollowed && (
+                          <div
+                            className="button followed"
+                            onClick={() => {
+                              handleButtonUnFollow(accountOwner, user);
+                              setIsFollowed(false);
+                            }}
+                          >
+                            <Button text="Followed!"></Button>
+                          </div>
+                        )}
                       </div>
-                      <div
-                        className="button viewPosts"
-                        onClick={() => handleButtonViewPosts(user)}
-                      >
-                        <Button text="View Posts"></Button>
-                      </div>
-                      <div
-                        className="button sendMessage"
-                        onClick={() => handleButtonSendMessage(user)}
-                      >
-                        <Button text="Send Message"></Button>
-                      </div>
-                      {isFollowed || (
-                        <div
-                          className="button follow"
-                          onClick={() => {
-                            handleButtonFollow(accountOwner, user);
-                            setIsFollowed(true);
-                          }}
-                        >
-                          <Button text="Follow"></Button>
+
+                      {letterVisible || (
+                        <div className="right">
+                          <p className="name">{user.username}</p>
+                          <p className="address">
+                            {user.privacy.city ? user.city : ""},{" "}
+                            {user.privacy.country ? user.country : ""}
+                          </p>
+                          <div className="data">
+                            <p>
+                              {user.privacy.firstname ? user.firstname : ""}{" "}
+                              {user.privacy.lastname ? user.lastname : ""}
+                            </p>
+                            <br />
+                            <p>
+                              {user.privacy.birthdate
+                                ? formatDate(user.birthdate)
+                                : ""}
+                            </p>
+                            <br />
+                            <p>{user.privacy.email ? user.email : ""}</p>
+                            <br />
+                          </div>
+
+                          <div className="twoButtons">
+                            <div
+                              className="button"
+                              onClick={() => handleButtonViewPosts(user)}
+                            >
+                              <Button text="View Posts"></Button>
+                            </div>
+                            <div
+                              className="button"
+                              onClick={() => handleButtonSendMessage(user)}
+                            >
+                              <Button text="Send Message"></Button>
+                            </div>
+                          </div>
                         </div>
                       )}
-
-                      {isFollowed && (
+                      {letterVisible && (
                         <div
-                          className="button followed"
-                          onClick={() => {
-                            handleButtonUnFollow(accountOwner, user);
-                            setIsFollowed(false);
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsZoomed(null);
                           }}
                         >
-                          <Button text="Followed!"></Button>
+                          <WriteMessage
+                            currentRecipient={currentUser}
+                            setLetterVisible={setLetterVisible}
+                          />
                         </div>
                       )}
                     </div>

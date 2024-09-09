@@ -3,15 +3,20 @@ import "./writeMessage.css";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 import { attachmentUpload, getUsersByField, sendMessage } from "../../http/api";
 import { IUser } from "../../interfaces/User";
+import CloseButton from "../CloseButton";
 
 interface props {
   currentRecipient: IUser | null;
+  setLetterVisible?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface UploadResponse {
   fileUrl: string;
 }
 
-const WriteMessage: React.FC<props> = ({ currentRecipient }) => {
+const WriteMessage: React.FC<props> = ({
+  currentRecipient,
+  setLetterVisible,
+}) => {
   const [recipients, setRecipients] = useState(
     currentRecipient?.username || ""
   );
@@ -89,11 +94,17 @@ const WriteMessage: React.FC<props> = ({ currentRecipient }) => {
       console.log({ recipients, subject, message });
     }
   };
+
+  const closeMessageWindow = () => {
+    if (setLetterVisible) setLetterVisible(false);
+  };
+
   return (
     <>
       {/* <Blind60 /> */}
       {/* <div className="screen"> */}
       <div className="letterContainer">
+        <CloseButton setFunction={closeMessageWindow} />
         <h1 className="title">Write a Message</h1>
         <form className="letterForm">
           <label className="label">Recipients</label>
@@ -124,7 +135,9 @@ const WriteMessage: React.FC<props> = ({ currentRecipient }) => {
               Attach Files
               <input
                 type="file"
-                onChange={handleFileUpload}
+                onChange={(e) => {
+                  handleFileUpload;
+                }}
                 className="hiddenInput"
               />
             </label>
