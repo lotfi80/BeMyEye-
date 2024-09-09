@@ -31,6 +31,8 @@ export interface IUser extends Document {
   };
   followers: mongoose.Types.ObjectId[];
   following: mongoose.Types.ObjectId[];
+  inbox: mongoose.Types.ObjectId[];
+  sent: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema(
@@ -76,6 +78,8 @@ const UserSchema = new Schema(
     },
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    inbox: [{ type: Schema.Types.ObjectId, ref: "Message" }],
+    sent: [{ type: Schema.Types.ObjectId, ref: "Message" }],
   },
   { timestamps: true }
 );

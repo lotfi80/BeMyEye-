@@ -5,6 +5,7 @@ export interface IMessage extends Document {
   sender: mongoose.Types.ObjectId;
   recipient: mongoose.Types.ObjectId[];
   message: string;
+  subject: string;
   isRead: boolean;
   createdAt: Date;
 }
@@ -12,8 +13,9 @@ export interface IMessage extends Document {
 const MessageSchema = new Schema(
   {
     sender: { type: Schema.ObjectId, ref: "User" },
-    recipient: { type: Schema.ObjectId, ref: "User" },
+    recipient: [{ type: Schema.ObjectId, ref: "User" }],
     message: { type: String },
+    subject: { type: String },
     isRead: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
   },

@@ -522,3 +522,124 @@ export const deleteFollower = async (userId: string, followingId: string) => {
     console.error("Failed to unfollow user:", error);
   }
 };
+// ****************************************************************
+export const sendMessage = async (
+  senderId: string,
+  recipients: string[],
+  message: string,
+  subject: string
+) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/messages/send/${senderId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ recipients, message, subject }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to sent message");
+    }
+
+    console.log("Message sended successfully");
+  } catch (error) {
+    console.error("Failed to sent message:", error);
+  }
+};
+// ****************************************************************
+export const getUserInbox = async (userId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/messages/user/${userId}/inbox`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch inbox");
+    }
+
+    const data = await response.json();
+    console.log("Inbox fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch inbox:", error);
+  }
+};
+// ****************************************************************
+export const getUserSent = async (userId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/messages/user/${userId}/sent`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch sent messages");
+    }
+
+    const data = await response.json();
+    console.log("Sent messages fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch sent messages:", error);
+  }
+};
+// ****************************************************************
+export const markAsRead = async (messageId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/messages/${messageId}/read`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to mark message as read");
+    }
+
+    console.log("Message marked as read successfully");
+  } catch (error) {
+    console.error("Failed to mark message as read:", error);
+  }
+};
+// ****************************************************************
+export const deleteMessage = async (messageId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/messages/${messageId}/delete`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete message");
+    }
+
+    console.log("Message deleted successfully");
+  } catch (error) {
+    console.error("Failed to delete message:", error);
+  }
+};

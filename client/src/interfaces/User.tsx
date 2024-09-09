@@ -28,4 +28,6 @@ export interface IUser {
   };
   followers: IUser[];
   following: IUser[];
+  inbox: IMessage[];
+  sent: IMessage[];
 }
