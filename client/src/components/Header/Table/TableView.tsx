@@ -308,7 +308,6 @@ const TableView: React.FC<props> = ({
                       {letterVisible && (
                         <div
                           onClick={(e) => {
-                            e.preventDefault();
                             setIsZoomed(null);
                           }}
                         >

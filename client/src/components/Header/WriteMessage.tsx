@@ -31,15 +31,14 @@ const WriteMessage: React.FC<props> = ({
     }
   }, [currentRecipient]);
 
-  useEffect(() => {
-    console.log("attachment", attachments);
-  }, [attachments]);
-
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    console.log("File selected:", event.target.files?.[0]);
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
     const newFormData = new FormData();
     newFormData.append("attachments", file);
     console.log("newFormData", newFormData);
@@ -101,8 +100,6 @@ const WriteMessage: React.FC<props> = ({
 
   return (
     <>
-      {/* <Blind60 /> */}
-      {/* <div className="screen"> */}
       <div className="letterContainer">
         <CloseButton setFunction={closeMessageWindow} />
         <h1 className="title">Write a Message</h1>
@@ -135,9 +132,7 @@ const WriteMessage: React.FC<props> = ({
               Attach Files
               <input
                 type="file"
-                onChange={(e) => {
-                  handleFileUpload;
-                }}
+                onChange={handleFileUpload}
                 className="hiddenInput"
               />
             </label>
