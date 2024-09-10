@@ -20,7 +20,7 @@ const Header: React.FC = () => {
   }, [user, registrationStatus]);
 
   return (
-    <header className="bg-white w-full py-4 shadow-md h-[15%] ">
+    <header className="bg-white w-full py-4 shadow-md h-32 ">
       <Header2 /> 
       
       {/* <div className="flex gap-10 justify-end items-center mx-auto max-w-screen-xl ">

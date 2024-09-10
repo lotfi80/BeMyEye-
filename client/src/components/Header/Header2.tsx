@@ -42,13 +42,13 @@ export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="bg-white ">
+    <header className="bg-white  ">
       <nav aria-label="Global" className="mx-auto  self-center flex max-w-7xl items-center justify-between p-5 lg:px-20 ">
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.1">
+          < Link to="/" className="-m-1.5 p-1.1">    
             <span className="sr-only">BeMyEye</span>
             <img alt="" src={logo2} className="h-20 w-auto  " />
-          </a>
+         </Link>
         </div>
         <div className="flex lg:hidden">
           <button
