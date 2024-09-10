@@ -3,9 +3,10 @@ import CategoryList from "./categoryList";
 
 function Category() {
   return (
-    <div className="w-[40%] h-full bg-gray-200">
+    <div className="w-[90%] h-full bg-[#fffefe border-black " >
       <CategoryList />
     </div>
+
   );
 }
 

@@ -135,7 +135,7 @@ function GridContainer() {
       <button
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 bg-gray-300 rounded-md shadow-md hover:bg-gray-400 transition-colors disabled:opacity-50"
+        className="px-4 py-2 border-black bg-gray-300 rounded-md shadow-md hover:bg-gray-400 transition-colors disabled:opacity-50"
       >
         Next
       </button>

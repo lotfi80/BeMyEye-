@@ -7,6 +7,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 import AccountButton from "./AccountButton";
 import GetUsers from "./GetUsers";
+import Header2 from "./Header2";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
@@ -20,7 +21,9 @@ const Header: React.FC = () => {
 
   return (
     <header className="bg-white w-full py-4 shadow-md h-[15%] ">
-      <div className="flex gap-10 justify-end items-center mx-auto max-w-screen-xl ">
+      <Header2 /> 
+      
+      {/* <div className="flex gap-10 justify-end items-center mx-auto max-w-screen-xl ">
 
         <div className="mr-auto">
           <img
@@ -28,10 +31,10 @@ const Header: React.FC = () => {
             alt=""
             className="h-20 w-auto"
           />
-        </div>
+        </div> */}
         {/* <div className="mr-auto text-3xl ">BeMyEye</div> */}
 
-        <div
+        {/* <div
           className="bg-gray-200 text-black px-4 py-2  
         rounded-md hover:bg-black hover:text-white cursor-pointer"
         >
@@ -41,12 +44,12 @@ const Header: React.FC = () => {
 
         <div className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer ">
           <Link to="/posts">Posts</Link> {/* Verlinke zur Posts-Route */}
-        </div>
+        {/* </div>
 
         <GetUsers />
 
         <div className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer">
-          <Link to="/logout">get my posts</Link>
+          
         </div>
 
         {user ? null : registrationStatus === "none" ? (
@@ -67,7 +70,7 @@ const Header: React.FC = () => {
           </>
         ) : null}
         {user ? <AccountButton /> : null}
-      </div>
+      </div> */}
     </header>
   );
 };

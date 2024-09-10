@@ -7,7 +7,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className="w-full h-screen flex">
-      <div className="w-[100%] h-full bg-gray-100 flex flex-row">
+      <div className="w-[100%] h-full bg-white-500 flex flex-row">
         <div className="w-[30%] p-4 overflow-auto">
           <Category />
         </div>

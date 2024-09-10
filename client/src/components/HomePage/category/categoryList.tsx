@@ -36,15 +36,17 @@ const CategoryList: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="flex flex-wrap gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 border">
       {categories.map((category) => (
         <div
           key={category._id}
-          className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-black hover:text-white cursor-pointer transition-colors"
+          className="bg-white text-sm font-semibold leading-6 px-4 py-2 rounded-md hover:bg-[#38b5ff]  hover:text-white cursor-pointer transition-colors"
+          
         >
           {category.name}
         </div>
       ))}
+      
     </div>
   );
 };

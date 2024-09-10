@@ -46,7 +46,7 @@ function ContainerSearch() {
           />
         </Autocomplete>
       </div>
-      <div className="w-[60%] h-[20%] bg-white p-4 flex items-center">
+      <div className="w-[60%] h-[20%] border-black bg-white p-4 flex items-center">
         <DistanceList />
       </div>
     </LoadScript>
