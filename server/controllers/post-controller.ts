@@ -18,6 +18,7 @@ export const createPost = async (
       longtitute,
       category,
       userid,
+      barcode
     } = req.body;
     console.log(userid, "test ", req.body);
     const image = req.file;
@@ -34,6 +35,7 @@ export const createPost = async (
         coordinates: [longtitute, latitute],
       },
       category,
+      barcode,
       postimage: [],
     });
 
