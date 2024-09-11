@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useCategoryUserContext } from "../../context/CategoryUser";
-import { getUserDataByID } from "../../http/api";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
+import { getUserDataByID, getPostByID } from "../../../http/api";
+import ListOfPosts from "./ListOfPosts";
+import { IPost } from "../../../interfaces/Post";
 
-const Button = () => {
+const Notification: React.FC = () => {
   const { user } = useCategoryUserContext();
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [postCount, setPostCount] = useState<number>(0);
+  const [isListOfPostsVisible, setIsListOfPostsVisible] = useState(false);
+  const [isPostWindowVisible, setIsPostWindowVisible] = useState(false);
 
   useEffect(() => {
+    // ///////////////////////////////тут ошибка
     const getPostCount = async () => {
       try {
         if (!user) return;
@@ -16,21 +22,43 @@ const Button = () => {
         console.log("userNotification", userData);
         const postCount = userData.notifications.length;
         setPostCount(postCount);
+
+        const waitPromise = userData.notifications.map(async (notification) => {
+          const post = await getPostByID(notification._id);
+          return post;
+        });
+
+        const fetchedPosts = await Promise.all(waitPromise);
+        console.log("post", fetchedPosts);
+        setPosts(fetchedPosts);
       } catch (error) {
         console.error("Error fetching user inbox:", error);
       }
     };
     getPostCount();
   }, [user]);
-
+  console.log("postsss", posts);
+  console.log("count", postCount);
   return (
     <StyledWrapper postCount={postCount}>
-      <div className="notification">
+      <div
+        className="notification"
+        onClick={() => setIsListOfPostsVisible(true)}
+      >
         <div className="bell-container">
           <div className="bell" />
         </div>
         <span className="tooltip">Your followed users have new posts!</span>
       </div>
+      {isListOfPostsVisible && (
+        <ListOfPosts
+          isListOfPostsVisible={isListOfPostsVisible}
+          setIsListOfPostsVisible={setIsListOfPostsVisible}
+          isPostWindowVisible={isPostWindowVisible}
+          setIsPostWindowVisible={setIsListOfPostsVisible}
+          posts={posts}
+        />
+      )}
     </StyledWrapper>
   );
 };
@@ -141,4 +169,4 @@ const StyledWrapper = styled.div<{ postCount: number }>`
   }
 `;
 
-export default Button;
+export default Notification;

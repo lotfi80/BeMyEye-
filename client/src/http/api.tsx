@@ -1,5 +1,6 @@
 import { AuthTokens } from "../interfaces/AuthToken";
-import { IUser } from "../interfaces/User";
+import IUser from "../interfaces/User";
+import { IPost } from "../interfaces/Post";
 
 const BASE_URL = "http://localhost:5000/api";
 
@@ -685,5 +686,27 @@ export const attachmentUpload = async (attachments: FormData) => {
     return await response.json();
   } catch (error) {
     console.error("Failed to upload attachments:", error);
+  }
+};
+// ---------------------------------------------------
+export const getPostByID = async (postId: string): Promise<IPost> => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post");
+    }
+
+    const data = await response.json();
+    console.log("API response:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch post:", error);
+    return {} as IPost;
   }
 };

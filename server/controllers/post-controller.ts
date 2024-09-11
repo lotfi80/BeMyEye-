@@ -238,3 +238,27 @@ export const deleteComment = async (
     next(e);
   }
 };
+// //////////////////////NATH////////////////////////////
+export const getPostsById = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
+  const id: string | null = req.params.id;
+  if (!id || typeof id !== "string") {
+    return res.status(400).json({ message: "Invalid ID format" });
+  }
+
+  try {
+    const post = await Post.findById(id)
+      .populate("userid")
+      .populate("category")
+      .populate("postimage");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching post", error });
+  }
+};
