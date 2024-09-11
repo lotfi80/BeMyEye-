@@ -18,6 +18,9 @@ const postRouter = express.Router();
 postRouter.get("/get/:id", getUserPosts);
 postRouter.post("/create", imagesUpload.single("postImages"), createPost);
 postRouter.get("/", getFilteredPosts);
+postRouter.post("/comment/create", createComment);
+postRouter.post("/comment/get", getComments);
+postRouter.put("/comment/update/:id", updateComment);
 
 // /////////////////////////NATH/////////////
 postRouter.get("/:id", getPostsById);

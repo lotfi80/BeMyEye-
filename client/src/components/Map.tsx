@@ -46,6 +46,7 @@ const libraries : Libraries = ['places'];
   };
   return (
     <div className="w-full h-full p-4 bg-white rounded-lg shadow-md">
+    <div className="relative w-full h-[100%] md:h-[100%] lg:h-[100%] rounded-lg shadow-md">
 
     <LoadScript
       googleMapsApiKey="AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg"
@@ -62,6 +63,7 @@ const libraries : Libraries = ['places'];
         ))}
       </GoogleMap>
     </LoadScript>
+    </div>
     </div>
 
   )
