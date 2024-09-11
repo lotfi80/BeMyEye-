@@ -8,12 +8,13 @@ async function clear() {
   await Message.deleteMany({});
   await User.updateMany(
     {},
-    {
-      $set: {
-        inbox: [],
-        sent: [],
-      },
-    }
+    // {
+    //   $set: {
+    //     inbox: [],
+    //     sent: [],
+    //   },
+    // }
+    { $unset: { location: "" } }
   );
 
   console.log("Fields 'inbox' and 'sent' cleared for all users.");
