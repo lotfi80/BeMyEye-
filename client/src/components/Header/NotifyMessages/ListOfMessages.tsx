@@ -68,10 +68,6 @@ const ListOfMessages: React.FC<props> = ({
   const arrayForMessages = isSearchActive
     ? searchResults.slice(0)
     : sortedMessages.slice(0);
-  console.log("isSearchActive", isSearchActive);
-  console.log("1", searchResults);
-  console.log("2", arrayForMessages);
-  console.log("3", sortedMessages);
 
   return (
     <>

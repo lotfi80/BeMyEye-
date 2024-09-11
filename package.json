@@ -11,7 +11,8 @@
     "posts": "ts-node ./server/scripts/seedsPosts.ts",
     "follow": "ts-node ./server/scripts/follow.ts",
     "messages": "ts-node ./server/scripts/seedsMessages.ts",
-    "cleardb": "ts-node ./server/scripts/clear.ts"
+    "cleardb": "ts-node ./server/scripts/clear.ts",
+    "not": "ts-node ./server/scripts/NOT.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",

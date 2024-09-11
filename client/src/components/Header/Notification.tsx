@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCategoryUserContext } from "../../context/CategoryUser";
+import { getUserDataByID } from "../../http/api";
 
 const Button = () => {
   const { user } = useCategoryUserContext();
+  const [postCount, setPostCount] = useState<number>(0);
+
+  useEffect(() => {
+    const getPostCount = async () => {
+      try {
+        if (!user) return;
+        const userData = await getUserDataByID(user?._id);
+        if (!userData) return;
+        console.log("userNotification", userData);
+        const postCount = userData.notifications.length;
+        setPostCount(postCount);
+      } catch (error) {
+        console.error("Error fetching user inbox:", error);
+      }
+    };
+    getPostCount();
+  }, [user]);
 
   return (
-    <StyledWrapper>
+    <StyledWrapper postCount={postCount}>
       <div className="notification">
         <div className="bell-container">
           <div className="bell" />
@@ -17,7 +35,7 @@ const Button = () => {
   );
 };
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ postCount: number }>`
   .bell {
     border: 2.5px solid green;
     border-radius: 10px 10px 0 0;
@@ -59,7 +77,7 @@ const StyledWrapper = styled.div`
     justify-content: center;
   }
   .notification::before {
-    content: "0";
+    content: "${(props) => props.postCount}";
     color: white;
     font-size: 0.7em;
     width: 20px;

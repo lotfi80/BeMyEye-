@@ -1,4 +1,5 @@
 import IMessage from "./Message";
+import { IPost } from "./Post";
 
 export default interface IUser {
   _id: string;
@@ -32,4 +33,5 @@ export default interface IUser {
   following: IUser[];
   inbox: IMessage[];
   sent: IMessage[];
+  notifications: IPost[];
 }
