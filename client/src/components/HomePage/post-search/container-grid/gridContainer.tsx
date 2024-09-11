@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
 import PostDetailsPopup from "../../../PostDetailsPopup";
+ 
 const GridContainer: React.FC = () => {
   const {
     selectedCategory,
@@ -18,14 +19,15 @@ const GridContainer: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [selectedPost, setSelectedPost] = useState<{
-    title: string;
-    description: string;
-    address: string;
-    city: string;
-    street: string;
-    country: string;
-    image: string;
-    postDate?: string;
+    // title: string;
+    // description: string;
+    // address: string;
+    // city: string;
+    // street: string;
+    // country: string;
+    // image: string;
+    postid: string;
+    // postDate?: string;
   } | null>(null);
 
   useEffect(() => {
@@ -75,14 +77,15 @@ const GridContainer: React.FC = () => {
 
   const handlePostClick = (post: any) => {
     setSelectedPost({
-      title: post.title,
-      description: post.description,
-      address: post.address,
-      city: post.city,
-      street: post.street,
-      country: post.country,
-      postDate: post.postDate,
-      image: post.postimage && post.postimage.length > 0 ? `http://localhost:5000/${post.postimage[0].image}` : ''
+      postid: post._id,
+      // title: post.title,
+      // description: post.description,
+      // address: post.address,
+      // city: post.city,
+      // street: post.street,
+      // country: post.country,
+      // postDate: post.postDate,
+      // image: post.postimage && post.postimage.length > 0 ? `http://localhost:5000/${post.postimage[0].image}` : ''
     });
   };
 
@@ -144,7 +147,7 @@ const GridContainer: React.FC = () => {
       </div>
 
       {selectedPost && (
-        <PostDetailsPopup post={selectedPost} onClose={handleClosePopup} />
+        <PostDetailsPopup selectedPost={selectedPost} onClose={handleClosePopup} />
       )}
     </div>
   );

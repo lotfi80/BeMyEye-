@@ -4,6 +4,7 @@ import { getFilteredPosts } from "../controllers/post-controller";
 import { createPost } from "../controllers/post-controller";
 import { getUserPosts } from "../controllers/post-controller";
 import {
+  getOnePost,
   createComment,
   getComments,
   updateComment,
@@ -14,11 +15,12 @@ import { imagesUpload } from "../service/multer-service";
 
 const postRouter = express.Router();
 // const upload = multer({ dest: "uploads/" });
+postRouter.get("/:id", getOnePost);
 postRouter.get("/get/:id", getUserPosts);
 postRouter.post("/create", imagesUpload.single("postImages"), createPost);
 postRouter.get("/", getFilteredPosts);
 postRouter.post("/comment/create", createComment);
-postRouter.post("/comment/get", getComments);
+postRouter.get("/comment/get", getComments);
 postRouter.put("/comment/update/:id", updateComment);
 
 export default postRouter;
