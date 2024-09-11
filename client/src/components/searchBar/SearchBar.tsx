@@ -2,19 +2,21 @@ import React from "react";
 
 interface props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
+  // onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
   inputValues: string;
-  setInputValues: any;
-  setIsSearchActive: any;
-  setIsDropDown: any;
+  setInputValues: React.Dispatch<string>;
+  setIsSearchActive: React.Dispatch<boolean>;
+  setIsDropDown: React.Dispatch<boolean>;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const SearchBar = ({
+const SearchBar: React.FC<props> = ({
   onChange,
   inputValues,
   setInputValues,
   setIsSearchActive,
   setIsDropDown,
+  onKeyDown,
 }) => {
   return (
     <div className="absolute left-5 top-4">
@@ -54,6 +56,7 @@ const SearchBar = ({
           type="text"
           value={inputValues}
           onChange={onChange}
+          onKeyDown={onKeyDown}
         />
         <button
           type="reset"

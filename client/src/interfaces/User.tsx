@@ -1,4 +1,6 @@
-export interface IUser {
+import IMessage from "./Message";
+
+export default interface IUser {
   _id: string;
   email: string;
   // password: string | null | undefined;

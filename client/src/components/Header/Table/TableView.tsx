@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IUser } from "../../../interfaces/User";
+import IUser from "../../../interfaces/User";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";

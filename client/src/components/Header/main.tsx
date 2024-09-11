@@ -5,6 +5,8 @@ import { useCategoryUserContext } from "../../context/CategoryUser";
 import AccountButton from "./AccountButton/AccountButton";
 import GetUsersButton from "./GetUser/GetUsersButton";
 import Permission from "../Permission";
+import Notification from "./Notification";
+import NotifyMessages from "./NotifyMessages/NotifyMessages";
 
 const Header: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
@@ -47,7 +49,8 @@ const Header: React.FC = () => {
             Posts
           </Link>
         </div>
-
+        <Notification />
+        <NotifyMessages />
         <GetUsersButton permission={permission} setPermission={setPermission} />
 
         {user ? null : registrationStatus === "none" ? (
