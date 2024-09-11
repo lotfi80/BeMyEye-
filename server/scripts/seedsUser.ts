@@ -123,6 +123,7 @@ async function run() {
         firstname: hasProfile ? firstname : undefined,
         lastname: hasProfile ? lastname : undefined,
         username: hasProfile ? `${firstname.toLowerCase()}${i}` : undefined,
+        // username: `${type}${i}`, 
         birthdate: hasProfile ? new Date(1980 + i, 0, 1) : undefined,
         profileimage: profileimage,
         city: hasProfile ? city : undefined,

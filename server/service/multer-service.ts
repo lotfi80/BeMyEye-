@@ -23,3 +23,14 @@ export const profileImagesStorage = multer.diskStorage({
 });
 
 export const profileImagesUpload = multer({ storage: profileImagesStorage });
+
+export const attachmentStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "attachments");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, `${uniqueSuffix}-${file.originalname}`);
+  },
+});
+export const attachmentUploads = multer({ storage: attachmentStorage });

@@ -79,6 +79,14 @@ passport.use(
               email: profile.emails[0].value,
               profileimage:
                 "http://localhost:5000/profileImages/avatar-default.svg",
+              privacy: {
+                email: true,
+                firstname: true,
+                lastname: true,
+                birthdate: true,
+                city: true,
+                country: true,
+              },
             });
             newUser.isActivated = true;
             newUser.hasPassword = false;

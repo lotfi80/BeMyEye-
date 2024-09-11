@@ -9,6 +9,9 @@ import { validationResult } from "express-validator";
 import { ITokensWithID } from "../interfaces/ITokensWithID";
 import User, { IUser } from "../models/user-model";
 import Token from "../models/token-model";
+import { Post } from "../models/Post";
+import { PostComment } from "../models/PostComments";
+
 import { validateAccessToken } from "../service/token-service";
 import { createHash } from "crypto";
 
@@ -341,3 +344,116 @@ export const passwordUpdate = async (
     next(e);
   }
 };
+// *****************************************************
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId: string = req.params.id;
+    console.log("server/userId", userId);
+    await Post.findByIdAndDelete(userId);
+    await PostComment.findByIdAndDelete(userId);
+    await Token.findByIdAndDelete(userId);
+    await User.findByIdAndDelete(userId);
+    return res.json({ message: "User deleted" });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// ****************************************************************
+export const getUserDataByField = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const fieldName: string = req.params.field;
+    const value: string = req.params.value;
+    const query = { [fieldName]: { $regex: `^${value}`, $options: "i" } };
+    const users: IUser[] = await User.find(query);
+    return res.json(users);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// ****************************************************************
+export const makeFollower = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const { followingId } = req.body;
+    const userId = req.params.id;
+    console.log(followingId, userId);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $push: { following: followingId } },
+      { new: true }
+    );
+    const updatedFollower = await User.findByIdAndUpdate(
+      followingId,
+      {
+        $push: { followers: userId },
+      },
+      { new: true }
+    );
+
+    return res.json({ message: "Follower added" });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: "Error adding follower" });
+  }
+};
+// ****************************************************************
+export const deleteFollower = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const { followingId } = req.body;
+    const userId = req.params.id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { following: followingId } },
+      { new: true }
+    );
+    const updatedFollower = await User.findByIdAndUpdate(
+      followingId,
+      {
+        $pull: { followers: userId },
+      },
+      { new: true }
+    );
+    console.log("Updated user followers:", updatedFollower);
+
+    return res.json({ message: "Follower deleted" });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: "Error deleting follower" });
+  }
+};
+// ******************************************************
+export const getFollow_ = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const userId = req.params.id;
+    const userData = await User.findById(userId)
+      .populate("followers")
+      .populate("following");
+    return res.json(userData);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+// ******************************************

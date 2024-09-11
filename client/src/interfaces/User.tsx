@@ -26,4 +26,8 @@ export interface IUser {
     country: boolean;
     city: boolean;
   };
+  followers: IUser[];
+  following: IUser[];
+  inbox: IMessage[];
+  sent: IMessage[];
 }

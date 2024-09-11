@@ -1,0 +1,147 @@
+.window {
+  position: relative;
+  width: 25%;
+  height: 70%;
+  background-color: white;
+  z-index: 55;
+  border: solid 2px green;
+  border-radius: 5px;
+  padding: 2rem;
+  text-align: left;
+  overflow: auto;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+  justify-content: left;
+}
+.follow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr, 1fr, auto;
+  grid-template-areas:
+    "img username button"
+    "img name button"
+    "linie linie linie";
+  row-gap: 0.7rem;
+  column-gap: 0.7rem;
+  align-items: center;
+}
+
+.follow img {
+  grid-area: img;
+  width: 60%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.follow h3 {
+  grid-area: username;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+.follow p {
+  grid-area: name;
+  font-size: 1rem;
+  margin: 0;
+}
+
+hr {
+  grid-area: linie;
+  width: 100%;
+  border: 0.2px solid rgb(232, 232, 232);
+}
+
+.container input {
+  grid-area: button;
+  justify-self: end;
+  align-self: top;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 20px;
+  user-select: none;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 1.5em;
+  width: 1.5em;
+  background-color: #080;
+  border: 2px solid #080;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.container input:checked ~ .checkmark {
+  border: 2px solid #080;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+.container input:not(:checked) ~ .checkmark:after {
+  background-color: white;
+  border-color: #080;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 0.5em;
+  top: 0;
+  width: 0.4em;
+  height: 1em;
+  border: solid white;
+  border-width: 0 0.1em 0.1em 0;
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+.container input:not(:checked) ~ .checkmark {
+  background-color: white;
+  border-color: #080;
+}
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  font-size: 0.5em;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 60;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}

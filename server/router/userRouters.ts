@@ -4,19 +4,19 @@ import {
   userProfileImageUpdate,
   passwordUpdate,
   getUserDataByID,
-  // findUserIDByToken,
-  // deleteUser,// wir brauchen das
+  deleteUser,
   getUsers,
+  getUserDataByField,
+  makeFollower,
+  deleteFollower,
+  getFollow_,
 } from "../controllers/user-controller";
-// import multer from "multer";
 import { profileImagesUpload } from "../service/multer-service";
 
 const userRouter = express.Router();
-
-// const upload = multer({ dest: "avatar/" });
-
-// userRouter.get("/user", findUserIDByToken);
-
+// **************************************************
+userRouter.get("/users", getUsers);
+// **************************************************
 userRouter.get("/user/:id", getUserDataByID);
 userRouter.put("/user/:id", userProfileUpdate);
 userRouter.post(
@@ -24,9 +24,14 @@ userRouter.post(
   profileImagesUpload.single("profileimage"),
   userProfileImageUpdate
 );
+userRouter.delete("/user/:id", deleteUser);
+// **************************************************
+userRouter.post("/user/:id/follow", makeFollower);
+userRouter.put("/user/:id/follow", deleteFollower);
+userRouter.get("/user/:id/follow", getFollow_);
+// **************************************************
+userRouter.get("/user/:field/:value", getUserDataByField);
 
 userRouter.put("/passwordUpdate/:id", passwordUpdate);
-// userRouter.delete("/user/:id", deleteUser); // wir brauchen das
-userRouter.get("/users", getUsers);
 
 export default userRouter;
