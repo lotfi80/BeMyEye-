@@ -96,7 +96,14 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
       );
       if (!response.ok) throw new Error("Failed to add comment");
       const data = await response.json();
-      setComments((prev) => [...prev, data.newComment]);
+      const commentToAdd = {
+        ...data.newComment,
+        userid: {
+          username: user?.username,
+          profileimage: user?.profileimage,
+        }
+      }
+      setComments((prev) => [...prev, commentToAdd]);
       setComment("");
     } catch (error) {
       console.error(error);
