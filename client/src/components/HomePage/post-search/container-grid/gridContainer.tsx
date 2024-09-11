@@ -1,125 +1,168 @@
-
 import React, { useEffect, useState } from "react";
-import { getAllPosts } from "../../../../http/api";
+import { useCategoryUserContext } from "../../../../context/CategoryUser";
 
-// function GridContainer() {
-//   const [posts, setPosts] = useState<any[]>([]);
-
-//   useEffect(() => {
-//     async function fetchData() {
-//       const data = await getAllPosts();
-//       if (data && Array.isArray(data.posts)) {
-//         setPosts(data.posts); 
-//       } else {
-//         console.error("Unexpected API response format:", data);
-//       }
-//     }
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <div className="grid grid-cols-3 gap-4 p-4 h-full">
-//       {posts.map((post, index) => (
-//         <div
-//           key={index}
-//           className="bg-gray-200 p-4 rounded-md shadow-md hover:bg-gray-300 transition-colors"
-//         >
-//           <h2 className="text-lg font-bold">{post.title}</h2>
-//           <p>{post.description}</p>
-//           <p>{post.city}</p>
-//           <p>{post.body}</p>
-
-          
-//           {post.postimage && post.postimage.length > 0 && (
-//             <div className="flex flex-wrap gap-2">
-//               {post.postimage.map((image, imgIndex) => (
-//                 <img
-//                   key={imgIndex}
-//                   src={image.url}
-//                   alt={`Post image ${imgIndex + 1}`}
-//                   className="w-full h-auto object-cover rounded-md shadow-md"
-//                 />
-//               ))}
-//             </div>
-//           )}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default GridContainer;
-
-interface PostImage {
-  image: string; 
-}
-
-interface Post {
-  title: string;
-  description: string;
-  city: string;
-  body: string;
-  postimage: PostImage[];
-}
-
-function GridContainer() {
-  const [posts, setPosts] = useState<any[]>([]);  
-  const [currentPage, setCurrentPage] = useState(1); 
-  const [totalPages, setTotalPages] = useState(1);   
-  const postsPerPage = 9;  
-
+const GridContainer: React.FC = () => {
+  const {
+    selectedCategory,
+    longFilter,
+    latFilter,
+    selectedDistance,
+    posts,
+    setPosts,
+  } = useCategoryUserContext();
+  // const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   useEffect(() => {
-    async function fetchData() {
-      const data = await getAllPosts(currentPage, postsPerPage);
-      if (data && Array.isArray(data.posts)) {
-        setPosts(data.posts);             
-        setTotalPages(data.totalPages);  
-      } else {
-        console.error("Unexpected API response format:", data);
+    console.log("Latitude:", latFilter);
+    console.log("Longitude:", longFilter);
+    console.log("Selected Category:", selectedCategory);
+    console.log("Selected Distance:", selectedDistance);
+    const fetchPosts = async () => {
+      try {
+        const query = new URLSearchParams({
+          categoryId: selectedCategory || "",
+          ...(longFilter && { long: longFilter.toString() }),
+          ...(latFilter && { lat: latFilter.toString() }),
+          maxDistance: selectedDistance?.toString() || "5",
+          page: page.toString(),
+          limit: "15",
+        });
+
+        const response = await fetch(`http://localhost:5000/posts/?${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data);
+        setPosts(data.posts);
+        setTotalPages(data.totalPages);
+        setLoading(false);
+      } catch (error) {
+        setError("Error fetching posts");
+        setLoading(false);
       }
-    }
-    fetchData();
-  }, [currentPage]);
+    };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+    fetchPosts();
+  }, [selectedCategory, longFilter, latFilter, selectedDistance, page]);
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-  const postImagesPath = "http://localhost:5000/";
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+  console.log(posts);
 
+  // return (
+  //   <div className="max-h-screen overflow-y-auto p-4">
+  //     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  //       {posts.map((post) => (
+  //         <div
+  //           key={post._id}
+  //           className="bg-gray-200 p-4 rounded-md shadow-md hover:bg-gray-300 transition-colors"
+  //         >
+  //           {post.postimage && post.postimage.length > 0 && (
+  //             <div className="mb-2">
+  //               <img
+  //                 src={`http://localhost:5000/${post.postimage[0].image}`}
+  //                 alt="Post image"
+  //                 className="w-full h-48 object-cover rounded-md shadow-md"
+  //               />
+  //             </div>
+  //           )}
+  //           <h2 className="text-lg font-bold truncate">{post.title}</h2>
+  //           <p className="truncate">{post.description}</p>
+  //           <p className="truncate">{post.address}</p>
+  //           <p className="truncate">{post.body}</p>
+  //           <span className="block text-xs font-medium text-blue-500 mt-2">
+  //             {post.category.name}
+  //           </span>{" "}
+  //         </div>
+  //       ))}
+  //     </div>
+  //     <div className="flex justify-center p-4">
+  //       <button
+  //         onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+  //         disabled={page === 1}
+  //         className="px-2 py-1 bg-blue-500 text-white rounded-md text-sm"
+  //       >
+  //         Previous
+  //       </button>
+  //       <span className="mx-2 text-sm">
+  //         Page {page} of {totalPages}
+  //       </span>
+  //       <button
+  //         onClick={() =>
+  //           setPage((prevPage) => Math.min(prevPage + 1, totalPages))
+  //         }
+  //         disabled={page === totalPages}
+  //         className="px-2 py-1 bg-blue-500 text-white rounded-md text-sm"
+  //       >
+  //         Next
+  //       </button>
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div className="p-4 h-full">
-    <div className="grid grid-cols-3 gap-4">
-      {posts.map((post, index) => (
-        <div
-          key={index}
-          className="bg-gray-200 p-4 rounded-md shadow-md hover:bg-gray-300 transition-colors"
-        >
-          <h2 className="text-lg font-bold">{post.title}</h2>
-          <p>{post.description}</p>
-          <p>{post.address}</p>
-          <p>{post.body}</p>
-          {post.postimage && post.postimage.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {post.postimage[0] && (
+    <div className="max-h-screen overflow-y-auto p-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <div
+            key={post._id}
+            className="bg-white p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
+          >
+            {post.postimage && post.postimage.length > 0 && (
+              <div className="mb-3">
                 <img
-                  src={postImagesPath + post.postimage[0].image}
-                  alt={`Post image`}
-                  className="w-full h-auto object-cover rounded-md shadow-md"
+                  src={`http://localhost:5000/${post.postimage[0].image}`}
+                  alt="Post image"
+                  className="w-full h-48 object-cover rounded-lg shadow-md"
                 />
-              )}
-            </div>
-          )}
-        </div>
-      ))}
+              </div>
+            )}
+            <h2 className="text-lg font-bold text-gray-800 mb-2 truncate">
+              {post.title}
+            </h2>
+            <p className="text-sm text-gray-600 truncate mb-1">
+              {post.description}
+            </p>
+            <p className="text-sm text-gray-500 truncate mb-1">{post.address}</p>
+            <p className="text-sm text-gray-500 truncate mb-1">{post.body}</p>
+            <span className="block text-xs font-medium text-blue-600 mt-3">
+              {post.category.name}
+            </span>
+          </div>
+        ))}
+      </div>
+      
+      {/* Pagination controls */}
+      <div className="flex justify-center p-4">
+        <button
+          onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Previous
+        </button>
+        <span className="mx-4 text-sm text-gray-700">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((prevPage) => Math.min(prevPage + 1, totalPages))}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Next
+        </button>
+      </div>
     </div>
+<<<<<<< HEAD
   
     <div className="flex justify-center items-center mt-4">
       <button
@@ -142,7 +185,10 @@ function GridContainer() {
     </div>
   </div>
   
+=======
+>>>>>>> main
   );
-}
+  
+};
 
 export default GridContainer;
