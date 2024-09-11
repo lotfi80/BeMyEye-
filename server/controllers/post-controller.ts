@@ -3,6 +3,7 @@ import { Post, IPost } from "../models/Post";
 import { PostComment, IPostComment } from "../models/PostComments";
 import { PostImage, IPostImage } from "../models/PostImages";
 import User from "../models/user-model";
+import { PostLike } from "../models/PostLikes";
 
 export const createPost = async (
   req: Request,
@@ -249,3 +250,39 @@ export const deleteComment = async (
     next(e);
   }
 };
+
+
+// ****************************************************************
+
+export const createPostLike = async ( req: Request, res: Response, next: NextFunction ) => {
+  const { postid, userid } = req.body;
+  try {
+   const newLike =  await PostLike.create({ postid, userid });
+    const post = await Post.findByIdAndUpdate(postid, {
+      $push: { likes: newLike._id },
+    });
+    res.status(200).json({ message: "Post liked successfully", post });
+  } 
+  catch (e) {
+    console.error(e);
+    next(e);
+  }
+}
+// ****************************************************************
+
+
+  export const deletePostLike = async ( req: Request, res: Response, next: NextFunction ) => {
+    const { postid, userid } = req.body;
+    try {
+     const likeToremove =  await PostLike.findOne({ postid, userid });
+      await PostLike.findByIdAndDelete(likeToremove?._id);
+      const post = await Post.findByIdAndUpdate(postid, {
+        $pull: { likes: likeToremove?._id },
+      });
+      res.status(200).json({ message: "Post liked successfully", post });
+    } 
+    catch (e) {
+      console.error(e);
+      next(e);
+    }
+  }

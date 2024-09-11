@@ -9,6 +9,8 @@ import {
   getComments,
   updateComment,
   deleteComment,
+  createPostLike,
+  deletePostLike
   //   deleteComment,
 } from "../controllers/post-controller";
 import { imagesUpload } from "../service/multer-service";
@@ -22,5 +24,9 @@ postRouter.get("/", getFilteredPosts);
 postRouter.post("/comment/create", createComment);
 postRouter.get("/comment/get", getComments);
 postRouter.put("/comment/update/:id", updateComment);
+postRouter.post("/like", createPostLike);
+postRouter.delete("/like", deletePostLike);
+
+
 
 export default postRouter;

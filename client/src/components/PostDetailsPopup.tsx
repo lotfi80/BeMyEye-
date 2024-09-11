@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
+import { createPostComment, fetchOnePost} from "../http/api";
 
 interface PostDetailsPopupProps {
   selectedPost: {
@@ -22,39 +23,12 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   const [showPopup, setShowPopup] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchOnePost = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/posts/${selectedPost.postid}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) throw new Error("Failed to fetch post");
-        const data = await response.json();
-        setPost(data);
-        if (data.postcomments) {
-          const res = await fetch(
-            `http://localhost:5000/posts/comment/get?postid=${data._id}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (!res.ok) throw new Error("Failed to fetch comments");
-          const postComments = await res.json();
-          setComments(postComments);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchOnePost();
+    const getOnePost = async () => {
+      const data = await fetchOnePost(selectedPost);
+      setPost(data?.data);
+      setComments(data?.postComments);
+    }
+    getOnePost();
   }, [selectedPost.postid]);
 
   const handleClose = () => {
@@ -80,22 +54,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     if (!comment.trim()) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/posts/comment/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userid: user?._id,
-            postid: selectedPost.postid,
-            content: comment,
-          }),
-        }
-      );
-      if (!response.ok) throw new Error("Failed to add comment");
-      const data = await response.json();
+      const data = await createPostComment(user, selectedPost, comment)
       const commentToAdd = {
         ...data.newComment,
         userid: {
