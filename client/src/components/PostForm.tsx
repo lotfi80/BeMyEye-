@@ -4,6 +4,8 @@ import { useCategoryUserContext } from "../context/CategoryUser";
 import { dataFormDatenGet } from "../http/api";
 import { Autocomplete, LoadScript, Libraries } from "@react-google-maps/api";
 
+
+
 const libraries: Libraries = ["places"];
 
 const PostComponent: React.FC = () => {
@@ -23,6 +25,7 @@ const PostComponent: React.FC = () => {
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+
   const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
   };
@@ -76,6 +79,27 @@ const PostComponent: React.FC = () => {
       setLoadingCategories(false);
     }
   }, [categories, setCategories]);
+  // useEffect(() => {
+  //   const initScanbotSDK = async () => {
+  //     await ScanbotSDK.initialize({
+  //       licenseKey: "", 
+  //     });
+  //   };
+
+  //   initScanbotSDK();
+  // }, [])
+  // const startScanner = async () => {
+  //   const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+  //   const result = await ScanbotSDK.UI.createBarcodeScanner(config);
+  //   console.log(result)
+  //   if (result && result.items.length > 0) {
+  //     setScanResult(result.items[0].text);
+  //   }
+    
+  //   return result;
+    
+  // };
+  
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -109,7 +133,7 @@ const PostComponent: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        Erstelle einen neuen Post
+        Erstelle einen neuen Post test 
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
@@ -193,9 +217,13 @@ const PostComponent: React.FC = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Post erstellen
+          Post erstellen test  
         </button>
       </form>
+      {/* <button onClick={startScanner} className="mt-4 p-2 bg-green-500 text-white rounded">
+        Barcode Scanner starten
+      </button> */}
+      {/* {scanResult && <div className="mt-4 p-2 bg-gray-100 border rounded">{scanResult}</div>} */}
     </div>
   );
 };
