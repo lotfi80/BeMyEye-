@@ -100,6 +100,12 @@ export const Search: React.FC<props> = ({
       {postVisible || (
         <SearchBar
           onChange={handleOnChange}
+          onKeyDown={(event) => {
+            if (event.key === "Backspace") {
+              setIsSearchActive(false);
+              setIsDropDown(false);
+            }
+          }}
           inputValues={inputValues}
           setInputValues={setInputValues}
           setIsSearchActive={setIsSearchActive}

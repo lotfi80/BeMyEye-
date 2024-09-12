@@ -115,8 +115,8 @@ const Button: React.FC = () => {
 
 const StyledWrapper = styled.div`
   .inbox-btn {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     border: none;
     display: flex;
@@ -130,19 +130,19 @@ const StyledWrapper = styled.div`
     fill: green;
   }
   .inbox-btn svg {
-    height: 25px;
+    height: 20px;
     transition: all 0.3s;
   }
   .msg-count {
     position: absolute;
-    top: -3px;
-    right: -3px;
+    top: 0;
+    right: 2px;
     background-color: red;
     border-radius: 50%;
-    font-size: 0.7em;
+    font-size: 0.6em;
     color: white;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     display: flex;
     align-items: center;
     justify-content: center;

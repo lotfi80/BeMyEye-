@@ -33,5 +33,5 @@ export default interface IUser {
   following: IUser[];
   inbox: IMessage[];
   sent: IMessage[];
-  notifications: IPost[];
+  notifications: string[];
 }

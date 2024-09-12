@@ -13,18 +13,18 @@ const Notification: React.FC = () => {
   const [isPostWindowVisible, setIsPostWindowVisible] = useState(false);
 
   useEffect(() => {
-    // ///////////////////////////////тут ошибка
     const getPostCount = async () => {
       try {
         if (!user) return;
         const userData = await getUserDataByID(user?._id);
         if (!userData) return;
-        console.log("userNotification", userData);
+        console.log("userData", userData);
         const postCount = userData.notifications.length;
         setPostCount(postCount);
-
+        console.log("noti", userData.notifications);
         const waitPromise = userData.notifications.map(async (notification) => {
-          const post = await getPostByID(notification._id);
+          console.log("notification", notification);
+          const post = await getPostByID(notification);
           return post;
         });
 
@@ -37,8 +37,7 @@ const Notification: React.FC = () => {
     };
     getPostCount();
   }, [user]);
-  console.log("postsss", posts);
-  console.log("count", postCount);
+
   return (
     <StyledWrapper postCount={postCount}>
       <div
@@ -67,12 +66,12 @@ const StyledWrapper = styled.div<{ postCount: number }>`
   .bell {
     border: 2.5px solid green;
     border-radius: 10px 10px 0 0;
-    width: 17px;
-    height: 19px;
+    width: 13px;
+    height: 16px;
     background: transparent;
     display: block;
     position: relative;
-    top: -3px;
+    top: -10px;
   }
   .bell::before,
   .bell::after {
@@ -107,14 +106,14 @@ const StyledWrapper = styled.div<{ postCount: number }>`
   .notification::before {
     content: "${(props) => props.postCount}";
     color: white;
-    font-size: 0.7em;
-    width: 20px;
-    height: 20px;
+    font-size: 0.6em;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     background-color: red;
     position: absolute;
-    right: 2px;
-    top: 2px;
+    right: 6px;
+    top: 0;
     display: flex;
     justify-content: center;
     align-items: center;

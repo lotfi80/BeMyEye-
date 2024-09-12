@@ -10,6 +10,7 @@ export default interface IMessage {
   isRead: boolean;
   sender: IUser;
   recipient: IUser[];
+  username?: string;
   // message: string;
   // date: Date;
   // read: boolean;

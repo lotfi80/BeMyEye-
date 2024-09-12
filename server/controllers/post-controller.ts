@@ -243,7 +243,7 @@ export const getPostsById = async (
   req: Request,
   res: Response
 ): Promise<Response | void> => {
-  const id: string | null = req.params.id;
+  const id: any = req.params.id;
   if (!id || typeof id !== "string") {
     return res.status(400).json({ message: "Invalid ID format" });
   }

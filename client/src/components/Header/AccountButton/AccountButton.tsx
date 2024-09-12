@@ -8,7 +8,7 @@ import Privacy from "./Privacy";
 import Logout from "./Logout";
 import DeleteAcc from "./DeleteAcc";
 
-import CloseButton from "../../CloseButton";
+import CloseButton from "../../MyCloseButton";
 import Blind from "../../Blind";
 
 import { IPost } from "../../../interfaces/Post";
@@ -47,7 +47,7 @@ const Account: React.FC = () => {
   return (
     <>
       <div
-        className={`flex items-center space-x-2  cursor-pointer `}
+        className="text-sm font-semibold leading-6 text-gray-900 flex flex-row gap-1"
         onClick={(e) => {
           setShowDropdown(!showDropdown);
         }}
@@ -55,7 +55,7 @@ const Account: React.FC = () => {
         <img
           src={userImage}
           alt="profileimage"
-          className="w-12 h-12 object-cover rounded-full "
+          className="w-12 h-12 object-cover rounded-full -translate-y-1/4"
         />
         <p>{user?.username}</p>
       </div>

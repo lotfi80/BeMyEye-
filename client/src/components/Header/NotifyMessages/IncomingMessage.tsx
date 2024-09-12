@@ -3,7 +3,7 @@ import styled from "styled-components";
 import IMessage from "../../../interfaces/Message";
 import IUser from "../../../interfaces/User";
 import Blind from "../../Blind";
-import CloseButton from "../../CloseButton";
+import CloseButton from "../../MyCloseButton";
 import WriteMessage from "../WriteMessage";
 import { markAsRead } from "../../../http/api";
 

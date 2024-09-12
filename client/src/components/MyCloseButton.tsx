@@ -1,10 +1,10 @@
 import React from "react";
 
 type CloseButtonProps = {
-  setFunction: () => void;
+  setFunction: () => any;
 };
 
-const closeButton: React.FC<CloseButtonProps> = ({ setFunction }) => {
+const myCloseButton: React.FC<CloseButtonProps> = ({ setFunction }) => {
   const handleClose = () => {
     setFunction();
   };
@@ -25,4 +25,4 @@ const closeButton: React.FC<CloseButtonProps> = ({ setFunction }) => {
     </>
   );
 };
-export default closeButton;
+export default myCloseButton;

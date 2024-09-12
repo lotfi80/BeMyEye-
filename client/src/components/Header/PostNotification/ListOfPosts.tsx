@@ -3,7 +3,7 @@ import styled from "styled-components";
 import IUser from "../../../interfaces/User";
 import { IPost } from "../../../interfaces/Post";
 import Blind from "../../Blind";
-import CloseButton from "../../CloseButton";
+import CloseButton from "../../MyCloseButton";
 
 interface props {
   isListOfPostsVisible: boolean;
@@ -44,20 +44,33 @@ const ListOfPosts: React.FC<props> = ({
             <CloseButton setFunction={closeListOfMessages} />
             <h2>You follow:</h2>
             <hr />
-            <ul>
+            <ul className="flex flex-col gap-10 w-full">
               {posts &&
-                posts.map((post) => (
+                posts.map((post, index) => (
                   <li
                     key={post._id}
                     onClick={(e) => handleOnPostClick(e, post)}
+                    className="flex flex-row gap-10 "
                   >
                     {post.postimage && (
                       <img
-                        src={`http://localhost:5000/${post.postimage.image}`}
+                        src={`http://localhost:5000/${post.postimage[0].image}`}
                         alt="postimage"
+                        className="max-w-24 max-h-24"
                       />
                     )}
-                    <span>{post.title}</span>
+                    <div className="flex flex-col gap-2 justify-start w-full">
+                      <div className="flex flex-row justify-between">
+                        <span className="text-decoration-line: underline decoration-slate-400 underline-offset-4">
+                          {post.title}
+                        </span>
+                        <span>{post.userid.username}</span>
+                      </div>
+                      <span className="w-4/5">{post.description}</span>
+                      <span>
+                        <i>{post.address}</i>
+                      </span>
+                    </div>
                   </li>
                 ))}
             </ul>

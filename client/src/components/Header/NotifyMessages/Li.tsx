@@ -29,7 +29,7 @@ const Li: React.FC<props> = ({ message }) => {
           {message.sender?.profileimage && (
             <img src={userImage(message.sender)} alt="profileimage" />
           )}
-          <span>{message.sender.username}</span>
+          <span>{message.sender?.username}</span>
           <span>{message.subject}</span>
           <span>{formatDate(message.createdAt)}</span>
           <input

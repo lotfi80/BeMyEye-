@@ -3,7 +3,7 @@ import "./writeMessage.css";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 import { attachmentUpload, getUsersByField, sendMessage } from "../../http/api";
 import IUser from "../../interfaces/User";
-import CloseButton from "../CloseButton";
+import CloseButton from "../MyCloseButton";
 import SuccessNote from "./SuccessNote";
 
 interface props {

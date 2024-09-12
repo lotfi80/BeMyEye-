@@ -9,4 +9,6 @@ export interface IPost {
   userid: IUser;
   postimage: IImage;
   title: string;
+  description: string;
+  address: string;
 }

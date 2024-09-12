@@ -13,15 +13,22 @@ const SortButton: React.FC<props> = ({ setSortedMessages, inbox }) => {
   const [orderBy, setOrderBy] = useState<string>("username");
 
   useEffect(() => {
+    inbox?.map(
+      (message: IMessage) =>
+        (message.username = message.sender.username
+          ? message.sender.username
+          : "z")
+    );
+  }, []);
+
+  useEffect(() => {
     console.log("Sorting", inbox);
     sortData(inbox);
   }, [order, orderBy]);
 
   const sortData = (messages: any) => {
     const sorted = messages.slice().sort((a, b) => {
-      if (!a[orderBy] && b[orderBy]) return 1;
-      if (a[orderBy] && !b[orderBy]) return -1;
-      if (!a[orderBy] && !b[orderBy]) return 0;
+      console.log(a[orderBy], b[orderBy]);
 
       if (typeof a[orderBy] === "string" && typeof b[orderBy] === "string") {
         if (order === "asc") {
@@ -38,7 +45,7 @@ const SortButton: React.FC<props> = ({ setSortedMessages, inbox }) => {
         }
         return dateB - dateA;
       }
-      return 0;
+      // return 0;
     });
     setSortedMessages(sorted);
   };
