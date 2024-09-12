@@ -30,6 +30,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
+            credentials: "include",
           }
         );
         if (!response.ok) throw new Error("Failed to fetch post");
@@ -42,7 +43,9 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
               },
+              credentials: "include",
             }
           );
           if (!res.ok) throw new Error("Failed to fetch comments");
@@ -85,12 +88,14 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           body: JSON.stringify({
             userid: user?._id,
             postid: selectedPost.postid,
             content: comment,
           }),
+          credentials: "include",
         }
       );
       if (!response.ok) throw new Error("Failed to add comment");

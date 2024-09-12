@@ -5,22 +5,30 @@ import Token from "../models/token-model";
 import { ITokenPayload } from "../interfaces/TokenPayload";
 
 export async function generateToken(payload: ITokenPayload) {
-  const accessToken = jwt.sign(
-    payload,
-    process.env.JWT_ACCESS_SECRET as string,
-    {
-      expiresIn: "30m",
-    }
-  );
-  const refreshToken = jwt.sign(
-    payload,
-    process.env.JWT_REFRESH_SECRET as string,
-    {
-      expiresIn: "30d",
-    }
-  );
+  try {
+    console.log("Payload received for token generation:", payload);
+    const { exp, iat, ...restPayload } = payload;
+    const accessToken = jwt.sign(
+      restPayload,
+      process.env.JWT_ACCESS_SECRET as string,
+      {
+        expiresIn: "30m",
+      }
+    );
+    const refreshToken = jwt.sign(
+      restPayload,
+      process.env.JWT_REFRESH_SECRET as string,
+      {
+        expiresIn: "30d",
+      }
+    );
 
-  return { accessToken, refreshToken };
+    console.log("Tokens generated:", { accessToken, refreshToken });
+    return { accessToken, refreshToken };
+  } catch (error) {
+    console.error("Error generating tokens:", error);
+    throw error;
+  }
 }
 // ***************************************************************
 export async function saveToken(userId: string, refreshToken: string) {
@@ -70,6 +78,7 @@ export async function validateRefreshToken(token: string) {
     return userData;
   } catch (e) {
     console.log(e);
+    return null;
   }
 }
 // ***************************************************************

@@ -17,22 +17,28 @@ const authMiddleware = async (
   }
 
   const token = authHeader.split(" ")[1];
-
+  console.log("tokenA", token);
   try {
     const userData = await validateAccessToken(token);
-    console.log(userData?.id);
+    console.log("1", userData?.id);
 
     if (!userData) {
-      const refreshToken = req.cookies["refreshToken"];
-      console.log(refreshToken);
+      const tokensAndID = req.cookies;
+      const refreshToken = await tokensAndID.refreshToken;
+      console.log("tokenR", refreshToken);
+
       if (!refreshToken) return res.sendStatus(401);
 
       const userFromRefreshToken = await validateRefreshToken(refreshToken);
-      console.log(userFromRefreshToken);
+      console.log("3", userFromRefreshToken);
       if (!userFromRefreshToken) return res.sendStatus(403);
-
+      console.log(
+        "userFromRefreshToken before generating tokens:",
+        userFromRefreshToken
+      );
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
         await generateToken(userFromRefreshToken);
+      console.log("4", newAccessToken, newRefreshToken);
       await saveToken(userFromRefreshToken?.id, newRefreshToken);
       res.setHeader("x-access-token", newAccessToken);
       res.cookie("refreshToken", newRefreshToken, {
