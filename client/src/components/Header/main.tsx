@@ -72,7 +72,9 @@ const Header: React.FC = () => {
             <img
               alt=""
               src="/Screenshot from 2024-09-02 03-03-43.png"
-              className="h-20 w-auto  "
+              width={150}
+              height={100}
+              // className="h- w-auto  "
             />
           </Link>
         </div>

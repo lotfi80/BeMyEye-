@@ -66,9 +66,10 @@ export async function validateRefreshToken(token: string) {
     const userData = jwt.verify(
       token,
       process.env.JWT_REFRESH_SECRET as string
-    );
+    ) as ITokenPayload;
     return userData;
   } catch (e) {
     console.log(e);
   }
 }
+// ***************************************************************

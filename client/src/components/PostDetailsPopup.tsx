@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
@@ -30,6 +28,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
           }
         );
@@ -193,17 +192,19 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                       new Date(a.commentDate).getTime()
                   )
                   .map((cmt) => (
-                    <div key={cmt.id} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-
+                    <div
+                      key={cmt.id}
+                      className="p-4 bg-gray-100 rounded-lg shadow-sm"
+                    >
                       <img
                         src={`http://localhost:5000/${cmt.userid.profileimage}`}
                         alt={`${cmt.userid.username} Profilbild`}
                         className="w-12 h-12 object-cover rounded-full mr-4"
                       />
                       <div className="flex-1">
-                      <p className="text-gray-800 break-words whitespace-normal">
-                      {cmt.content}
-                    </p>
+                        <p className="text-gray-800 break-words whitespace-normal">
+                          {cmt.content}
+                        </p>
                         <p className="text-sm text-gray-500 mt-2">
                           Gepostet von:{" "}
                           <span className="font-semibold">

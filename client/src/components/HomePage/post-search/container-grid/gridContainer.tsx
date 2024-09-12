@@ -1,9 +1,7 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
 import PostDetailsPopup from "../../../PostDetailsPopup";
- 
+
 const GridContainer: React.FC = () => {
   const {
     selectedCategory,
@@ -13,7 +11,7 @@ const GridContainer: React.FC = () => {
     posts,
     setPosts,
   } = useCategoryUserContext();
-  
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
@@ -35,7 +33,7 @@ const GridContainer: React.FC = () => {
     console.log("Longitude:", longFilter);
     console.log("Selected Category:", selectedCategory);
     console.log("Selected Distance:", selectedDistance);
-    
+
     const fetchPosts = async () => {
       try {
         const query = new URLSearchParams({
@@ -51,6 +49,7 @@ const GridContainer: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           credentials: "include",
         });
@@ -117,7 +116,9 @@ const GridContainer: React.FC = () => {
             <p className="text-sm text-gray-600 truncate mb-1">
               {post.description}
             </p>
-            <p className="text-sm text-gray-500 truncate mb-1">{post.address}</p>
+            <p className="text-sm text-gray-500 truncate mb-1">
+              {post.address}
+            </p>
             <p className="text-sm text-gray-500 truncate mb-1">{post.body}</p>
             <span className="block text-xs font-medium text-blue-600 mt-3">
               {post.category.name}
@@ -125,7 +126,7 @@ const GridContainer: React.FC = () => {
           </div>
         ))}
       </div>
-      
+
       <div className="flex justify-center p-4">
         <button
           onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
@@ -138,7 +139,9 @@ const GridContainer: React.FC = () => {
           Page {page} of {totalPages}
         </span>
         <button
-          onClick={() => setPage((prevPage) => Math.min(prevPage + 1, totalPages))}
+          onClick={() =>
+            setPage((prevPage) => Math.min(prevPage + 1, totalPages))
+          }
           disabled={page === totalPages}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
         >
@@ -147,12 +150,13 @@ const GridContainer: React.FC = () => {
       </div>
 
       {selectedPost && (
-        <PostDetailsPopup selectedPost={selectedPost} onClose={handleClosePopup} />
+        <PostDetailsPopup
+          selectedPost={selectedPost}
+          onClose={handleClosePopup}
+        />
       )}
     </div>
   );
 };
 
 export default GridContainer;
-
-

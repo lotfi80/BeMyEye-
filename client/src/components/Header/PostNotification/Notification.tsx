@@ -18,18 +18,14 @@ const Notification: React.FC = () => {
         if (!user) return;
         const userData = await getUserDataByID(user?._id);
         if (!userData) return;
-        console.log("userData", userData);
         const postCount = userData.notifications.length;
         setPostCount(postCount);
-        console.log("noti", userData.notifications);
         const waitPromise = userData.notifications.map(async (notification) => {
-          console.log("notification", notification);
           const post = await getPostByID(notification);
           return post;
         });
 
         const fetchedPosts = await Promise.all(waitPromise);
-        console.log("post", fetchedPosts);
         setPosts(fetchedPosts);
       } catch (error) {
         console.error("Error fetching user inbox:", error);

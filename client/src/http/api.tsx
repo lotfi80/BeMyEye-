@@ -192,9 +192,9 @@ export const fetchUser = async (): Promise<IUser | undefined> => {
   try {
     const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
-      // headers: {
-      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
     });
 
     if (!response.ok) {
@@ -268,6 +268,7 @@ export const getAllPosts = async (
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
 
@@ -292,6 +293,7 @@ export const getPostByUser = async (userid: string): Promise<any> => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }
     );
@@ -695,6 +697,7 @@ export const getPostByID = async (postId: string): Promise<IPost> => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
 
