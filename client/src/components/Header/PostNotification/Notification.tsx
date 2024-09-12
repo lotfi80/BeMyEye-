@@ -18,8 +18,8 @@ const Notification: React.FC = () => {
         if (!user) return;
         const userData = await getUserDataByID(user?._id);
         if (!userData) return;
-        const postCount = userData.notifications.length;
-        setPostCount(postCount);
+        const postcount = userData.notifications.length;
+        setPostCount(postcount);
         const waitPromise = userData.notifications.map(async (notification) => {
           const post = await getPostByID(notification);
           return post;
@@ -35,7 +35,7 @@ const Notification: React.FC = () => {
   }, [user]);
 
   return (
-    <StyledWrapper postCount={postCount}>
+    <StyledWrapper pcount={postCount}>
       <div
         className="notification"
         onClick={() => setIsListOfPostsVisible(true)}
@@ -58,7 +58,7 @@ const Notification: React.FC = () => {
   );
 };
 
-const StyledWrapper = styled.div<{ postCount: number }>`
+const StyledWrapper = styled.div<{ pcount: number }>`
   .bell {
     border: 2.5px solid green;
     border-radius: 10px 10px 0 0;
@@ -100,7 +100,7 @@ const StyledWrapper = styled.div<{ postCount: number }>`
     justify-content: center;
   }
   .notification::before {
-    content: "${(props) => props.postCount}";
+    content: "${(props) => props.pcount}";
     color: white;
     font-size: 0.6em;
     width: 15px;

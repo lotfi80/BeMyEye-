@@ -17,10 +17,8 @@ const authMiddleware = async (
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("tokenA", token);
   try {
     const userData = await validateAccessToken(token);
-    console.log("1", userData?.id);
 
     if (!userData) {
       const tokensAndID = req.cookies;
@@ -30,7 +28,6 @@ const authMiddleware = async (
       if (!refreshToken) return res.sendStatus(401);
 
       const userFromRefreshToken = await validateRefreshToken(refreshToken);
-      console.log("3", userFromRefreshToken);
       if (!userFromRefreshToken) return res.sendStatus(403);
       console.log(
         "userFromRefreshToken before generating tokens:",
