@@ -18,6 +18,7 @@ export const createPost = async (
       longtitute,
       category,
       userid,
+      barcode
     } = req.body;
     console.log(userid, "test ", req.body);
     const image = req.file;
@@ -34,6 +35,7 @@ export const createPost = async (
         coordinates: [longtitute, latitute],
       },
       category,
+      barcode,
       postimage: [],
     });
 
@@ -115,7 +117,7 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     // }
     //   )
     const totalPosts = await Post.find(query);
-    console.log("totalPosts", totalPosts);
+    // console.log("totalPosts", totalPosts);
 
     const posts = await Post.find(query)
       .populate("userid")
@@ -143,6 +145,24 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
 };
 
 // ****************************************************************
+export const getOnePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  const postid: string = req.params.id;
+  try {
+    const posts = await Post.findById(postid)
+    .populate("postcomments")
+    .populate("postimage");
+    res.status(200).json(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error fetching posts", e });
+  }
+};
+
+// ****************************************************************
 export const getUserPosts = async (
   req: Request,
   res: Response,
@@ -164,13 +184,14 @@ export const createComment = async (
   next: NextFunction
 ) => {
   const { postid, userid, content } = req.body;
+  console.log('req.body', req.body);
   try {
     const newComment: IPostComment = await PostComment.create({
       postid,
       userid,
       content,
     });
-    console.log(newComment);
+    console.log('newComment', newComment);
 
     const post = await Post.findByIdAndUpdate(postid, {
       $push: { postcomments: newComment._id },
@@ -191,7 +212,7 @@ export const getComments = async (
   next: NextFunction
 ) => {
   try {
-    const { postid } = req.body;
+    const { postid } = req.query;
     const comments = await PostComment.find({ postid: postid }).populate(
       "userid"
     );
