@@ -64,12 +64,12 @@ export const postOptions = {
     },
     userid: {
       type: 'reference',
-      reference: 'user',
+      reference: 'User',
       isVisible: false,
     },
     postimage: {
       type: 'reference',
-      reference: 'postimage',
+      reference: 'PostImage',
       isVisible: {
         list: true,
         filter: false,
@@ -79,7 +79,7 @@ export const postOptions = {
     },
     postcomments: {
       type: 'reference',
-      reference: 'postcomment',
+      reference: 'PostComment',
       isVisible: {
         list: true,
         filter: false,
@@ -89,7 +89,7 @@ export const postOptions = {
     },
     postlikes: {
       type: 'reference',
-      reference: 'user',
+      reference: 'User',
       isVisible: false,
     },
     barcode: {
@@ -107,7 +107,7 @@ export const postOptions = {
     },
     category: {
       type: 'reference',
-      reference: 'category',
+      reference: 'Category',
       isVisible: {
         list: true,
         filter: true,

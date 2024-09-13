@@ -10,7 +10,7 @@ import provider from './admin/auth-provider.js';
 import options from './admin/options.js';
 import { buildAuthenticatedRouter } from '@adminjs/express';
 
-import User from './models/User.js';
+import User from './models/user.js';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -27,10 +27,7 @@ const start = async (): Promise<void> => {
       console.error('Database connection error:', err);
     });
 
-  const admin = new AdminJS({
-    resources: [User],
-    rootPath: '/admin',
-  });
+  const admin = new AdminJS(options);
 
   if (process.env.NODE_ENV === 'development') {
     admin.watch();
