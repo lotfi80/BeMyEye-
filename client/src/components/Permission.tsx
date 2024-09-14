@@ -1,5 +1,5 @@
 import React from "react";
-import CloseButton from "./CloseButton";
+import CloseButton from "./MyCloseButton";
 import { Link } from "react-router-dom";
 import Blind from "./Blind";
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
-import CloseButton from "../../CloseButton";
+import CloseButton from "../../MyCloseButton";
 import Blind from "../../Blind";
 import { getFollow_, deleteFollower } from "../../../http/api";
-import { IUser } from "../../../interfaces/User";
+import IUser from "../../../interfaces/User";
 import "./following.css";
 
 const Following: React.FC = () => {

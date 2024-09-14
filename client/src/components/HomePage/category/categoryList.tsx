@@ -1,9 +1,9 @@
-
-import React, { useEffect, useState } from 'react';
-import { useCategoryUserContext } from '../../../context/CategoryUser';
+import React, { useEffect, useState } from "react";
+import { useCategoryUserContext } from "../../../context/CategoryUser";
 
 const CategoryList: React.FC = () => {
-  const { categories, setCategories, selectedCategory, setSelectedCategory } = useCategoryUserContext();
+  const { categories, setCategories, selectedCategory, setSelectedCategory } =
+    useCategoryUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +14,7 @@ const CategoryList: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           credentials: "include",
         });
@@ -59,7 +60,7 @@ const CategoryList: React.FC = () => {
       {/* Display loading or error message */}
       {loading && <p className="text-center text-gray-600">Loading...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
-  
+
       {/* Categories List */}
       <div className="flex flex-wrap gap-4 justify-center">
         {categories.map((category) => (
@@ -68,8 +69,8 @@ const CategoryList: React.FC = () => {
             onClick={() => handleCategoryClick(category._id)}
             className={`px-4 py-2 rounded-md cursor-pointer transition-colors ${
               selectedCategory === category._id
-                ? 'bg-black text-white'
-                : 'bg-gray-300 text-black hover:bg-black hover:text-white'
+                ? "bg-black text-white"
+                : "bg-gray-300 text-black hover:bg-black hover:text-white"
             }`}
           >
             {category.name}
@@ -78,7 +79,6 @@ const CategoryList: React.FC = () => {
       </div>
     </div>
   );
-  
 };
 
 export default CategoryList;

@@ -4,8 +4,6 @@ import { useCategoryUserContext } from "../context/CategoryUser";
 import { dataFormDatenGet } from "../http/api";
 import { Autocomplete, LoadScript, Libraries } from "@react-google-maps/api";
 
-
-
 const libraries: Libraries = ["places"];
 
 const PostComponent: React.FC = () => {
@@ -58,6 +56,7 @@ const PostComponent: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           credentials: "include",
         });
@@ -82,7 +81,7 @@ const PostComponent: React.FC = () => {
   // useEffect(() => {
   //   const initScanbotSDK = async () => {
   //     await ScanbotSDK.initialize({
-  //       licenseKey: "", 
+  //       licenseKey: "",
   //     });
   //   };
 
@@ -95,11 +94,10 @@ const PostComponent: React.FC = () => {
   //   if (result && result.items.length > 0) {
   //     setScanResult(result.items[0].text);
   //   }
-    
+
   //   return result;
-    
+
   // };
-  
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -133,7 +131,7 @@ const PostComponent: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        Erstelle einen neuen Post test 
+        Erstelle einen neuen Post test
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
@@ -209,7 +207,7 @@ const PostComponent: React.FC = () => {
         </select>
         <input
           type="file"
-          multiple = {true}
+          multiple={true}
           onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -217,7 +215,7 @@ const PostComponent: React.FC = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Post erstellen test  
+          Post erstellen test
         </button>
       </form>
       {/* <button onClick={startScanner} className="mt-4 p-2 bg-green-500 text-white rounded">

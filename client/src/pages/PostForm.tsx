@@ -55,6 +55,7 @@ const PostComponent: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           credentials: "include",
         });
@@ -193,7 +194,7 @@ const PostComponent: React.FC = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Post erstellen 
+          Post erstellen
         </button>
       </form>
     </div>

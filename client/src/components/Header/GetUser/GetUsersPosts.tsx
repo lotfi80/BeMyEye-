@@ -3,7 +3,7 @@ import TableHeadCell from "../Table/TableHeadCell";
 import { Button } from "../Table/Button";
 import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
-import { IUser } from "../../../interfaces/User";
+import IUser from "../../../interfaces/User";
 
 interface TableProps {
   posts: any[];

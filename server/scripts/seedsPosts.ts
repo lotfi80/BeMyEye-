@@ -5,6 +5,19 @@ import { Category, ICategory } from "../models/Categories";
 import { PostImage, IPostImage } from "../models/PostImages";
 import connectDB from "../service/mongo-start";
 
+const API_KEY = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
+const getCoordinatesByCity = async (address: string) => {
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${API_KEY}`
+  );
+  const data = await response.json();
+  if (data.results && data.results.length > 0) {
+    const { lat, lng } = data.results[0].geometry.location;
+    return { lat, lng };
+  }
+  throw new Error("Error fetching coordinates");
+};
+
 async function getCategoriesIds() {
   const categoryNames = [
     "Haushalt",
@@ -152,6 +165,7 @@ async function run() {
         const postimageid: Types.ObjectId =
           createdPostImage._id as Types.ObjectId;
         const postDate = getRandomDate(startDate, endDate);
+        const { lat, lng } = await getCoordinatesByCity(city);
         const data = {
           userid: user._id,
           title: `Post ${user.username}-${i}`,
@@ -163,6 +177,11 @@ async function run() {
           postDate: postDate,
           category: category,
           createdAt: postDate,
+          address: city,
+          location: {
+            type: "Point" as "Point",
+            coordinates: [lng, lat],
+          },
         };
         const createdPost = await createPost(data);
         await updatePostImageWithPostId(

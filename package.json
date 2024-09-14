@@ -9,17 +9,24 @@
     "defImage": "ts-node ./server/scripts/defaultImage.ts",
     "privacy": "ts-node ./server/scripts/privacyZumUser.ts",
     "posts": "ts-node ./server/scripts/seedsPosts.ts",
-    "follow": "ts-node ./server/scripts/follow.ts"
+    "follow": "ts-node ./server/scripts/follow.ts",
+    "messages": "ts-node ./server/scripts/seedsMessages.ts",
+    "cleardb": "ts-node ./server/scripts/clear.ts",
+    "not": "ts-node ./server/scripts/NOT.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@headlessui/react": "^2.1.7",
+    "@heroicons/react": "^2.1.5",
+    "@mui/material": "^6.1.0",
     "@react-google-maps/api": "^2.19.3",
     "@types/cookie-parser": "^1.4.7",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.4.2",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/styled-components": "^5.1.34",
     "@types/uuid": "^10.0.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -41,6 +48,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
+    "styled-components": "^6.1.13",
     "scanbot-web-sdk": "^5.1.3",
     "uuid": "^10.0.0"
   },
