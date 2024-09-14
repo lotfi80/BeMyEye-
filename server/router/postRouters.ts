@@ -11,6 +11,7 @@ import {
   deleteComment,
   getLikesByPOst,
   togglePostLike,
+  getPostsById,
   //   deleteComment,
 } from "../controllers/post-controller";
 import { imagesUpload } from "../service/multer-service";
@@ -27,9 +28,17 @@ postRouter.get("/comment/get", getComments);
 postRouter.put("/comment/update/:id", updateComment);
 postRouter.get("/:id/like", getLikesByPOst);
 postRouter.post("/like", togglePostLike);
+postRouter.get("/:id", authMiddleware, getPostsById);
 
 
 
 // /////////////////////////NATH/////////////
 // postRouter.get("/:id", authMiddleware, getPostsById);
 export default postRouter;
+
+
+
+
+
+
+
