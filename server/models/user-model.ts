@@ -16,7 +16,7 @@ export interface IUser extends Document {
   street: string;
   country: string;
   postid: mongoose.Types.ObjectId[];
-  // postlikes: mongoose.Types.ObjectId[];
+  postlikes: mongoose.Types.ObjectId[];
   hash: string;
   registerDate: Date;
   googleId: string;
@@ -64,7 +64,9 @@ const UserSchema = new Schema(
     street: { type: String },
     country: { type: String },
     postid: [{ type: Schema.Types.ObjectId, ref: "Post" }],
-    postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    // postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    postlikes: [{ type: Schema.Types.ObjectId, ref: "PostLike" }], 
+
     hash: { type: String, default: null },
     sex: { type: Number },
     registerDate: { type: Date, default: Date.now },

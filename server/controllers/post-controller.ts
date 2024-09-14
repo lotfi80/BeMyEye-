@@ -145,7 +145,8 @@ export const getOnePost = async (
   try {
     const posts = await Post.findById(postid)
     .populate("postcomments")
-    .populate("postimage");
+    .populate("postimage")
+    .populate("postlikes");
     res.status(200).json(posts);
   } catch (e) {
     console.error(e);
@@ -251,38 +252,62 @@ export const deleteComment = async (
   }
 };
 
-
 // ****************************************************************
 
-export const createPostLike = async ( req: Request, res: Response, next: NextFunction ) => {
-  const { postid, userid } = req.body;
+export const getLikesByPOst = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-   const newLike =  await PostLike.create({ postid, userid });
-    const post = await Post.findByIdAndUpdate(postid, {
-      $push: { likes: newLike._id },
-    });
-    res.status(200).json({ message: "Post liked successfully", post });
-  } 
-  catch (e) {
+    const { id } = req.params;
+    const likes = await PostLike.find({ postid: id }).populate(
+      "userid"
+    );
+    res.status(200).json(likes);
+  } catch (e) {
     console.error(e);
     next(e);
   }
-}
+};
+
+
+
+
 // ****************************************************************
 
-
-  export const deletePostLike = async ( req: Request, res: Response, next: NextFunction ) => {
+  export const togglePostLike = async (req: Request, res: Response, next: NextFunction) => {
     const { postid, userid } = req.body;
+  
     try {
-     const likeToremove =  await PostLike.findOne({ postid, userid });
-      await PostLike.findByIdAndDelete(likeToremove?._id);
-      const post = await Post.findByIdAndUpdate(postid, {
-        $pull: { likes: likeToremove?._id },
+      const existingLike = await PostLike.findOne({ postid, userid });
+      if (existingLike) {
+        await PostLike.findByIdAndDelete(existingLike._id);
+  
+      await Post.findByIdAndUpdate(postid, {
+        $pull: { postlikes: existingLike._id },
       });
-      res.status(200).json({ message: "Post liked successfully", post });
-    } 
-    catch (e) {
-      console.error(e);
+  
+      await User.findByIdAndUpdate(userid, {
+        $pull: { postlikes: existingLike._id },
+      });
+      return res.status(200).json({ message: 'Like successfully removed', existingLike });
+      }
+  
+      const newLike = await PostLike.create({ postid, userid });
+  
+      await Post.findByIdAndUpdate(postid, {
+        $push: { postlikes: newLike._id },
+      });
+  
+      await User.findByIdAndUpdate(userid, {
+        $push: { postlikes: newLike._id },
+      });
+  
+      res.status(201).json({ message: "Post erfolgreich geliked", newLike });
+    } catch (e) {
+      console.error("Fehler beim Erstellen des Likes:", e);
       next(e);
     }
-  }
+  };
+  

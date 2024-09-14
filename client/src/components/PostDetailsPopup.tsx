@@ -1,9 +1,12 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
-import { createPostComment, fetchOnePost} from "../http/api";
+import {
+  createPostComment,
+  fetchOnePost,
+  createPostLike,
+  deletePostLike,
+} from "../http/api";
 
 interface PostDetailsPopupProps {
   selectedPost: {
@@ -19,15 +22,18 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   const { user } = useCategoryUserContext();
   const [post, setPost] = useState<any>({});
   const [comment, setComment] = useState<string>("");
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<any[]>([]); //for later I have toadd type of comment
+  const [likes, setLikes] = useState<any[]>([]); // for later have I toadd type of like
   const [showPopup, setShowPopup] = useState<boolean>(true);
 
   useEffect(() => {
     const getOnePost = async () => {
       const data = await fetchOnePost(selectedPost);
+      console.log("datadata", data);
       setPost(data?.data);
       setComments(data?.postComments);
-    }
+      setLikes(data?.postLikes);
+    };
     getOnePost();
   }, [selectedPost.postid]);
 
@@ -54,21 +60,57 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     if (!comment.trim()) return;
 
     try {
-      const data = await createPostComment(user, selectedPost, comment)
+      const data = await createPostComment(user, selectedPost, comment);
       const commentToAdd = {
         ...data.newComment,
         userid: {
           username: user?.username,
           profileimage: user?.profileimage,
-        }
-      }
+        },
+      };
       setComments((prev) => [...prev, commentToAdd]);
       setComment("");
     } catch (error) {
       console.error(error);
     }
   };
+  const addLikes = async () => {
+    try {
+      //   const findedLike = likes.find((like) => like.postid === selectedPost.postid
+      // && like.userid === user?._id);
+      // if (!findedLike) {
+      const data = await createPostLike(user, selectedPost);
+      console.log("data", data);
+      if (data.newLike) {
+        const newLike = {
+          ...data.newLike,
+          userid: {
+            _id: user?._id,
+            username: user?.username,
+            profileimage: user?.profileimage,
+          },
+        };
+        setLikes((prev) => [...prev, newLike]);
+      } else {
+        setLikes(likes.filter((like) => like._id !== data.existingLike._id));
+      }
 
+      //   console.log(data);
+      // } else {
+      //   const data = await deletePostLike(user, selectedPost);
+      //   setLikes(likes.filter((like) => like._id !== data.likeToremove._id));
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log("likesssssss", likes);
+  const hasLiked = likes.find(
+    (like) =>
+      like.userid._id === user?._id && like.postid === selectedPost.postid
+  );
+  console.log("hasLiked", hasLiked);
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70 transition-opacity duration-300 ${
@@ -128,6 +170,28 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             Adresse: <span className="font-medium">{post.address}</span>
           </p>
 
+          <div>
+            <span>{`${likes.length} likes`}</span>
+            <button onClick={addLikes} className="focus:outline-none p-0 m-0">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-8 w-8 transition-colors duration-300 ${
+                  hasLiked ? "text-red-500" : "text-gray-400"
+                }`}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={hasLiked ? "none" : "currentColor"}
+                strokeWidth={2}
+              >
+                <path
+                  d="M12 21C12 21 5 13.7 5 9.5C5 7 6.5 5.5 9 5.5C10.5 5.5 12 6.5 12 6.5C12 6.5 13.5 5.5 15 5.5C17.5 5.5 19 7 19 9.5C19 13.7 12 21 12 21Z"
+                  fill={hasLiked ? "currentColor" : "none"}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
           <div className="mt-8">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               Kommentare
@@ -159,17 +223,19 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                       new Date(a.commentDate).getTime()
                   )
                   .map((cmt) => (
-                    <div key={cmt.id} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-
+                    <div
+                      key={cmt.id}
+                      className="p-4 bg-gray-100 rounded-lg shadow-sm"
+                    >
                       <img
                         src={`http://localhost:5000/${cmt.userid.profileimage}`}
                         alt={`${cmt.userid.username} Profilbild`}
                         className="w-12 h-12 object-cover rounded-full mr-4"
                       />
                       <div className="flex-1">
-                      <p className="text-gray-800 break-words whitespace-normal">
-                      {cmt.content}
-                    </p>
+                        <p className="text-gray-800 break-words whitespace-normal">
+                          {cmt.content}
+                        </p>
                         <p className="text-sm text-gray-500 mt-2">
                           Gepostet von:{" "}
                           <span className="font-semibold">

@@ -690,6 +690,8 @@ export const attachmentUpload = async (attachments: FormData) => {
 
 export  const fetchOnePost = async (selectedPost) => {
   try {
+    let postComments;
+    let postLikes;
     const response = await fetch(
       `http://localhost:5000/posts/${selectedPost.postid}`,
       {
@@ -713,14 +715,32 @@ export  const fetchOnePost = async (selectedPost) => {
         }
       );
       if (!res.ok) throw new Error("Failed to fetch comments");
-      const postComments = await res.json();
+      postComments = await res.json();
       // setComments(postComments);
-      return {data, postComments}
+      
     }
+    if (data.postlikes) {
+      const res = await fetch(
+        `http://localhost:5000/posts/${data._id}/like`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) throw new Error("Failed to fetch likes");
+      postLikes = await res.json();
+      // setComments(postComments);
+      
+    }
+    return {data, postComments, postLikes}
   } catch (error) {
     console.error(error);
   }
 };
+
+// ****************************************************************
 
 export const createPostComment = async (user, selectedPost, comment) => {
   try {
@@ -745,3 +765,58 @@ export const createPostComment = async (user, selectedPost, comment) => {
 }
 
 }
+
+// ****************************************************************
+
+export const createPostLike = async (user, selectedPost) => {
+  try {
+    console.log('User ID:', user?._id);
+    console.log('Post ID:', selectedPost.postid);
+  const response = await fetch(
+    `http://localhost:5000/posts/like`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+
+      }),
+    }
+  );
+  if (!response.ok) throw new Error("Failed to add like");
+  return await response.json();
+} catch (error) {
+  console.error("Failed to create like:", error);
+}
+
+}
+
+// ****************************************************************
+
+export const deletePostLike = async (user, selectedPost) => {
+  try {
+  const response = await fetch(
+    `http://localhost:5000/posts/like`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+
+      }),
+    }
+  );
+  if (!response.ok) throw new Error("Failed to delete like");
+  return await response.json();
+} catch (error) {
+  console.error("Failed to delete like:", error);
+}
+
+}
+
