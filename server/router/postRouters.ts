@@ -19,7 +19,7 @@ import authMiddleware from "../controllers/token-controller";
 
 const postRouter = express.Router();
 // const upload = multer({ dest: "uploads/" });
-postRouter.get("/:id", authMiddleware, getOnePost);
+postRouter.get("/:id", /*authMiddleware*/ getOnePost);
 postRouter.get("/get/:id", authMiddleware, getUserPosts);
 postRouter.post("/create", imagesUpload.single("postImages"), createPost);
 postRouter.get("/", getFilteredPosts);
