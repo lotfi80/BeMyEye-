@@ -54,20 +54,7 @@ export const getUserInbox = async (
 ): Promise<Response | void> => {
   const userId = req.params.id;
   try {
-    const user = await User.findById(userId).populate({
-      path: "inbox",
-      populate: [
-        {
-          path: "sender",
-          model: "User",
-        },
-        {
-          path: "recipient",
-          model: "User",
-        },
-      ],
-    });
-
+    const user = await User.findById(userId).populate("inbox");
     const inbox = user?.inbox;
     return res.status(200).json(inbox);
   } catch (err) {
@@ -83,17 +70,11 @@ export const getUserSent = async (
 ): Promise<Response | void> => {
   const userId = req.params.id;
   try {
-    const user = await User.findById(userId).populate({
-      path: "sent",
-      populate: {
-        path: "recipient",
-        model: "User",
-      },
-    });
+    const user = await User.findById(userId).populate("sent");
     const sent = user?.sent;
     return res.status(200).json(sent);
   } catch (err) {
-    console.error("getUserInbox error: ", err);
+    console.error("getUserSent error: ", err);
     return res.status(500).send("Internal server error");
   }
 };

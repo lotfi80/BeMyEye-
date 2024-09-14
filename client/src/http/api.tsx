@@ -1,6 +1,5 @@
 import { AuthTokens } from "../interfaces/AuthToken";
-import IUser from "../interfaces/User";
-import { IPost } from "../interfaces/Post";
+import { IUser } from "../interfaces/User";
 
 const BASE_URL = "http://localhost:5000/api";
 
@@ -38,7 +37,6 @@ export const activateUser = async (activationLink: string): Promise<any> => {
       `http://localhost:5000/auth/activate/${activationLink}`,
       {
         method: "GET",
-        credentials: "include",
       }
     );
 
@@ -62,7 +60,6 @@ export const getUserIdByActivationLink = async (
       `http://localhost:5000/auth/user/${activationLink}`,
       {
         method: "GET",
-        credentials: "include",
       }
     );
 
@@ -176,7 +173,6 @@ export const getUserDataByID = async (
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -195,10 +191,9 @@ export const fetchUser = async (): Promise<IUser | undefined> => {
   try {
     const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      credentials: "include",
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      // },
     });
 
     if (!response.ok) {
@@ -220,7 +215,6 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: formData,
-      credentials: "include",
     });
     const data = await response.json();
     if (!response.ok) {
@@ -245,7 +239,6 @@ export const userInContextUpdateRequest = async (
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(user),
-      credentials: "include",
     });
     const message = await response.json();
     if (!response.ok) {
@@ -274,9 +267,7 @@ export const getAllPosts = async (
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -300,9 +291,7 @@ export const getPostByUser = async (userid: string): Promise<any> => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
 
@@ -332,7 +321,6 @@ export const uploadProfileImage = async (
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: formData,
-        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -364,7 +352,6 @@ export const getHash = async (
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ oldPassword, password }),
-        credentials: "include",
       }
     );
     // const hash = await response.json();
@@ -387,7 +374,6 @@ export const getUsers = async () => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      credentials: "include",
     });
     if (!response.ok) {
       throw new Error("Failed to fetch users");
@@ -407,7 +393,6 @@ export const deleteUser = async (id: string) => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      credentials: "include",
       // body: JSON.stringify(id),
     });
     if (!response.ok) {
@@ -428,7 +413,6 @@ export const getUsersPost = async (userid: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -455,7 +439,6 @@ export const notifyFollowers = async (userId: string) => {
         userId,
         message: `User ${userId} posted a new post`,
       }),
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -479,7 +462,6 @@ export const makeFollower = async (userId: string, followingId: string) => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ followingId }),
-        credentials: "include",
       }
     );
 
@@ -502,7 +484,6 @@ export const getFollow_ = async (userId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
 
@@ -529,7 +510,6 @@ export const deleteFollower = async (userId: string, followingId: string) => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ followingId }),
-        credentials: "include",
       }
     );
 
@@ -560,7 +540,6 @@ export const sendMessage = async (
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ recipients, message, subject, attachments }),
-        credentials: "include",
       }
     );
 
@@ -583,7 +562,6 @@ export const getUserInbox = async (userId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
 
@@ -608,7 +586,6 @@ export const getUserSent = async (userId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
 
@@ -633,7 +610,6 @@ export const markAsRead = async (messageId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
 
@@ -656,7 +632,6 @@ export const deleteMessage = async (messageId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
 
@@ -679,7 +654,6 @@ export const getUsersByField = async (field: string, value: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -701,7 +675,6 @@ export const attachmentUpload = async (attachments: FormData) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: attachments,
-      credentials: "include",
     });
 
     if (!response.ok) {

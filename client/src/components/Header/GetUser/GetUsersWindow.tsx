@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TableView from "../Table/TableView";
 import GetUsersPosts from "./GetUsersPosts";
 import { getUsersPost, makeFollower, deleteFollower } from "../../../http/api";
-import IUser from "../../../interfaces/User";
+import { IUser } from "../../../interfaces/User";
 import { Search } from "../../searchBar/Search";
 import { getUsers } from "../../../http/api";
 

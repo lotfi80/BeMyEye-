@@ -14,12 +14,11 @@ import {
   //   deleteComment,
 } from "../controllers/post-controller";
 import { imagesUpload } from "../service/multer-service";
-import authMiddleware from "../controllers/token-controller";
 
 const postRouter = express.Router();
 // const upload = multer({ dest: "uploads/" });
-postRouter.get("/:id", authMiddleware, getOnePost);
-postRouter.get("/get/:id", authMiddleware, getUserPosts);
+postRouter.get("/:id", getOnePost);
+postRouter.get("/get/:id", getUserPosts);
 postRouter.post("/create", imagesUpload.single("postImages"), createPost);
 postRouter.get("/", getFilteredPosts);
 postRouter.post("/comment/create", createComment);
@@ -30,6 +29,4 @@ postRouter.post("/like", togglePostLike);
 
 
 
-// /////////////////////////NATH/////////////
-// postRouter.get("/:id", authMiddleware, getPostsById);
 export default postRouter;

@@ -12,28 +12,26 @@ import {
   getFollow_,
 } from "../controllers/user-controller";
 import { profileImagesUpload } from "../service/multer-service";
-import authMiddleware from "../controllers/token-controller";
 
 const userRouter = express.Router();
 // **************************************************
-userRouter.get("/users", authMiddleware, getUsers);
+userRouter.get("/users", getUsers);
 // **************************************************
-userRouter.get("/user/:id", authMiddleware, getUserDataByID);
-userRouter.put("/user/:id", authMiddleware, userProfileUpdate);
+userRouter.get("/user/:id", getUserDataByID);
+userRouter.put("/user/:id", userProfileUpdate);
 userRouter.post(
   "/user/:id/upload-image",
-
   profileImagesUpload.single("profileimage"),
   userProfileImageUpdate
 );
-userRouter.delete("/user/:id", authMiddleware, deleteUser);
+userRouter.delete("/user/:id", deleteUser);
 // **************************************************
-userRouter.post("/user/:id/follow", authMiddleware, makeFollower);
-userRouter.put("/user/:id/follow", authMiddleware, deleteFollower);
-userRouter.get("/user/:id/follow", authMiddleware, getFollow_);
+userRouter.post("/user/:id/follow", makeFollower);
+userRouter.put("/user/:id/follow", deleteFollower);
+userRouter.get("/user/:id/follow", getFollow_);
 // **************************************************
-userRouter.get("/user/:field/:value", authMiddleware, getUserDataByField);
+userRouter.get("/user/:field/:value", getUserDataByField);
 
-userRouter.put("/passwordUpdate/:id", authMiddleware, passwordUpdate);
+userRouter.put("/passwordUpdate/:id", passwordUpdate);
 
 export default userRouter;

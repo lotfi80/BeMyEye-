@@ -20,7 +20,6 @@ import path from "path";
 
 const uploadDir = path.join(__dirname, "..", "postImages");
 const uploadProfileDir = path.join(__dirname, "..", "profileImages");
-const uploadAttachmentDir = path.join(__dirname, "..", "attachments");
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -51,7 +50,6 @@ app.use("/messages", messageRouter);
 
 app.use("/profileImages", express.static(uploadProfileDir));
 app.use("/postImages", express.static(uploadDir));
-app.use("/attachments", express.static(uploadAttachmentDir));
 
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);

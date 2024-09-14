@@ -1,7 +1,4 @@
-import IMessage from "./Message";
-import { IPost } from "./Post";
-
-export default interface IUser {
+export interface IUser {
   _id: string;
   email: string;
   // password: string | null | undefined;
@@ -33,5 +30,4 @@ export default interface IUser {
   following: IUser[];
   inbox: IMessage[];
   sent: IMessage[];
-  notifications: string[];
 }

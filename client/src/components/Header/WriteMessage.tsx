@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./writeMessage.css";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 import { attachmentUpload, getUsersByField, sendMessage } from "../../http/api";
-import IUser from "../../interfaces/User";
-import CloseButton from "../MyCloseButton";
-import SuccessNote from "./SuccessNote";
+import { IUser } from "../../interfaces/User";
+import CloseButton from "../CloseButton";
 
 interface props {
   currentRecipient: IUser | null;
@@ -19,13 +18,12 @@ const WriteMessage: React.FC<props> = ({
   setLetterVisible,
 }) => {
   const [recipients, setRecipients] = useState(
-    currentRecipient?.username ? currentRecipient.username : "incognito"
+    currentRecipient?.username || ""
   );
   const [subject, setSubject] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const { user } = useCategoryUserContext();
   const [attachments, setAttachments] = useState<string[]>([]);
-  const [success, setSuccess] = useState<boolean>(false);
 
   useEffect(() => {
     if (currentRecipient?.username) {
@@ -81,6 +79,7 @@ const WriteMessage: React.FC<props> = ({
         const newArrayOfRecipients = (
           await Promise.all(recipientPromises)
         ).filter((id) => id !== null);
+        console.log("newArrayOfRecipients", newArrayOfRecipients);
         await sendMessage(
           user._id,
           newArrayOfRecipients,
@@ -88,11 +87,6 @@ const WriteMessage: React.FC<props> = ({
           subject,
           attachments
         );
-        setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false);
-          if (setLetterVisible) setLetterVisible(false);
-        }, 2000);
       }
     } catch (err) {
       console.log(err);
@@ -126,7 +120,6 @@ const WriteMessage: React.FC<props> = ({
             onChange={(e) => setSubject(e.target.value)}
             className="input"
           />
-          {success && <SuccessNote />}
           <label className="label">Message</label>
           <textarea
             placeholder="Type your message here"
@@ -151,6 +144,7 @@ const WriteMessage: React.FC<props> = ({
           <p className="note">* Separate usernames with commas</p>
         </form>
       </div>
+      {/* </div> */}
     </>
   );
 };

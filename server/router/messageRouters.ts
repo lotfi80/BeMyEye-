@@ -7,19 +7,17 @@ import sendMessage, {
   attachmentUpload,
 } from "../controllers/message-controller";
 import { attachmentUploads } from "../service/multer-service";
-import authMiddleware from "../controllers/token-controller";
 
 const messageRouter = express.Router();
 
-messageRouter.post("/send/:id", authMiddleware, sendMessage);
-messageRouter.get("/user/:id/inbox", authMiddleware, getUserInbox);
-messageRouter.get("/user/:id/sent", authMiddleware, getUserSent);
-messageRouter.patch("/:id/read", authMiddleware, markAsRead);
-messageRouter.delete("/:id/delete", authMiddleware, deleteMessage);
+messageRouter.post("/send/:id", sendMessage);
+messageRouter.get("/user/:id/inbox", getUserInbox);
+messageRouter.get("/user/:id/sent", getUserSent);
+messageRouter.patch("/:id/read", markAsRead);
+messageRouter.delete("/:id/delete", deleteMessage);
 
 messageRouter.post(
   "/attachment",
-  authMiddleware,
   attachmentUploads.single("attachments"),
   attachmentUpload
 );

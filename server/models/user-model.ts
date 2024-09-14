@@ -33,7 +33,6 @@ export interface IUser extends Document {
   following: mongoose.Types.ObjectId[];
   inbox: mongoose.Types.ObjectId[];
   sent: mongoose.Types.ObjectId[];
-  notifications: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema(
@@ -83,7 +82,6 @@ const UserSchema = new Schema(
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     inbox: [{ type: Schema.Types.ObjectId, ref: "Message" }],
     sent: [{ type: Schema.Types.ObjectId, ref: "Message" }],
-    notifications: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   },
   { timestamps: true }
 );
