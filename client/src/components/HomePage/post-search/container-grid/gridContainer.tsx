@@ -120,9 +120,9 @@ const GridContainer: React.FC = () => {
               {post.address}
             </p>
             <p className="text-sm text-gray-500 truncate mb-1">{post.body}</p>
-            <span className="block text-xs font-medium text-blue-600 mt-3">
+            {/* <span className="block text-xs font-medium text-blue-600 mt-3">
               {post.category.name}
-            </span>
+            </span> */}
           </div>
         ))}
       </div>

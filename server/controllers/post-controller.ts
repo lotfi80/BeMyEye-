@@ -3,6 +3,7 @@ import { Post, IPost } from "../models/Post";
 import { PostComment, IPostComment } from "../models/PostComments";
 import { PostImage, IPostImage } from "../models/PostImages";
 import User from "../models/user-model";
+import { PostLike } from "../models/PostLikes";
 
 export const createPost = async (
   req: Request,
@@ -154,7 +155,8 @@ export const getOnePost = async (
   try {
     const posts = await Post.findById(postid)
     .populate("postcomments")
-    .populate("postimage");
+    .populate("postimage")
+    .populate("postlikes");
     res.status(200).json(posts);
   } catch (e) {
     console.error(e);
@@ -259,27 +261,63 @@ export const deleteComment = async (
     next(e);
   }
 };
-// //////////////////////NATH////////////////////////////
-export const getPostsById = async (
-  req: Request,
-  res: Response
-): Promise<Response | void> => {
-  const id: any = req.params.id;
-  if (!id || typeof id !== "string") {
-    return res.status(400).json({ message: "Invalid ID format" });
-  }
 
+// ****************************************************************
+
+export const getLikesByPOst = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const post = await Post.findById(id)
-      .populate("userid")
-      .populate("category")
-      .populate("postimage");
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-    res.status(200).json(post);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching post", error });
+    const { id } = req.params;
+    const likes = await PostLike.find({ postid: id }).populate(
+      "userid"
+    );
+    res.status(200).json(likes);
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 };
+
+
+
+
+// ****************************************************************
+
+  export const togglePostLike = async (req: Request, res: Response, next: NextFunction) => {
+    const { postid, userid } = req.body;
+  
+    try {
+      const existingLike = await PostLike.findOne({ postid, userid });
+      if (existingLike) {
+        await PostLike.findByIdAndDelete(existingLike._id);
+  
+      await Post.findByIdAndUpdate(postid, {
+        $pull: { postlikes: existingLike._id },
+      });
+  
+      await User.findByIdAndUpdate(userid, {
+        $pull: { postlikes: existingLike._id },
+      });
+      return res.status(200).json({ message: 'Like successfully removed', existingLike });
+      }
+  
+      const newLike = await PostLike.create({ postid, userid });
+  
+      await Post.findByIdAndUpdate(postid, {
+        $push: { postlikes: newLike._id },
+      });
+  
+      await User.findByIdAndUpdate(userid, {
+        $push: { postlikes: newLike._id },
+      });
+  
+      res.status(201).json({ message: "Post erfolgreich geliked", newLike });
+    } catch (e) {
+      console.error("Fehler beim Erstellen des Likes:", e);
+      next(e);
+    }
+  };
+  

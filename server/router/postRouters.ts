@@ -9,7 +9,8 @@ import {
   getComments,
   updateComment,
   deleteComment,
-  getPostsById,
+  getLikesByPOst,
+  togglePostLike,
   //   deleteComment,
 } from "../controllers/post-controller";
 import { imagesUpload } from "../service/multer-service";
@@ -21,10 +22,14 @@ postRouter.get("/:id", authMiddleware, getOnePost);
 postRouter.get("/get/:id", authMiddleware, getUserPosts);
 postRouter.post("/create", imagesUpload.single("postImages"), createPost);
 postRouter.get("/", getFilteredPosts);
-postRouter.post("/comment/create", authMiddleware, createComment);
-postRouter.get("/comment/get", authMiddleware, getComments);
-postRouter.put("/comment/update/:id", authMiddleware, updateComment);
+postRouter.post("/comment/create", createComment);
+postRouter.get("/comment/get", getComments);
+postRouter.put("/comment/update/:id", updateComment);
+postRouter.get("/:id/like", getLikesByPOst);
+postRouter.post("/like", togglePostLike);
+
+
 
 // /////////////////////////NATH/////////////
-postRouter.get("/:id", authMiddleware, getPostsById);
+// postRouter.get("/:id", authMiddleware, getPostsById);
 export default postRouter;
