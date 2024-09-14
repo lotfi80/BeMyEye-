@@ -1,4 +1,14 @@
+export interface IImage {
+  image: string;
+  _id: string;
+}
+
+import IUser from "./User";
 export interface IPost {
-  postid: string[];
-  userid: string;
+  _id: string;
+  userid: IUser;
+  postimage: IImage;
+  title: string;
+  description: string;
+  address: string;
 }

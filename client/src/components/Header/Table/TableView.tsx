@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IUser } from "../../../interfaces/User";
+import IUser from "../../../interfaces/User";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
@@ -162,7 +162,7 @@ const TableView: React.FC<props> = ({
     return null;
   }
   return (
-    <table className="min-w-full divide-y divide-gray-400">
+    <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-100">
         <tr>
           {headCells.map((headCell) => (

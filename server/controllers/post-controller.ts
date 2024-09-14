@@ -54,9 +54,19 @@ export const createPost = async (
     const user = await User.findById(userid);
     if (user) {
       user.postid.push(newPost._id as any);
+      // ////////////////////////////NATH//////////////////////////////////////////
+      //////////////fuer Notification den Followers //////////////////////////
+      if (user.followers.length > 0) {
+        const notPromises = user.followers.map(async (follower) => {
+          await User.findByIdAndUpdate(follower._id, {
+            $push: { notifications: newPost._id },
+          });
+        });
+        await Promise.all(notPromises);
+      }
+      ///////////////////////END//////////////////////////////////////////////////
       await user.save();
     }
-
     res.status(201).json({ message: "Post successfully created", newPost });
     //     res.status(201).json({ message: "PostImage successfully created", newPostImage });
   } catch (e) {
