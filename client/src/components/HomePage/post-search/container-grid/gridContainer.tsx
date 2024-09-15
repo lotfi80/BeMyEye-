@@ -16,6 +16,8 @@ const GridContainer: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
+
   const [selectedPost, setSelectedPost] = useState<{
     // title: string;
     // description: string;
@@ -119,14 +121,43 @@ const GridContainer: React.FC = () => {
             <p className="text-sm text-gray-500 truncate mb-1">
               {post.address}
             </p>
-            <p className="text-sm text-gray-500 truncate mb-1">{post.body}</p>
-            {/* <span className="block text-xs font-medium text-blue-600 mt-3">
-              {post.category.name}
-            </span> */}
+            <p className="text-sm text-gray-500 truncate mb-1">
+              {post.body}
+            </p>
+  
+            {/* Likes and Comments Section */}
+            <div className="flex items-center space-x-2 mt-2">
+              <div className="flex items-center space-x-1">
+                <p className="text-sm text-gray-500 truncate">
+                  {post.postlikes.length} Likes
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-5 w-5 ${
+                    post.postlikes.length > 0
+                      ? 'text-red-500' // Inner part of the heart red
+                      : 'text-gray-500'
+                  }`}
+                  fill={post.postlikes.length > 0 ? 'currentColor' : 'none'}
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                  />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-500 truncate">
+                {post.postcomments.length} comments
+              </p>
+            </div>
           </div>
         ))}
       </div>
-
+  
       <div className="flex justify-center p-4">
         <button
           onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
@@ -148,7 +179,7 @@ const GridContainer: React.FC = () => {
           Next
         </button>
       </div>
-
+  
       {selectedPost && (
         <PostDetailsPopup
           selectedPost={selectedPost}
@@ -157,6 +188,9 @@ const GridContainer: React.FC = () => {
       )}
     </div>
   );
+  
+
+
 };
 
 export default GridContainer;
