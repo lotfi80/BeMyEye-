@@ -103,15 +103,20 @@ const GridContainer: React.FC = () => {
             onClick={() => handlePostClick(post)}
             className="bg-white p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer"
           >
-            {post.postimage && post.postimage.length > 0 && (
-              <div className="mb-3">
+            <div className="mb-3">
+              {post.postimage && post.postimage.length > 0 ? (
                 <img
                   src={`http://localhost:5000/${post.postimage[0].image}`}
                   alt="Post image"
                   className="w-full h-48 object-cover rounded-lg shadow-md"
                 />
-              </div>
-            )}
+              ) : (
+                <div className="w-full h-48 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
+                  <span className="text-gray-500">No Image Available</span>
+                </div>
+              )}
+            </div>
+
             <h2 className="text-lg font-bold text-gray-800 mb-2 truncate">
               {post.title}
             </h2>
@@ -121,11 +126,36 @@ const GridContainer: React.FC = () => {
             <p className="text-sm text-gray-500 truncate mb-1">
               {post.address}
             </p>
-            <p className="text-sm text-gray-500 truncate mb-1">
-              {post.body}
-            </p>
-  
-            {/* Likes and Comments Section */}
+            <p className="text-sm text-gray-500 truncate mb-1">{post.body}</p>
+            {post.category && post.category.name && (
+              <p className="text-sm text-blue-500 truncate mb-1">
+                {post.category.name}
+              </p>
+            )}
+
+            {post.userid && (
+              <div className="flex items-center mt-3 space-x-3">
+                {post.userid.profileimage && (
+                  <img
+                    src={`http://localhost:5000/${post.userid.profileimage}`}
+                    alt={`${post.userid.username || "User"} Profilbild`}
+                    className="w-10 h-10 object-cover rounded-full"
+                  />
+                )}
+                <p className="text-sm text-gray-500">
+                  Gepostet von:
+                  <span
+                    className="text-sm text-blue-500 cursor-pointer hover:underline ml-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    {post.userid.username || "Unknown"}
+                  </span>
+                </p>
+              </div>
+            )}
+
             <div className="flex items-center space-x-2 mt-2">
               <div className="flex items-center space-x-1">
                 <p className="text-sm text-gray-500 truncate">
@@ -134,11 +164,9 @@ const GridContainer: React.FC = () => {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className={`h-5 w-5 ${
-                    post.postlikes.length > 0
-                      ? 'text-red-500' // Inner part of the heart red
-                      : 'text-gray-500'
+                    post.postlikes.length > 0 ? "text-red-500" : "text-gray-500"
                   }`}
-                  fill={post.postlikes.length > 0 ? 'currentColor' : 'none'}
+                  fill={post.postlikes.length > 0 ? "currentColor" : "none"}
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
@@ -157,7 +185,7 @@ const GridContainer: React.FC = () => {
           </div>
         ))}
       </div>
-  
+
       <div className="flex justify-center p-4">
         <button
           onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
@@ -179,7 +207,7 @@ const GridContainer: React.FC = () => {
           Next
         </button>
       </div>
-  
+
       {selectedPost && (
         <PostDetailsPopup
           selectedPost={selectedPost}
@@ -188,9 +216,6 @@ const GridContainer: React.FC = () => {
       )}
     </div>
   );
-  
-
-
 };
 
 export default GridContainer;

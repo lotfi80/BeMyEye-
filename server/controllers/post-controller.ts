@@ -22,6 +22,16 @@ export const createPost = async (
       barcode
     } = req.body;
     console.log(userid, "test ", req.body);
+    if (!title || !description  /*|| !latitute || !longtitute */|| !category || !userid) {
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields" });
+    }
+    if (!address || !latitute || !longtitute ) {
+      return res
+      .status(400)
+      .json({ message: "Please enter a valid street name and city" });
+    }
     const image = req.file;
 
     const newPost: IPost = await Post.create({
@@ -39,12 +49,17 @@ export const createPost = async (
       barcode,
       postimage: [],
     });
+if(!image){
+  return res.status(400).json({ message: "Please upload an image" });
+}
+else if (image) {
+  const newPostImage: IPostImage = await PostImage.create({
+    image: image.path,
+    postid: newPost._id,
+  });
 
-    if (image) {
-      const newPostImage: IPostImage = await PostImage.create({
-        image: image.path,
-        postid: newPost._id,
-      });
+   
+
 
       await Post.findByIdAndUpdate(newPost._id, {
         $push: { postimage: newPostImage._id },
@@ -70,7 +85,7 @@ export const createPost = async (
     res.status(201).json({ message: "Post successfully created", newPost });
     //     res.status(201).json({ message: "PostImage successfully created", newPostImage });
   } catch (e) {
-    console.error(e);
+    console.error(`Error creating post: ${e}`);
     next(e);
   }
 };
@@ -156,7 +171,8 @@ export const getOnePost = async (
     const posts = await Post.findById(postid)
     .populate("postcomments")
     .populate("postimage")
-    .populate("postlikes");
+    .populate("postlikes")
+    .populate("userid")
     res.status(200).json(posts);
   } catch (e) {
     console.error(e);
