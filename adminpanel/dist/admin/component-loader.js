@@ -1,3 +1,4 @@
 import { ComponentLoader } from 'adminjs';
 const componentLoader = new ComponentLoader();
-export default componentLoader;
+componentLoader.add('ButtonExamples', '../components/Button.tsx');
+export { componentLoader };

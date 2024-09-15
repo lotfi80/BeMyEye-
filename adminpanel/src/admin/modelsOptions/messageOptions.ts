@@ -2,7 +2,7 @@ export const messageOptions = {
   properties: {
     _id: { type: 'string', isVisible: false },
     message: {
-      type: 'string',
+      type: 'richtext',
       isVisible: {
         list: true,
         filter: true,

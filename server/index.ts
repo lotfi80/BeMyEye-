@@ -26,10 +26,21 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+const allowedOrigins = [
+  process.env.CLIENT_URL as string,
+  "http://localhost:5001",
+];
+
 const app = express();
 app.use(
   cors({
-    origin: process.env.CLIENT_URL as string,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     // origin: "*",
     credentials: true,
   })

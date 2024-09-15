@@ -122,5 +122,6 @@ export const postOptions = {
     delete: { isAccessible: true },
     list: { isAccessible: true },
     show: { isAccessible: true },
+    search: { isAccessible: true },
   },
 };

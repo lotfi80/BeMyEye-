@@ -1,30 +1,33 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
+import mongoose from 'mongoose';
 import AdminJS from 'adminjs';
-import { buildAuthenticatedRouter } from '@adminjs/express';
-import provider from './admin/auth-provider.js';
+import AdminJSExpress from '@adminjs/express';
+import * as AdminJSMongoose from '@adminjs/mongoose';
 import options from './admin/options.js';
-import initializeDb from './db/index.js';
 const port = process.env.PORT || 3000;
+const app = express();
+AdminJS.registerAdapter(AdminJSMongoose);
 const start = async () => {
-    const app = express();
-    await initializeDb();
+    await mongoose
+        .connect(`${process.env.MONGODB_URL}`)
+        .then(() => {
+        console.log('Database connected');
+    })
+        .catch((err) => {
+        console.error('Database connection error:', err);
+    });
     const admin = new AdminJS(options);
-    if (process.env.NODE_ENV === 'production') {
-        await admin.initialize();
-    }
-    else {
+    console.log('AdminJS initialized');
+    if (process.env.NODE_ENV === 'development') {
         admin.watch();
     }
-    const router = buildAuthenticatedRouter(admin, {
-        cookiePassword: process.env.COOKIE_SECRET,
-        cookieName: 'adminjs',
-        provider,
-    }, null, {
-        secret: process.env.COOKIE_SECRET,
-        saveUninitialized: true,
-        resave: true,
+    const adminRouter = AdminJSExpress.buildRouter(admin);
+    app.use(admin.options.rootPath, adminRouter);
+    app.get('/', (req, res) => {
+        res.send('Hello from AdminJS!');
     });
-    app.use(admin.options.rootPath, router);
     app.listen(port, () => {
         console.log(`AdminJS available at http://localhost:${port}${admin.options.rootPath}`);
     });

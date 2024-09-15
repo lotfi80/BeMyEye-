@@ -2,15 +2,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
-import AdminJS from 'adminjs';
+import AdminJS, { Dashboard } from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
 import * as AdminJSMongoose from '@adminjs/mongoose';
+import { componentLoader } from './admin/component-loader.js';
+import { Components } from './admin/component-loader.js';
 
-import provider from './admin/auth-provider.js';
 import options from './admin/options.js';
-import { buildAuthenticatedRouter } from '@adminjs/express';
-
-import User from './models/user.js';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -27,28 +25,41 @@ const start = async (): Promise<void> => {
       console.error('Database connection error:', err);
     });
 
-  const admin = new AdminJS(options);
-
-  if (process.env.NODE_ENV === 'development') {
-    admin.watch();
-  }
-
-  const router = buildAuthenticatedRouter(
-    admin,
-    {
-      cookiePassword: process.env.COOKIE_SECRET,
-      cookieName: 'adminjs',
-      provider,
+  const adminJsOptions = {
+    ...options,
+    componentLoader,
+    dashboard: {
+      component: Components.Dashboard,
     },
-    null,
-    {
-      secret: process.env.COOKIE_SECRET,
-      saveUninitialized: true,
-      resave: true,
-    }
-  );
+    branding: {
+      companyName: 'BeMyEye',
+    },
+  };
+  const admin = new AdminJS(adminJsOptions);
+  admin.watch();
+  console.log('AdminJS initialized');
 
-  app.use(admin.options.rootPath, router);
+  // if (process.env.NODE_ENV === 'development') {
+  //   admin.watch();
+  // }
+
+  // const router = buildAuthenticatedRouter(
+  //   admin,
+  //   {
+  //     cookiePassword: process.env.COOKIE_SECRET,
+  //     cookieName: 'adminjs',
+  //     provider,
+  //   },
+  //   null,
+  //   {
+  //     secret: process.env.COOKIE_SECRET,
+  //     saveUninitialized: true,
+  //     resave: true,
+  //   }
+  // );
+  const adminRouter = AdminJSExpress.buildRouter(admin);
+
+  app.use(admin.options.rootPath, adminRouter);
 
   app.get('/', (req, res) => {
     res.send('Hello from AdminJS!');
