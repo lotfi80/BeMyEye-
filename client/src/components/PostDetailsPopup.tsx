@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
@@ -22,14 +23,14 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   const { user } = useCategoryUserContext();
   const [post, setPost] = useState<any>({});
   const [comment, setComment] = useState<string>("");
-  const [comments, setComments] = useState<any[]>([]); //for later I have toadd type of comment
-  const [likes, setLikes] = useState<any[]>([]); // for later have I toadd type of like
+  const [comments, setComments] = useState<any[]>([]);
+  const [likes, setLikes] = useState<any[]>([]);
   const [showPopup, setShowPopup] = useState<boolean>(true);
+  const [hovered, setHovered] = useState<boolean>(false);
 
   useEffect(() => {
     const getOnePost = async () => {
       const data = await fetchOnePost(selectedPost);
-      console.log("datadata", data);
       setPost(data?.data);
       setComments(data?.postComments);
       setLikes(data?.postLikes);
@@ -74,13 +75,10 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
       console.error(error);
     }
   };
+
   const addLikes = async () => {
     try {
-      //   const findedLike = likes.find((like) => like.postid === selectedPost.postid
-      // && like.userid === user?._id);
-      // if (!findedLike) {
       const data = await createPostLike(user, selectedPost);
-      console.log("data", data);
       if (data.newLike) {
         const newLike = {
           ...data.newLike,
@@ -94,23 +92,17 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
       } else {
         setLikes(likes.filter((like) => like._id !== data.existingLike._id));
       }
-
-      //   console.log(data);
-      // } else {
-      //   const data = await deletePostLike(user, selectedPost);
-      //   setLikes(likes.filter((like) => like._id !== data.likeToremove._id));
-      // }
     } catch (error) {
       console.error(error);
     }
   };
 
-  console.log("likesssssss", likes);
   const hasLiked = likes.find(
     (like) =>
       like.userid._id === user?._id && like.postid === selectedPost.postid
   );
-  console.log("hasLiked", hasLiked);
+  console.log(post)
+
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70 transition-opacity duration-300 ${
@@ -165,13 +157,19 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             Erstellt am:{" "}
             <span className="font-medium">{formatDate(post.postDate)}</span>
           </p>
+          <p>
+            Erstellt von:{" "}
+            <span className="font-medium">
+              {post.userid && post.userid.username||'Unknown'}
+              
+            </span>
+          </p>
 
           <p className="text-sm text-gray-600 mb-2">
             Adresse: <span className="font-medium">{post.address}</span>
           </p>
 
-          <div>
-            <span>{`${likes.length} likes`}</span>
+          <div className="flex items-center space-x-2 relative">
             <button onClick={addLikes} className="focus:outline-none p-0 m-0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +189,28 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                 />
               </svg>
             </button>
+            <span
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              className="cursor-pointer text-gray-900"
+            >
+              {`${likes.length} likes`}
+            </span>
+            {hovered && (
+              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-300 rounded shadow-lg p-2 text-sm z-10 w-64">
+                {likes.length > 0 ? (
+                  likes.map((like) => (
+                    <p key={like.userid._id} className="truncate p-1">
+                      {like.userid.username || "Unknown"}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No likes</p>
+                )}
+              </div>
+            )}
           </div>
+
           <div className="mt-8">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               Kommentare
