@@ -1,8 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'adminjs';
 import { Box, Button, CurrencyInput, H3, H5, Illustration, Text, Theme } from '@adminjs/design-system';
 import { styled } from '@adminjs/design-system/styled-components';
 
-// import { useTranslation } from '../../hooks/index.js';
 import Logo from '../utils/Logo.js';
 import MyDropDown from './Search/MyDropDown.js';
 

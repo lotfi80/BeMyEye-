@@ -1,26 +1,18 @@
 import React from 'react';
 import { Input, Label, Icon, Button } from '@adminjs/design-system';
+import { useNavigate } from 'react-router-dom';
 
 interface props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inputValues: string;
   setInputValues: React.Dispatch<string>;
-  setIsSearchActive: React.Dispatch<boolean>;
-  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const SearchBar: React.FC<props> = ({ onChange, inputValues, setIsSearchActive, onKeyDown, setInputValues }) => {
+const SearchBar: React.FC<props> = ({ onChange, inputValues, setInputValues, onClick }) => {
   return (
     <>
-      <Icon
-        icon="Search"
-        size={22}
-        rounded
-        onClick={(e) => {
-          e.preventDefault();
-          setIsSearchActive(true);
-        }}
-      />
+      <Icon icon="Search" size={22} rounded onClick={onClick} />
 
       <Input
         type="text"
@@ -29,7 +21,6 @@ const SearchBar: React.FC<props> = ({ onChange, inputValues, setIsSearchActive, 
         placeholder="Search user by username..."
         value={inputValues}
         onChange={onChange}
-        onKeyDown={onKeyDown}
       />
       <Icon
         icon="X"
@@ -37,7 +28,6 @@ const SearchBar: React.FC<props> = ({ onChange, inputValues, setIsSearchActive, 
         onClick={(e) => {
           e.preventDefault();
           setInputValues('');
-          setIsSearchActive(false);
         }}
       />
     </>

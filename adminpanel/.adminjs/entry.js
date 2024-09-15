@@ -7,8 +7,8 @@ import TopBar from '../src/components/TopBar'
 AdminJS.UserComponents.TopBar = TopBar
 import ButtonExamples from '../src/components/Button'
 AdminJS.UserComponents.ButtonExamples = ButtonExamples
-import SearchBar from '../src/components/Search/SearchBarA'
-AdminJS.UserComponents.SearchBar = SearchBar
+import SearchBarA from '../src/components/Search/SearchBarA'
+AdminJS.UserComponents.SearchBarA = SearchBarA
 import MyDropDown from '../src/components/Search/MyDropDown'
 AdminJS.UserComponents.MyDropDown = MyDropDown
 import RecentUsers from '../src/components/RecentUsers'

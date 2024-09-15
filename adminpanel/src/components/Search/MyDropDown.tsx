@@ -8,8 +8,7 @@ import { getUsers } from '../../http/api.js';
 
 const MyDropDown: React.FC = () => {
   const [inputValues, setInputValues] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<Partial<IUser>[]>([]);
-  const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
+
   const [writeInSearchBarResults, setWriteInSearchBarResults] = useState<any>([]);
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
   const navigate = useNavigate();
@@ -26,7 +25,11 @@ const MyDropDown: React.FC = () => {
     getAllUsers();
   }, []);
 
-  useEffect(() => {
+  const handleOnClick = (child: any) => {
+    setInputValues(child?.value);
+  };
+
+  const handleSearchClick = () => {
     const searchResult: Partial<IUser>[] = allUsers.filter((user: IUser) => {
       return (
         user.username?.toLowerCase().startsWith(inputValues.toLowerCase()) ||
@@ -35,18 +38,14 @@ const MyDropDown: React.FC = () => {
         user.city?.toLowerCase().startsWith(inputValues.toLowerCase())
       );
     });
-    setSearchResults(searchResult);
-  }, [isSearchActive]);
-
-  const handleOnClick = (child: any) => {
-    setInputValues(child?.value);
+    const resultsUsernames = searchResult.map((result) => result.username);
+    const queryParam = resultsUsernames.map((username) => `filters.username=${encodeURIComponent(username)}`).join('&');
+    navigate(`/admin/resources/User?${queryParam}`);
   };
 
   const handleOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setWriteInSearchBarResults([]);
-    console.log('event.target.value', event.target.value);
-    console.log('allUsers', allUsers);
-    console.log('writeInSearchBarResults', writeInSearchBarResults);
+
     setInputValues(event.target.value);
     if (event.target.value.length > 0) {
       if (allUsers && allUsers.length > 0) {
@@ -89,19 +88,14 @@ const MyDropDown: React.FC = () => {
             <Button>
               <SearchBarA
                 onChange={handleOnChange}
-                onKeyDown={(event) => {
-                  if (event.key === 'Backspace') {
-                    setIsSearchActive(false);
-                  }
-                }}
+                onClick={handleSearchClick}
                 inputValues={inputValues}
                 setInputValues={setInputValues}
-                setIsSearchActive={setIsSearchActive}
               />
             </Button>
           </DropDownTrigger>
           <DropDownMenu width={1}>
-            {writeInSearchBarResults.map((child, index) => (
+            {writeInSearchBarResults.map((child: any, index: number) => (
               <DropDownItem key={index} onClick={() => handleOnClick(child)}>
                 {`${child?.value}`}
               </DropDownItem>
