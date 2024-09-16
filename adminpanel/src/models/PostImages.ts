@@ -1,7 +1,8 @@
-import { model, Schema, Document, Types } from "mongoose";
+import { model, Schema, Document, Types } from 'mongoose';
+import { IPost } from './Post.js';
 
 export interface IPostImage extends Document {
-  postid: Types.ObjectId;
+  postid: IPost;
   image: string;
   createAt: Date;
 }
@@ -10,7 +11,7 @@ const PostImageSchema: Schema<IPostImage> = new Schema(
   {
     postid: {
       type: Schema.Types.ObjectId,
-      ref: "Post",
+      ref: 'Post',
     },
     image: { type: String, required: true },
     createAt: { type: Date },
@@ -18,4 +19,4 @@ const PostImageSchema: Schema<IPostImage> = new Schema(
   { timestamps: true }
 );
 
-export const PostImage = model<IPostImage>("PostImage", PostImageSchema);
+export const PostImage = model<IPostImage>('PostImage', PostImageSchema);

@@ -15,3 +15,7 @@ import RecentUsers from '../src/components/RecentUsers'
 AdminJS.UserComponents.RecentUsers = RecentUsers
 import RecentPosts from '../src/components/RecentPosts'
 AdminJS.UserComponents.RecentPosts = RecentPosts
+import PostAmount from '../src/components/PostAmount'
+AdminJS.UserComponents.PostAmount = PostAmount
+import UsersAmount from '../src/components/UsersAmount'
+AdminJS.UserComponents.UsersAmount = UsersAmount

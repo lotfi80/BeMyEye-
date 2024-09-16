@@ -82,7 +82,7 @@ const MyDropDown: React.FC = () => {
 
   return (
     <>
-      <Box border="1px solid red">
+      <Box>
         <DropDown stick="left">
           <DropDownTrigger>
             <Button>

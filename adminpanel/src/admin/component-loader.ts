@@ -11,7 +11,9 @@ const Components = {
   MyDropDown: componentLoader.add('MyDropDown', '../components/Search/MyDropDown.tsx'),
   RecentUsers: componentLoader.add('RecentUsers', '../components/RecentUsers.tsx'),
   RecentPosts: componentLoader.add('RecentPosts', '../components/RecentPosts.tsx'),
+  PostAmount: componentLoader.add('PostAmount', '../components/PostAmount.tsx'),
+  UsersAmount: componentLoader.add('UsersAmount', '../components/UsersAmount.tsx'),
 };
-console.log('Components', Components);
-console.log('componentLoader', componentLoader);
+
+console.log('Components:', Components);
 export { componentLoader, Components };

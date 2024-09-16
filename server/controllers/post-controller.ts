@@ -18,7 +18,7 @@ export const createPost = async (
       longtitute,
       category,
       userid,
-      barcode
+      barcode,
     } = req.body;
     console.log(userid, "test ", req.body);
     const image = req.file;
@@ -153,8 +153,8 @@ export const getOnePost = async (
   const postid: string = req.params.id;
   try {
     const posts = await Post.findById(postid)
-    .populate("postcomments")
-    .populate("postimage");
+      .populate("postcomments")
+      .populate("postimage");
     res.status(200).json(posts);
   } catch (e) {
     console.error(e);
@@ -184,14 +184,14 @@ export const createComment = async (
   next: NextFunction
 ) => {
   const { postid, userid, content } = req.body;
-  console.log('req.body', req.body);
+  console.log("req.body", req.body);
   try {
     const newComment: IPostComment = await PostComment.create({
       postid,
       userid,
       content,
     });
-    console.log('newComment', newComment);
+    console.log("newComment", newComment);
 
     const post = await Post.findByIdAndUpdate(postid, {
       $push: { postcomments: newComment._id },
@@ -281,5 +281,30 @@ export const getPostsById = async (
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching post", error });
+  }
+};
+// ****************************************************************
+export const getAllPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  console.log("Fetching posts...");
+  try {
+    const posts = await Post.find()
+      .populate("userid")
+      .populate("category")
+      .populate("postimage");
+
+    console.log("Posts fetched:", posts);
+    if (posts.length === 0) {
+      console.log("No posts found");
+      return res.status(404).json({ message: "No posts found" });
+    }
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };

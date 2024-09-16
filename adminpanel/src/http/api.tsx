@@ -2,7 +2,11 @@ import { IUser } from '../models/user.js';
 import { IPost } from '../models/Post.js';
 
 const BASE_URL = 'http://localhost:5000/api';
-
+// const token = document.cookie
+//   .split('; ')
+//   .find((row) => row.startsWith('refreshToken='))
+//   .split('=')[1];
+// console.log('token:', token);
 // **********************************************************************
 export const getUserDataByID = async (id: string): Promise<IUser | undefined> => {
   try {
@@ -205,7 +209,7 @@ export const getUsers = async () => {
       throw new Error('Failed to fetch users');
     }
     const data = await response.json();
-    console.log('Users fetched successfully:', data);
+    console.log('Users fetched successfully in Daschboard:', data);
     return data;
   } catch (error) {
     console.error('Failed to fetch users:', error);
@@ -502,7 +506,7 @@ export const attachmentUpload = async (attachments: FormData) => {
 // ---------------------------------------------------
 export const getPostByID = async (postId: string): Promise<IPost> => {
   try {
-    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+    const response = await fetch(`http://localhost:5000/posts/getby/${postId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -521,5 +525,26 @@ export const getPostByID = async (postId: string): Promise<IPost> => {
   } catch (error) {
     console.error('Failed to fetch post:', error);
     return {} as IPost;
+  }
+};
+// ****************************************************************
+export const getPosts = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/posts/getall', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status} ${response.statusText}. `);
+    }
+    const data = await response.json();
+    console.log('API response getPosts:', data);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch posts:', error);
+    return [];
   }
 };

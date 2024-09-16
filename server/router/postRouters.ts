@@ -10,6 +10,7 @@ import {
   updateComment,
   deleteComment,
   getPostsById,
+  getAllPosts,
   //   deleteComment,
 } from "../controllers/post-controller";
 import { imagesUpload } from "../service/multer-service";
@@ -17,7 +18,7 @@ import authMiddleware from "../controllers/token-controller";
 
 const postRouter = express.Router();
 // const upload = multer({ dest: "uploads/" });
-postRouter.get("/:id", authMiddleware, getOnePost);
+// postRouter.get("/:id", authMiddleware, getOnePost);
 postRouter.get("/get/:id", authMiddleware, getUserPosts);
 postRouter.post("/create", imagesUpload.single("postImages"), createPost);
 postRouter.get("/", getFilteredPosts);
@@ -26,5 +27,6 @@ postRouter.get("/comment/get", authMiddleware, getComments);
 postRouter.put("/comment/update/:id", authMiddleware, updateComment);
 
 // /////////////////////////NATH/////////////
-postRouter.get("/:id", authMiddleware, getPostsById);
+postRouter.get("/getby/:id", authMiddleware, getPostsById);
+postRouter.get("/getall", authMiddleware, getAllPosts);
 export default postRouter;

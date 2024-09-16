@@ -1,4 +1,6 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from 'mongoose';
+import { IPost } from './Post.js';
+import { IMessage } from './Message.js';
 
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
@@ -15,7 +17,7 @@ export interface IUser extends Document {
   city: string;
   street: string;
   country: string;
-  postid: mongoose.Types.ObjectId[];
+  postid: IPost[];
   // postlikes: mongoose.Types.ObjectId[];
   hash: string;
   registerDate: Date;
@@ -29,11 +31,11 @@ export interface IUser extends Document {
     country: boolean;
     city: boolean;
   };
-  followers: mongoose.Types.ObjectId[];
-  following: mongoose.Types.ObjectId[];
-  inbox: mongoose.Types.ObjectId[];
-  sent: mongoose.Types.ObjectId[];
-  notifications: mongoose.Types.ObjectId[];
+  followers: IUser[];
+  following: IUser[];
+  inbox: IMessage[];
+  sent: IMessage[];
+  notifications?: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema(
@@ -64,8 +66,8 @@ const UserSchema = new Schema(
     city: { type: String },
     street: { type: String },
     country: { type: String },
-    postid: [{ type: Schema.Types.ObjectId, ref: "Post" }],
-    postlikes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    postid: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    postlikes: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     hash: { type: String, default: null },
     sex: { type: Number },
     registerDate: { type: Date, default: Date.now },
@@ -77,14 +79,14 @@ const UserSchema = new Schema(
       country: { type: Boolean },
       city: { type: Boolean },
     },
-    followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    inbox: [{ type: Schema.Types.ObjectId, ref: "Message" }],
-    sent: [{ type: Schema.Types.ObjectId, ref: "Message" }],
-    notifications: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    inbox: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+    sent: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+    notifications: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
   },
   { timestamps: true }
 );
 
-const User = mongoose.model<IUser>("User", UserSchema);
+const User = mongoose.model<IUser>('User', UserSchema);
 export default User;
