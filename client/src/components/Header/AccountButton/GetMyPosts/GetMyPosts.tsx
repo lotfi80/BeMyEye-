@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import GetUsersPosts from "../../GetUser/GetUsersPosts";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
 import { getUsersPost } from "../../../../http/api";
-import CloseButton from "../../../CloseButton";
+import CloseButton from "../../../MyCloseButton";
 import Blind from "../../../Blind";
 
 interface props {

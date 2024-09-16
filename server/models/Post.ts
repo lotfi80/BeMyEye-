@@ -17,6 +17,7 @@ export interface IPost extends Document {
   postimage: Types.ObjectId[];
   postcomments: Types.ObjectId[];
   postlikes: Types.ObjectId[];
+  barcode?: string;
   postDate: Date;
   category: Types.ObjectId;
   createAt: Date;
@@ -46,7 +47,8 @@ const PostSchema: Schema<IPost> = new Schema(
     country: { type: String, required: false },
     postimage: [{ type: Schema.Types.ObjectId, ref: "PostImage" }],
     postcomments: [{ type: Schema.Types.ObjectId, ref: "PostComment" }],
-    postlikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    postlikes: [{ type: Schema.Types.ObjectId, ref: "PostLike" }],
+    barcode: { type: String, required: false },
     postDate: { type: Date, default: Date.now },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   },

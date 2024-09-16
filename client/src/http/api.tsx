@@ -1,5 +1,6 @@
 import { AuthTokens } from "../interfaces/AuthToken";
-import { IUser } from "../interfaces/User";
+import IUser from "../interfaces/User";
+import { IPost } from "../interfaces/Post";
 
 const BASE_URL = "http://localhost:5000/api";
 
@@ -37,6 +38,7 @@ export const activateUser = async (activationLink: string): Promise<any> => {
       `http://localhost:5000/auth/activate/${activationLink}`,
       {
         method: "GET",
+        credentials: "include",
       }
     );
 
@@ -60,6 +62,7 @@ export const getUserIdByActivationLink = async (
       `http://localhost:5000/auth/user/${activationLink}`,
       {
         method: "GET",
+        credentials: "include",
       }
     );
 
@@ -173,6 +176,7 @@ export const getUserDataByID = async (
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -191,9 +195,10 @@ export const fetchUser = async (): Promise<IUser | undefined> => {
   try {
     const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
-      // headers: {
-      //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -215,12 +220,23 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: formData,
+      credentials: "include",
     });
     const data = await response.json();
-    if (!response.ok) {
-      console.error("Server response error:", data);
-      throw new Error("Failed to create form");
+    if (data.message === "Please fill all required fields") {
+      console.log("Please fill all required fields");
+      return { message: "Please fill all required fields" };
+    } else if (data.message === "Please enter a valid street name and city") {
+      console.log("Please enter a valid street name and city");
+      return { message: "Please enter a valid street name and city" };
+    } else if (data.message === "Please upload an image") {
+      console.log("Please upload an image");
+      return { message: "Please upload an image" };
     }
+    // if (!response.ok) {
+    //   console.error("Server response error:", data);
+    //   throw new Error("Failed to create form");
+    // }
     console.log("Form submitted successfully:", data);
   } catch (error) {
     console.error("Fehler beim Erstellen der Form:", error);
@@ -239,6 +255,7 @@ export const userInContextUpdateRequest = async (
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(user),
+      credentials: "include",
     });
     const message = await response.json();
     if (!response.ok) {
@@ -267,7 +284,9 @@ export const getAllPosts = async (
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -291,7 +310,9 @@ export const getPostByUser = async (userid: string): Promise<any> => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
 
@@ -321,6 +342,7 @@ export const uploadProfileImage = async (
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: formData,
+        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -352,6 +374,7 @@ export const getHash = async (
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ oldPassword, password }),
+        credentials: "include",
       }
     );
     // const hash = await response.json();
@@ -374,6 +397,7 @@ export const getUsers = async () => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
+      credentials: "include",
     });
     if (!response.ok) {
       throw new Error("Failed to fetch users");
@@ -393,6 +417,7 @@ export const deleteUser = async (id: string) => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
+      credentials: "include",
       // body: JSON.stringify(id),
     });
     if (!response.ok) {
@@ -413,6 +438,7 @@ export const getUsersPost = async (userid: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -439,6 +465,7 @@ export const notifyFollowers = async (userId: string) => {
         userId,
         message: `User ${userId} posted a new post`,
       }),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -462,6 +489,7 @@ export const makeFollower = async (userId: string, followingId: string) => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ followingId }),
+        credentials: "include",
       }
     );
 
@@ -484,6 +512,7 @@ export const getFollow_ = async (userId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
 
@@ -510,6 +539,7 @@ export const deleteFollower = async (userId: string, followingId: string) => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ followingId }),
+        credentials: "include",
       }
     );
 
@@ -540,6 +570,7 @@ export const sendMessage = async (
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ recipients, message, subject, attachments }),
+        credentials: "include",
       }
     );
 
@@ -562,6 +593,7 @@ export const getUserInbox = async (userId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
 
@@ -586,6 +618,7 @@ export const getUserSent = async (userId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
 
@@ -610,6 +643,7 @@ export const markAsRead = async (messageId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
 
@@ -632,6 +666,7 @@ export const deleteMessage = async (messageId: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
 
@@ -654,6 +689,7 @@ export const getUsersByField = async (field: string, value: string) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -675,6 +711,7 @@ export const attachmentUpload = async (attachments: FormData) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: attachments,
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -685,5 +722,138 @@ export const attachmentUpload = async (attachments: FormData) => {
     return await response.json();
   } catch (error) {
     console.error("Failed to upload attachments:", error);
+  }
+};
+
+export const fetchOnePost = async (selectedPost) => {
+  try {
+    let postComments;
+    let postLikes;
+    const response = await fetch(
+      `http://localhost:5000/posts/${selectedPost.postid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch post");
+    const data = await response.json();
+    // setPost(data);
+    if (data.postcomments) {
+      const res = await fetch(
+        `http://localhost:5000/posts/comment/get?postid=${data._id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) throw new Error("Failed to fetch comments");
+      postComments = await res.json();
+      // setComments(postComments);
+    }
+    if (data.postlikes) {
+      const res = await fetch(`http://localhost:5000/posts/${data._id}/like`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch likes");
+      postLikes = await res.json();
+      // setComments(postComments);
+    }
+    return { data, postComments, postLikes };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// ****************************************************************
+
+export const createPostComment = async (user, selectedPost, comment) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/comment/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+        content: comment,
+      }),
+    });
+    if (!response.ok) throw new Error("Failed to add comment");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to create comment:", error);
+  }
+};
+
+// ****************************************************************
+
+export const createPostLike = async (user, selectedPost) => {
+  try {
+    console.log("User ID:", user?._id);
+    console.log("Post ID:", selectedPost.postid);
+    const response = await fetch(`http://localhost:5000/posts/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+      }),
+    });
+    if (!response.ok) throw new Error("Failed to add like");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to create like:", error);
+  }
+};
+
+// ****************************************************************
+
+export const deletePostLike = async (user, selectedPost) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/like`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+      }),
+    });
+    if (!response.ok) throw new Error("Failed to delete like");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to delete like:", error);
+  }
+};
+
+// ****************************************************************
+
+export const getPostByID = async (postId: string): Promise<IPost> => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    console.log("API response:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch post:", error);
+    return {} as IPost;
   }
 };

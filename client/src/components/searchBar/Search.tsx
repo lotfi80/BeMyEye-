@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { DropDown } from "./DropDown.js";
-import SearchBar from "./SearchBar.js";
-import { IUser } from "../../interfaces/User.js";
+import { DropDown } from "./DropDown";
+import SearchBar from "./SearchBar";
+import IUser from "../../interfaces/User";
 
 interface props {
-  setIsSearchActive: any;
-  isSearchActive: boolean;
+  setIsSearchActive?: any;
+  isSearchActive?: boolean;
   allUsers: IUser[];
   setWriteInSearchBarResults: any;
   writeInSearchBarResults: any;
   setSearchResults: any;
-  postVisible: boolean;
+  postVisible?: boolean;
 }
 
 export const Search: React.FC<props> = ({
@@ -31,6 +31,10 @@ export const Search: React.FC<props> = ({
     setInputValues(event.target.value);
     if (event.target.value.length > 0) {
       setIsDropDown(true);
+      // /////////////////////////////////////
+      ///////////////////////////////////////
+      //////////////////////////////////////
+      /////////////////////////////////////
       if (allUsers && allUsers.length > 0) {
         const results = allUsers
           .map((user: IUser) => {
@@ -96,6 +100,12 @@ export const Search: React.FC<props> = ({
       {postVisible || (
         <SearchBar
           onChange={handleOnChange}
+          onKeyDown={(event) => {
+            if (event.key === "Backspace") {
+              setIsSearchActive(false);
+              setIsDropDown(false);
+            }
+          }}
           inputValues={inputValues}
           setInputValues={setInputValues}
           setIsSearchActive={setIsSearchActive}
@@ -107,7 +117,8 @@ export const Search: React.FC<props> = ({
         isDropDown={isDropDown}
         setIsDropDown={setIsDropDown}
         setInputValues={setInputValues}
-      ></DropDown>
+        width={"25%"}
+      />
     </>
   );
 };

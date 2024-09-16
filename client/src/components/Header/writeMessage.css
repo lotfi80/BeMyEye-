@@ -15,6 +15,7 @@ div.screen {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   position: relative;
+  z-index: 80;
 }
 .title {
   font-size: 18px;
@@ -32,7 +33,7 @@ div.screen {
 }
 .input {
   font-size: 10px;
-  padding: 8px;
+  padding: 3px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }

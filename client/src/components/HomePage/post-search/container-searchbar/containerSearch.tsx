@@ -67,7 +67,7 @@ function ContainerSearch() {
                 placeholder="Enter City"
                 value={searchTerm}
                 onChange={(e) => onInputPlaceChange(e)}
-                className="w-full p-2 border rounded-md border-gray-300"
+                className="w-2/4 p-2 border rounded-md border-gray-300 "
               />
             </Autocomplete>
           </LoadScript>

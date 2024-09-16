@@ -3,6 +3,7 @@ import { Post, IPost } from "../models/Post";
 import { PostComment, IPostComment } from "../models/PostComments";
 import { PostImage, IPostImage } from "../models/PostImages";
 import User from "../models/user-model";
+import { PostLike } from "../models/PostLikes";
 
 export const createPost = async (
   req: Request,
@@ -18,8 +19,19 @@ export const createPost = async (
       longtitute,
       category,
       userid,
+      barcode
     } = req.body;
     console.log(userid, "test ", req.body);
+    if (!title || !description  /*|| !latitute || !longtitute */|| !category || !userid) {
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields" });
+    }
+    if (!address || !latitute || !longtitute ) {
+      return res
+      .status(400)
+      .json({ message: "Please enter a valid street name and city" });
+    }
     const image = req.file;
 
     const newPost: IPost = await Post.create({
@@ -34,14 +46,20 @@ export const createPost = async (
         coordinates: [longtitute, latitute],
       },
       category,
+      barcode,
       postimage: [],
     });
+if(!image){
+  return res.status(400).json({ message: "Please upload an image" });
+}
+else if (image) {
+  const newPostImage: IPostImage = await PostImage.create({
+    image: image.path,
+    postid: newPost._id,
+  });
 
-    if (image) {
-      const newPostImage: IPostImage = await PostImage.create({
-        image: image.path,
-        postid: newPost._id,
-      });
+   
+
 
       await Post.findByIdAndUpdate(newPost._id, {
         $push: { postimage: newPostImage._id },
@@ -51,13 +69,23 @@ export const createPost = async (
     const user = await User.findById(userid);
     if (user) {
       user.postid.push(newPost._id as any);
+      // ////////////////////////////NATH//////////////////////////////////////////
+      //////////////fuer Notification den Followers //////////////////////////
+      if (user.followers.length > 0) {
+        const notPromises = user.followers.map(async (follower) => {
+          await User.findByIdAndUpdate(follower._id, {
+            $push: { notifications: newPost._id },
+          });
+        });
+        await Promise.all(notPromises);
+      }
+      ///////////////////////END//////////////////////////////////////////////////
       await user.save();
     }
-
     res.status(201).json({ message: "Post successfully created", newPost });
     //     res.status(201).json({ message: "PostImage successfully created", newPostImage });
   } catch (e) {
-    console.error(e);
+    console.error(`Error creating post: ${e}`);
     next(e);
   }
 };
@@ -105,7 +133,7 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
     // }
     //   )
     const totalPosts = await Post.find(query);
-    console.log("totalPosts", totalPosts);
+    // console.log("totalPosts", totalPosts);
 
     const posts = await Post.find(query)
       .populate("userid")
@@ -133,6 +161,28 @@ export const getFilteredPosts = async (req: Request, res: Response) => {
 };
 
 // ****************************************************************
+export const getOnePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  const postid: string = req.params.id;
+  try {
+    const posts = await Post.findById(postid)
+    .populate("postcomments")
+    .populate("postimage")
+    .populate("postlikes")
+    .populate("userid")
+    res.status(200).json(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Error fetching posts", e });
+  }
+};
+
+
+
+// ****************************************************************
 export const getUserPosts = async (
   req: Request,
   res: Response,
@@ -154,13 +204,14 @@ export const createComment = async (
   next: NextFunction
 ) => {
   const { postid, userid, content } = req.body;
+  console.log('req.body', req.body);
   try {
     const newComment: IPostComment = await PostComment.create({
       postid,
       userid,
       content,
     });
-    console.log(newComment);
+    console.log('newComment', newComment);
 
     const post = await Post.findByIdAndUpdate(postid, {
       $push: { postcomments: newComment._id },
@@ -181,7 +232,7 @@ export const getComments = async (
   next: NextFunction
 ) => {
   try {
-    const { postid } = req.body;
+    const { postid } = req.query;
     const comments = await PostComment.find({ postid: postid }).populate(
       "userid"
     );
@@ -226,5 +277,92 @@ export const deleteComment = async (
   } catch (e) {
     console.error(e);
     next(e);
+  }
+};
+
+// ****************************************************************
+
+export const getLikesByPOst = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const likes = await PostLike.find({ postid: id }).populate(
+      "userid"
+    );
+    res.status(200).json(likes);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+
+
+
+// ****************************************************************
+
+  export const togglePostLike = async (req: Request, res: Response, next: NextFunction) => {
+    const { postid, userid } = req.body;
+  
+    try {
+      const existingLike = await PostLike.findOne({ postid, userid });
+      if (existingLike) {
+        await PostLike.findByIdAndDelete(existingLike._id);
+  
+      await Post.findByIdAndUpdate(postid, {
+        $pull: { postlikes: existingLike._id },
+      });
+  
+      await User.findByIdAndUpdate(userid, {
+        $pull: { postlikes: existingLike._id },
+      });
+      return res.status(200).json({ message: 'Like successfully removed', existingLike });
+      }
+  
+      const newLike = await PostLike.create({ postid, userid });
+  
+      await Post.findByIdAndUpdate(postid, {
+        $push: { postlikes: newLike._id },
+      });
+  
+      await User.findByIdAndUpdate(userid, {
+        $push: { postlikes: newLike._id },
+      });
+  
+      res.status(201).json({ message: "Post erfolgreich geliked", newLike });
+    } catch (e) {
+      console.error("Fehler beim Erstellen des Likes:", e);
+      next(e);
+    }
+  };
+  
+
+
+// ****************************************************************
+
+export const getPostsById = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
+  try {
+    const id: any = req.params.id;
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+    const post = await Post.findById(id)
+      .populate("userid")
+      .populate("category")
+      .populate("postimage");
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    return res.status(200).json(post);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error fetching post", error });
   }
 };

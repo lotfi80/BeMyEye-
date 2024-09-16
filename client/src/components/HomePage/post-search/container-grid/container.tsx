@@ -13,10 +13,8 @@ const Container: React.FC = () => {
   // );
   return (
     <div className="w-full flex flex-col h-full">
-      {/* Search Section */}
       <ContainerSearch />
 
-      {/* Grid Section */}
       <div className="flex-grow overflow-y-auto">
         <GridContainer />
       </div>
