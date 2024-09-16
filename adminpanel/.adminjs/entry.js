@@ -19,3 +19,5 @@ import PostAmount from '../src/components/PostAmount'
 AdminJS.UserComponents.PostAmount = PostAmount
 import UsersAmount from '../src/components/UsersAmount'
 AdminJS.UserComponents.UsersAmount = UsersAmount
+import SelectTimePeriod from '../src/components/SelectTimePeriod'
+AdminJS.UserComponents.SelectTimePeriod = SelectTimePeriod

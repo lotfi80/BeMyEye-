@@ -13,7 +13,8 @@ const Components = {
   RecentPosts: componentLoader.add('RecentPosts', '../components/RecentPosts.tsx'),
   PostAmount: componentLoader.add('PostAmount', '../components/PostAmount.tsx'),
   UsersAmount: componentLoader.add('UsersAmount', '../components/UsersAmount.tsx'),
+  SelectTimePeriod: componentLoader.add('SelectTimePeriod', '../components/SelectTimePeriod.tsx'),
 };
 
-console.log('Components:', Components);
+// console.log('Components:', Components);
 export { componentLoader, Components };

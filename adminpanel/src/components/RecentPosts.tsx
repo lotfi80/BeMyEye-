@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { IPost } from '../models/Post.js';
 import { Box } from '@adminjs/design-system';
-import { ObjectId } from 'mongoose';
+import SelectTimePeriod from './SelectTimePeriod.js';
 
 interface recentPostsProps {
   allPosts: IPost[];
@@ -28,6 +28,7 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts }) => {
 
   return (
     <Box p="lg">
+      <SelectTimePeriod />
       {allPosts.map((post: IPost, index: number) => {
         console.log('Post:', post.postDate);
         const postBox: postBoxType = {
