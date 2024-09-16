@@ -162,31 +162,6 @@ const GridContainer: React.FC = () => {
         </button>
       </div>
     </div>
-<<<<<<< HEAD
-  
-    <div className="flex justify-center items-center mt-4">
-      <button
-        onClick={handlePreviousPage}
-        disabled={currentPage === 1}
-        className="px-4 py-2 bg-gray-300 rounded-md shadow-md hover:bg-gray-400 transition-colors disabled:opacity-50"
-      >
-        Previous
-      </button>
-      <span className="mx-4">
-        Page {currentPage} of {totalPages}
-      </span>
-      <button
-        onClick={handleNextPage}
-        disabled={currentPage === totalPages}
-        className="px-4 py-2  bg-gray-300 rounded-md shadow-md hover:bg-gray-400 transition-colors disabled:opacity-50"
-      >
-        Next
-      </button>
-    </div>
-  </div>
-  
-=======
->>>>>>> main
   );
   
 };
