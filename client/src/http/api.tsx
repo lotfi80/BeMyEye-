@@ -265,14 +265,16 @@ export const deletePost = async (postId: string) => {
   }
 };
 //*********************************************************************
-export const updatePost = async (postId: string, updatedData: Partial<IPost>) => {
+export const updatePost = async (postId: string, formData: FormData) => {
   try {
+    console.log('formDataformData', formData);
     const response = await fetch(`http://localhost:5000/posts/${postId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      body: JSON.stringify(updatedData),
+      body: formData,
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -781,7 +783,10 @@ export const fetchOnePost = async (selectedPost) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+
         },
+        credentials: "include",
       }
     );
     if (!response.ok) throw new Error("Failed to fetch post");
@@ -794,6 +799,8 @@ export const fetchOnePost = async (selectedPost) => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+
           },
         }
       );
