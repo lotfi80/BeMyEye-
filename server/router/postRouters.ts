@@ -37,6 +37,6 @@ postRouter.put("/:postId", updatePost);
 postRouter.get("/:id", authMiddleware, getPostsById);
 
 // /////////////////////////NATH/////////////
-// postRouter.get("/getby/:id", authMiddleware, getPostsById);
+postRouter.get("/getby/:id", authMiddleware, getPostsById);
 postRouter.get("/getall/posts", authMiddleware, getAllPosts);
 export default postRouter;
