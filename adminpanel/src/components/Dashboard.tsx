@@ -27,6 +27,7 @@ type BoxType = {
   href?: string;
   borderLeft: string;
   component?: React.FC;
+  index?: string;
 };
 
 const Card = styled(Box)`
@@ -119,12 +120,14 @@ export const Dashboard: React.FC = () => {
       subtitle: 'Recent Comments',
       // href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
       borderLeft: '3px solid #7ffc26',
+      index: 'comments',
     },
     {
       variant: 'Details',
       subtitle: 'Recent Posts',
       // href: 'https://docs.adminjs.co/tutorials/adding-role-based-access-control',
       borderLeft: '3px solid #0606fa',
+      index: 'posts',
       component: () => <RecentPosts allPosts={allPosts} filteredPosts={filteredPosts} isFiltered={isFiltered} />,
     },
   ];
@@ -235,11 +238,20 @@ export const Dashboard: React.FC = () => {
                   <Box flex flex-row gap="10px" justifyContent="space-between">
                     <Illustration variant={box.variant} width={80} height={80} />
                     <Box flew flex-col gap="10px" width={2 / 3}>
-                      <SelectTimePeriod
-                        allPosts={allPosts}
-                        setFilteredPosts={setFilteredPosts}
-                        setIsFiltered={setIsFiltered}
-                      />
+                      {box.index === 'posts' ? (
+                        <SelectTimePeriod
+                          allPosts={allPosts}
+                          setFilteredPosts={setFilteredPosts}
+                          setIsFiltered={setIsFiltered}
+                        />
+                      ) : (
+                        <H5>Hier kommt Select</H5>
+                        // <SelectTimePeriod
+                        //   allComments={allComments}
+                        //   setFilteredComments={setFilteredComments}
+                        //   setIsFiltered={setIsFiltered}
+                        // />
+                      )}
                       <Text>{box.subtitle}</Text>
                       <H5>{box.title}</H5>
                     </Box>
