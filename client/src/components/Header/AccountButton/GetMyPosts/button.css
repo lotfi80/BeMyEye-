@@ -1,7 +1,90 @@
-.icon path {
+/* .icon path {
   fill: gray;
 }
 
 .icon:hover path {
   fill: red;
+} */
+
+/* .edit-icon {
+  transition: transform 0.2s;
+  color: rgb(34, 190, 34);
+}
+
+.edit-icon:hover {
+  transform: scale(1.2);
+} */
+.edit-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.edit-button-tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; 
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.edit-button-container:hover .edit-button-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.edit-button-icon {
+  cursor: pointer;
+  font-size: 20px;
+  color: rgb(34, 190, 34);
+}
+
+.delete-icon {
+  transition: transform 0.2s;
+  color: red;
+}
+
+.delete-icon:hover {
+  transform: scale(1.2);
+}
+.delete-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.delete-button-tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 155%; 
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.delete-button-container:hover .delete-button-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.delete-button-icon {
+  cursor: pointer;
+  color: red;
+
+  font-size: 20px;
 }
