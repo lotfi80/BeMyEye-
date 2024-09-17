@@ -14,6 +14,8 @@ import {
 import { EditButton } from "./Header/AccountButton/GetMyPosts/EditButton";
 import {DeleteButton} from "./Header/AccountButton/GetMyPosts/DeleteButton";
 
+import { deletePost } from "../http/api";
+
 interface PostDetailsPopupProps {
   selectedPost: {
     postid: string;
@@ -25,7 +27,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   selectedPost,
   onClose,
 }) => {
-  const { user } = useCategoryUserContext();
+  const { user, posts, setPosts } = useCategoryUserContext();
   const [post, setPost] = useState<any>({});
   const [comment, setComment] = useState<string>("");
   const [comments, setComments] = useState<any[]>([]);
@@ -125,6 +127,25 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     (like) =>
       like.userid._id === user?._id && like.postid === selectedPost.postid
   );
+  const handleDelete = async (postId) => {
+    if (!postId) {
+      console.error('No postId provided');
+      return;
+    }
+
+    try {
+      await deletePost(postId);
+      setPosts(posts.filter((post) => post._id !== postId));
+      setShowPopup(false);
+      setTimeout(() => {
+        onClose();
+      }, 500);
+      // onDelete();
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+    }
+  };
+
 
   return (
     <div
@@ -178,7 +199,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
         </div>
         <div className=" p-4">
            <DeleteButton postId={post._id}
-          deletePost={() => {}}
+          deletePost={handleDelete}
         />
         </div>
         
