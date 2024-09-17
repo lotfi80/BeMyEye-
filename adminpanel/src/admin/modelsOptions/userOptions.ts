@@ -140,9 +140,9 @@ export const userOptions = {
     },
     notifications: { type: 'reference', reference: 'Post', isVisible: false },
   },
-  show: {
-    component: Components.ButtonExamples,
-  },
+  // show: {
+  //   component: Components.ButtonExamples,
+  // },
   actions: {
     new: { isAccessible: false },
     edit: { isAccessible: true },
@@ -150,27 +150,27 @@ export const userOptions = {
     list: { isAccessible: true },
     show: {
       isAccessible: true,
-      component: Components.ButtonExamples,
-      isVisible: (context: any) => {
-        const username = context.record?.param('username');
-        return username && username.trim() !== '';
-      },
+      // component: Components.ButtonExamples,
+      // isVisible: (context: any) => {
+      //   const username = context.record?.param('username');
+      //   return username && username.trim() !== '';
+      // },
     },
     search: { actionType: 'resource', isAccessible: true },
     ban: { actionType: 'record', icon: 'Lock', isVisible: true, guard: 'admin', component: 'Button' },
     unban: { actionType: 'record', icon: 'Unlock', isVisible: true, guard: 'admin', component: 'Button' },
-    myCustomAction: {
-      actionType: 'record',
-      icon: 'Add',
-      label: 'Meine benutzerdefinierte Aktion',
-      component: Components.ButtonExamples,
-      handler: async (request, response, context) => {
-        console.log('Benutzerdefinierte Aktion ausgeführt');
-        return {
-          record: context.record,
-          redirectUrl: context.record?.listUrl(),
-        };
-      },
-    },
+    // myCustomAction: {
+    //   actionType: 'record',
+    //   icon: 'Add',
+    //   label: 'Meine benutzerdefinierte Aktion',
+    //   component: Components.ButtonExamples,
+    //   handler: async (request, response, context) => {
+    //     console.log('Benutzerdefinierte Aktion ausgeführt');
+    //     return {
+    //       record: context.record,
+    //       redirectUrl: context.record?.listUrl(),
+    //     };
+    //   },
+    // },
   },
 };

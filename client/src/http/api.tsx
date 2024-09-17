@@ -717,14 +717,17 @@ export const attachmentUpload = async (attachments: FormData) => {
 // ---------------------------------------------------
 export const getPostByID = async (postId: string): Promise<IPost> => {
   try {
-    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `http://localhost:5000/posts/getby/${postId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        credentials: "include",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch post");

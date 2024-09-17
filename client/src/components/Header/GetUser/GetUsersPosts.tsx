@@ -28,7 +28,7 @@ const GetUsersPost: React.FC<TableProps> = ({
       return "";
     }
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString("de-DE");
   }
 
   return (
@@ -63,15 +63,23 @@ const GetUsersPost: React.FC<TableProps> = ({
                 <tr key={post._id} className="hover:bg-gray-200">
                   <td>{post.title}</td>
                   <td>
-                    <img
-                      src={
-                        post.postimage[0].image.includes("http")
-                          ? post.image
-                          : `http://localhost:5000/${post.postimage[0].image}`
-                      }
-                      alt="postimage"
-                      className="w-16 h-16 object-cover my-4 "
-                    />
+                    {post.postimage.length === 0 ? (
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                        alt="NoImage"
+                        className="w-16 h-16 object-cover my-4 "
+                      />
+                    ) : (
+                      <img
+                        src={
+                          post.postimage[0].image.includes("http")
+                            ? post?.image
+                            : `http://localhost:5000/${post.postimage[0].image}`
+                        }
+                        alt="postimage"
+                        className="w-16 h-16 object-cover my-4 "
+                      />
+                    )}
                   </td>
                   <td
                     className="max-w-md break-words 

@@ -12,6 +12,7 @@ import MyDropDown from './Search/MyDropDown.js';
 import PostAmount from './PostAmount.js';
 import UsersAmount from './UsersAmount.js';
 import RecentPosts from './RecentPosts.js';
+import SelectTimePeriod from './SelectTimePeriod.js';
 
 const pageHeaderHeight = 120;
 const pageHeaderPaddingY = 20;
@@ -23,7 +24,7 @@ type BoxType = {
   variant: VariantType;
   title?: string;
   subtitle?: string;
-  href: string;
+  href?: string;
   borderLeft: string;
   component?: React.FC;
 };
@@ -92,36 +93,39 @@ export const Dashboard: React.FC = () => {
   const [userAmount, setUserAmount] = useState<number>(0);
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
   const [allPosts, setAllPosts] = useState<IPost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]);
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
   const boxesSmall = (): Array<BoxType> => [
     {
       variant: 'Docs' as any,
       subtitle: 'Posts amount',
-      href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
+      // href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
       borderLeft: '3px solid #FFC107',
       component: () => <PostAmount postAmount={postAmount} />,
     },
     {
       variant: 'Astronaut' as any,
       subtitle: 'Users amount',
-      href: 'https://docs.adminjs.co/tutorials/adding-role-based-access-control',
+      // href: 'https://docs.adminjs.co/tutorials/adding-role-based-access-control',
       borderLeft: '3px solid #FF5722',
       component: () => <UsersAmount userAmount={userAmount} />,
     },
   ];
+
   const boxesRight = (): Array<BoxType> => [
     {
       variant: 'DocumentSearch',
       subtitle: 'Recent Comments',
-      href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
+      // href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
       borderLeft: '3px solid #7ffc26',
     },
     {
       variant: 'Details',
       subtitle: 'Recent Posts',
-      href: 'https://docs.adminjs.co/tutorials/adding-role-based-access-control',
+      // href: 'https://docs.adminjs.co/tutorials/adding-role-based-access-control',
       borderLeft: '3px solid #0606fa',
-      component: () => <RecentPosts allPosts={allPosts} />,
+      component: () => <RecentPosts allPosts={allPosts} filteredPosts={filteredPosts} isFiltered={isFiltered} />,
     },
   ];
 
@@ -129,7 +133,7 @@ export const Dashboard: React.FC = () => {
     {
       variant: 'Plug',
       subtitle: 'New Users',
-      href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
+      // href: 'https://docs.adminjs.co/ui-customization/dashboard-customization',
       borderLeft: '3px solid #06f602',
     },
   ];
@@ -149,7 +153,6 @@ export const Dashboard: React.FC = () => {
     const getPostAmount = async () => {
       try {
         const response = await getPosts();
-        console.log('Posts in Dashboard:', response);
         sortData(response);
       } catch (error) {
         console.log(error);
@@ -183,7 +186,7 @@ export const Dashboard: React.FC = () => {
       return '';
     }
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('de-DE');
   }
 
   return (
@@ -194,7 +197,7 @@ export const Dashboard: React.FC = () => {
       </Box>
 
       <Box flex flex-row mb="lg">
-        <Box display="flex" flexDirection="column" flexGrow={1}>
+        <Box display="flex" flexDirection="column" width={1 / 3}>
           <Box flex flex-row pl="lg" pt="lg">
             {boxesSmall().map((box) => (
               <Box key={box.variant} width={[1, 1, 1 / 2, 1 / 2]}>
@@ -224,15 +227,23 @@ export const Dashboard: React.FC = () => {
           ))}
         </Box>
 
-        <Box flex flex-row flexGrow="2">
+        <Box flex flex-row width={2 / 3}>
           {boxesRight().map((box) => (
             <Box key={box.variant} width={1 / 2} pt="lg" pr="lg" pl="lg">
               <Card flex variant={box.variant} as="a" href={box.href} borderLeft={box.borderLeft}>
-                <Box flex="1 1 auto">
-                  <Illustration variant={box.variant} width={50} height={50} />
-
-                  <H5>{box.title}</H5>
-                  <Text>{box.subtitle}</Text>
+                <Box flex="1 1 auto" p="md">
+                  <Box flex flex-row gap="10px" justifyContent="space-between">
+                    <Illustration variant={box.variant} width={80} height={80} />
+                    <Box flew flex-col gap="10px" width={2 / 3}>
+                      <SelectTimePeriod
+                        allPosts={allPosts}
+                        setFilteredPosts={setFilteredPosts}
+                        setIsFiltered={setIsFiltered}
+                      />
+                      <Text>{box.subtitle}</Text>
+                      <H5>{box.title}</H5>
+                    </Box>
+                  </Box>
                   <Box>{box.component && <box.component />}</Box>
                 </Box>
               </Card>

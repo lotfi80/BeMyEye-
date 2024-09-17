@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 
 import { IPost } from '../models/Post.js';
-import { Box } from '@adminjs/design-system';
-import SelectTimePeriod from './SelectTimePeriod.js';
+import { Box, H6, Badge } from '@adminjs/design-system';
 
 interface recentPostsProps {
   allPosts: IPost[];
+  filteredPosts: IPost[];
+  isFiltered: boolean;
 }
-const RecentPosts: React.FC<recentPostsProps> = ({ allPosts }) => {
+const RecentPosts: React.FC<recentPostsProps> = ({ allPosts, filteredPosts, isFiltered }) => {
   type postBoxType = {
     title: string;
     description: string;
@@ -15,6 +16,7 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts }) => {
     author: string;
     img: string;
     category: string;
+    address: string;
   };
 
   function formatDate(dateString: any): string {
@@ -23,14 +25,12 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts }) => {
     }
 
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('de-DE');
   }
-
+  const arrayVorMap = isFiltered ? filteredPosts : allPosts;
   return (
     <Box p="lg">
-      <SelectTimePeriod />
-      {allPosts.map((post: IPost, index: number) => {
-        console.log('Post:', post.postDate);
+      {arrayVorMap.map((post: IPost, index: number) => {
         const postBox: postBoxType = {
           title: post.title,
           description: post.description,
@@ -38,6 +38,7 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts }) => {
           author: post.userid?.username ? post.userid.username : 'No username',
           img: post.postimage[0]?.image ? (post.postimage[0].image as string) : '',
           category: post.category.name,
+          address: post.address,
         };
         return (
           <Box
@@ -45,31 +46,44 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts }) => {
             borderBottom="1px solid darkgrey"
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr 4fr',
-              gridTemplateRows: '1fr 1fr 1fr',
+              gridTemplateColumns: '1fr 1fr 2fr',
+              gridTemplateRows: '3fr 2fr 2fr 2fr',
               gridTemplateAreas: `
-              "image title content"
+              "title title ."
               "image date content"
-              "image category content"
               "image user content"
+              "image city content"
+              "category . content"
             `,
-              colGap: '10px',
+              columnGap: '20px',
               marginTop: '10px',
               fontSize: '10px',
             }}
           >
-            <h2 style={{ gridArea: 'title' }}>{postBox.title}</h2>
-            <p style={{ gridArea: 'content', overflowWrap: 'break-word' }}>{postBox.description}</p>
-            <p style={{ gridArea: 'date' }}>Date: {postBox.date}</p>
-            <p style={{ gridArea: 'user' }}>Author: {postBox.author}</p>
-            <p style={{ gridArea: 'category' }}>Category: {postBox.category}</p>
+            <H6 style={{ gridArea: 'title', marginTop: '0', lineHeight: '16 px' }}>{postBox.title}</H6>
+            <p
+              style={{
+                gridArea: 'content',
+                overflowWrap: 'break-word',
+                borderLeft: '2px solid grey',
+                height: 'fit-content',
+                paddingLeft: '5px',
+              }}
+            >
+              {postBox.description}
+            </p>
+            <p style={{ gridArea: 'date', fontWeight: 'bold' }}>{postBox.date}</p>
+            <p style={{ gridArea: 'user', fontWeight: 'bold', fontSize: '1.2em' }}>{postBox.author}</p>
+            <Badge size="sm" variant="success" style={{ gridArea: 'category' }} width="fit-content">
+              {postBox.category}
+            </Badge>
+            <p style={{ gridArea: 'city' }}>{postBox.address}</p>
             <Box style={{ gridArea: 'image' }}>
-              <img src={`http://localhost:5000/${postBox.img}`} alt={`Image`} width={50} />
+              <img src={`http://localhost:5000/${postBox.img}`} alt={`Image`} width={70} />
             </Box>
           </Box>
         );
       })}
-      ;
     </Box>
   );
 };
