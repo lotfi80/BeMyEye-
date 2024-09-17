@@ -42,6 +42,7 @@ const App: React.FC = () => {
             <Route path="/profile/:id" element={<UserData />} />
 
             <Route path="/posts" element={<PostForm />} />
+            {/* <Route path="/posts/:id" element={<PostForm />} /> */}
 
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/term" element={<TermOfService />} />

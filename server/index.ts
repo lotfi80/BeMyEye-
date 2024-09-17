@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+// import http from 'http';
+// import { Server } from "socket.io";
 dotenv.config();
 import connectDB from "./service/mongo-start";
 import cors from "cors";
@@ -62,6 +64,29 @@ app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;
 
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: '*', // Adjust as needed for security
+//   },
+// });
+// io.on('connection',(socket)=>{
+//   console.log('client connected: ',socket.id)
+  
+//   socket.join('clock-room')
+//   socket.on("sendMessage", (chatMessage) => {
+//     console.log("message sent");
+//     io.to('clock-room').emit("receiveMessage", chatMessage);
+// });
+  
+//   socket.on('disconnect',(reason)=>{
+//     console.log(reason)
+//   })
+// })
+
+// setInterval(()=>{
+//   io.to('clock-room').emit('time', new Date())
+// },1000)
 const start = async () => {
   try {
     await connectDB();
