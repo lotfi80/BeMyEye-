@@ -1,16 +1,17 @@
-
-
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
-import { dataFormDatenGet } from "../http/api";
+import { dataFormDatenGet, getPostByID } from "../http/api";
 import { Autocomplete, LoadScript, Libraries } from "@react-google-maps/api";
 
 const libraries: Libraries = ["places"];
 
 const PostComponent: React.FC = () => {
+  const { id } = useParams();
+  const autocompleteRef = useRef(null);
   const { categories, setCategories } = useCategoryUserContext();
   const { user, setUser } = useCategoryUserContext();
+  const [address, setAddress] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   // const [city, setCity] = useState<string>("");
@@ -47,6 +48,7 @@ const PostComponent: React.FC = () => {
       );
       console.log(place.name);
       setSearchTerm(place.formatted_address || "");
+      setAddress(place.formatted_address || "");
       console.log(searchTerm);
     } else {
       console.log("Error");
@@ -54,6 +56,19 @@ const PostComponent: React.FC = () => {
   };
 
   const navigate = useNavigate();
+
+  useEffect (() => {
+    const fetOnePost = async () => {
+      if (id) {
+        const data = await getPostByID(id);
+        setTitle(data.title);
+        setDescription(data.description);
+        setSelectedCategory(data.category);
+        setAddress(data.address);
+      }
+    }
+    fetOnePost();
+  }, [id])
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -84,6 +99,10 @@ const PostComponent: React.FC = () => {
       setLoadingCategories(false);
     }
   }, [categories, setCategories]);
+
+  const handleInputAddressChange = (e) => {
+    setAddress(e.target.value);
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -137,7 +156,6 @@ const PostComponent: React.FC = () => {
   if (loadingCategories) return <p>Lädt Kategorien...</p>;
   if (error) return <p>{error}</p>;
   const apiKey = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
-  // console.log(messagePost)
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
@@ -203,9 +221,12 @@ const PostComponent: React.FC = () => {
               }}
             >
               <input
+                // ref={autocompleteRef}
                 type="text"
                 id="address"
                 placeholder="adresse"
+                value={address}
+                onChange={handleInputAddressChange}
                 style={{
                   width: "100%",
                   padding: "8px",

@@ -361,23 +361,7 @@ const GetUsersPost: React.FC<TableProps> = ({
 
   };
 
-  // const handleDelete = (postId: string) => {
-  //   // Logic to delete the post and update the UI
-  // };
-  // const handleDelete = async (postId) => {
-  //   if (!postId) {
-  //     console.error('No postId provided');
-  //     return;
-  //   }
-
-  //   try {
-  //     await deletePost(postId);
-  //     // setPosts(posts.filter((post) => post._id !== postId));
-  //     // onDelete();
-  //   } catch (error) {
-  //     console.error('Failed to delete post:', error);
-  //   }
-  // };
+  
   return (
     <>
       <div
