@@ -243,6 +243,52 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
   }
 };
 // **********************************************************************
+export const deletePost = async (postId: string) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error deleting post: ${response.statusText}`);
+    }
+
+    // Parse the response data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error deleting post: ${error}`);
+    throw error;
+  }
+};
+//*********************************************************************
+export const updatePost = async (postId: string, updatedData: Partial<IPost>) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error updating post: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error updating post: ${error}`);
+    throw error;
+  }
+};
+
+
+// **********************************************************************
 export const userInContextUpdateRequest = async (
   id: string,
   user: IUser

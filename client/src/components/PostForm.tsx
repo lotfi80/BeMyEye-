@@ -131,7 +131,7 @@ const PostComponent: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        Erstelle einen neuen Post test
+        Erstelle einen neuen Post 
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

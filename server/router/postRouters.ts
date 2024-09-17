@@ -3,6 +3,8 @@ import multer from "multer";
 import { getFilteredPosts } from "../controllers/post-controller";
 import { createPost } from "../controllers/post-controller";
 import { getUserPosts } from "../controllers/post-controller";
+import { deletePost , updatePost } from "../controllers/post-controller";
+
 import {
   getOnePost,
   createComment,
@@ -28,6 +30,10 @@ postRouter.get("/comment/get", getComments);
 postRouter.put("/comment/update/:id", updateComment);
 postRouter.get("/:id/like", getLikesByPOst);
 postRouter.post("/like", togglePostLike); 
+postRouter.delete('/:postId', deletePost);
+postRouter.put('/:postId', updatePost);
+
+
 
 postRouter.get("/:id", authMiddleware, getPostsById);
 
