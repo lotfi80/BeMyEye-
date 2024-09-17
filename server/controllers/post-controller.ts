@@ -463,3 +463,23 @@ export const getPostsById = async (
     return res.status(500).json({ message: "Error fetching post", error });
   }
 };
+
+export const getAllPosts = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
+  try {
+    const post = await Post.find()
+      .populate("userid")
+      .populate("category")
+      .populate("postimage");
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    return res.status(200).json(post);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error fetching post", error });
+  }
+};

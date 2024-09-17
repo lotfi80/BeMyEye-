@@ -3,7 +3,7 @@ import multer from "multer";
 import { getFilteredPosts } from "../controllers/post-controller";
 import { createPost } from "../controllers/post-controller";
 import { getUserPosts } from "../controllers/post-controller";
-import { deletePost , updatePost } from "../controllers/post-controller";
+import { deletePost, updatePost } from "../controllers/post-controller";
 
 import {
   getOnePost,
@@ -13,7 +13,7 @@ import {
   deleteComment,
   getLikesByPOst,
   togglePostLike,
-  getPostsById
+  getPostsById,
   getAllPosts,
   //   deleteComment,
 } from "../controllers/post-controller";
@@ -30,17 +30,13 @@ postRouter.post("/comment/create", createComment);
 postRouter.get("/comment/get", getComments);
 postRouter.put("/comment/update/:id", updateComment);
 postRouter.get("/:id/like", getLikesByPOst);
-postRouter.post("/like", togglePostLike); 
-postRouter.delete('/:postId', deletePost);
-postRouter.put('/:postId', updatePost);
-
-
+postRouter.post("/like", togglePostLike);
+postRouter.delete("/:postId", deletePost);
+postRouter.put("/:postId", updatePost);
 
 postRouter.get("/:id", authMiddleware, getPostsById);
 
-
-
 // /////////////////////////NATH/////////////
 // postRouter.get("/getby/:id", authMiddleware, getPostsById);
-postRouter.get("/getall", authMiddleware, getAllPosts);
+postRouter.get("/getall/posts", authMiddleware, getAllPosts);
 export default postRouter;

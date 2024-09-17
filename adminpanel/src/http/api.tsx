@@ -530,7 +530,7 @@ export const getPostByID = async (postId: string): Promise<IPost> => {
 // ****************************************************************
 export const getPosts = async () => {
   try {
-    const response = await fetch('http://localhost:5000/posts/getall', {
+    const response = await fetch('http://localhost:5000/posts/getall/posts', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -548,3 +548,4 @@ export const getPosts = async () => {
     return [];
   }
 };
+// e;**************************
