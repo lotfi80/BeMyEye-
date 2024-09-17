@@ -3,6 +3,7 @@ import { Post, IPost } from "../models/Post";
 import { PostComment, IPostComment } from "../models/PostComments";
 import { PostImage, IPostImage } from "../models/PostImages";
 import User from "../models/user-model";
+import { PostLike } from "../models/PostLikes";
 
 export const createPost = async (
   req: Request,
@@ -21,6 +22,21 @@ export const createPost = async (
       barcode,
     } = req.body;
     console.log(userid, "test ", req.body);
+    if (
+      !title ||
+      !description /*|| !latitute || !longtitute */ ||
+      !category ||
+      !userid
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields" });
+    }
+    if (!address || !latitute || !longtitute) {
+      return res
+        .status(400)
+        .json({ message: "Please enter a valid street name and city" });
+    }
     const image = req.file;
 
     const newPost: IPost = await Post.create({
@@ -38,8 +54,9 @@ export const createPost = async (
       barcode,
       postimage: [],
     });
-
-    if (image) {
+    if (!image) {
+      return res.status(400).json({ message: "Please upload an image" });
+    } else if (image) {
       const newPostImage: IPostImage = await PostImage.create({
         image: image.path,
         postid: newPost._id,
@@ -69,10 +86,109 @@ export const createPost = async (
     res.status(201).json({ message: "Post successfully created", newPost });
     //     res.status(201).json({ message: "PostImage successfully created", newPostImage });
   } catch (e) {
-    console.error(e);
+    console.error(`Error creating post: ${e}`);
     next(e);
   }
 };
+// ****************************************************************
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { postId } = req.params;
+    console.log("Attempting to delete post with ID:", postId);
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    await PostImage.deleteMany({ postid: postId });
+
+    await User.findByIdAndUpdate(post.userid, {
+      $pull: { postid: postId },
+    });
+
+    await Post.findByIdAndDelete(postId);
+
+    res.status(200).json({ message: "Post successfully deleted" });
+  } catch (e) {
+    console.error(`Error deleting post: ${e}`);
+    next(e);
+  }
+};
+
+//****************************************************************
+
+export const updatePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { postId } = req.params;
+    const {
+      title,
+      description,
+      address,
+      latitute,
+      longtitute,
+      category,
+      barcode,
+    } = req.body;
+    const image = req.file;
+
+    if (!title || !description || !category) {
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields" });
+    }
+    if (!address || !latitute || !longtitute) {
+      return res
+        .status(400)
+        .json({ message: "Please enter a valid street name and city" });
+    }
+
+    const existingPost = await Post.findById(postId);
+    if (!existingPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (image) {
+      await PostImage.deleteMany({ postid: postId });
+
+      const newPostImage: IPostImage = await PostImage.create({
+        image: image.path,
+        postid: postId,
+      });
+
+      await Post.findByIdAndUpdate(postId, {
+        $set: {
+          ...req.body,
+          postimage: [newPostImage._id],
+        },
+      });
+    } else {
+      await Post.findByIdAndUpdate(postId, {
+        $set: req.body,
+      });
+    }
+
+    const updatedPost: IPost | null = await Post.findById(postId);
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found after update" });
+    }
+
+    res.status(200).json({ message: "Post successfully updated", updatedPost });
+  } catch (e) {
+    console.error(`Error updating post: ${e}`);
+    next(e);
+  }
+};
+
+////////***************** */
 
 export const getFilteredPosts = async (req: Request, res: Response) => {
   try {
@@ -154,7 +270,9 @@ export const getOnePost = async (
   try {
     const posts = await Post.findById(postid)
       .populate("postcomments")
-      .populate("postimage");
+      .populate("postimage")
+      .populate("postlikes")
+      .populate("userid");
     res.status(200).json(posts);
   } catch (e) {
     console.error(e);
@@ -259,52 +377,89 @@ export const deleteComment = async (
     next(e);
   }
 };
-// //////////////////////NATH////////////////////////////
+
+// ****************************************************************
+
+export const getLikesByPOst = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const likes = await PostLike.find({ postid: id }).populate("userid");
+    res.status(200).json(likes);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+// ****************************************************************
+
+export const togglePostLike = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postid, userid } = req.body;
+
+  try {
+    const existingLike = await PostLike.findOne({ postid, userid });
+    if (existingLike) {
+      await PostLike.findByIdAndDelete(existingLike._id);
+
+      await Post.findByIdAndUpdate(postid, {
+        $pull: { postlikes: existingLike._id },
+      });
+
+      await User.findByIdAndUpdate(userid, {
+        $pull: { postlikes: existingLike._id },
+      });
+      return res
+        .status(200)
+        .json({ message: "Like successfully removed", existingLike });
+    }
+
+    const newLike = await PostLike.create({ postid, userid });
+
+    await Post.findByIdAndUpdate(postid, {
+      $push: { postlikes: newLike._id },
+    });
+
+    await User.findByIdAndUpdate(userid, {
+      $push: { postlikes: newLike._id },
+    });
+
+    res.status(201).json({ message: "Post erfolgreich geliked", newLike });
+  } catch (e) {
+    console.error("Fehler beim Erstellen des Likes:", e);
+    next(e);
+  }
+};
+
+// ****************************************************************
+
 export const getPostsById = async (
   req: Request,
   res: Response
 ): Promise<Response | void> => {
-  const id: any = req.params.id;
-  if (!id || typeof id !== "string") {
-    return res.status(400).json({ message: "Invalid ID format" });
-  }
-
   try {
+    const id: any = req.params.id;
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
     const post = await Post.findById(id)
       .populate("userid")
       .populate("category")
       .populate("postimage");
+
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    res.status(200).json(post);
+    return res.status(200).json(post);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching post", error });
-  }
-};
-// ****************************************************************
-export const getAllPosts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
-  console.log("Fetching posts...");
-  try {
-    const posts = await Post.find()
-      .populate("userid")
-      .populate("category")
-      .populate("postimage");
-
-    console.log("Posts fetched:", posts);
-    if (posts.length === 0) {
-      console.log("No posts found");
-      return res.status(404).json({ message: "No posts found" });
-    }
-    res.status(200).json(posts);
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    res.status(500).json({ message: "Internal server error" });
-    next(error);
+    return res.status(500).json({ message: "Error fetching post", error });
   }
 };

@@ -223,15 +223,73 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
       credentials: "include",
     });
     const data = await response.json();
-    if (!response.ok) {
-      console.error("Server response error:", data);
-      throw new Error("Failed to create form");
+    if (data.message === "Please fill all required fields") {
+      console.log("Please fill all required fields");
+      return { message: "Please fill all required fields" };
+    } else if (data.message === "Please enter a valid street name and city") {
+      console.log("Please enter a valid street name and city");
+      return { message: "Please enter a valid street name and city" };
+    } else if (data.message === "Please upload an image") {
+      console.log("Please upload an image");
+      return { message: "Please upload an image" };
     }
+    // if (!response.ok) {
+    //   console.error("Server response error:", data);
+    //   throw new Error("Failed to create form");
+    // }
     console.log("Form submitted successfully:", data);
   } catch (error) {
     console.error("Fehler beim Erstellen der Form:", error);
   }
 };
+// **********************************************************************
+export const deletePost = async (postId: string) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error deleting post: ${response.statusText}`);
+    }
+
+    // Parse the response data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error deleting post: ${error}`);
+    throw error;
+  }
+};
+//*********************************************************************
+export const updatePost = async (
+  postId: string,
+  updatedData: Partial<IPost>
+) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error updating post: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error updating post: ${error}`);
+    throw error;
+  }
+};
+
 // **********************************************************************
 export const userInContextUpdateRequest = async (
   id: string,
@@ -714,7 +772,122 @@ export const attachmentUpload = async (attachments: FormData) => {
     console.error("Failed to upload attachments:", error);
   }
 };
-// ---------------------------------------------------
+
+export const fetchOnePost = async (selectedPost) => {
+  try {
+    let postComments;
+    let postLikes;
+    const response = await fetch(
+      `http://localhost:5000/posts/${selectedPost.postid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch post");
+    const data = await response.json();
+    // setPost(data);
+    if (data.postcomments) {
+      const res = await fetch(
+        `http://localhost:5000/posts/comment/get?postid=${data._id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) throw new Error("Failed to fetch comments");
+      postComments = await res.json();
+      // setComments(postComments);
+    }
+    if (data.postlikes) {
+      const res = await fetch(`http://localhost:5000/posts/${data._id}/like`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch likes");
+      postLikes = await res.json();
+      // setComments(postComments);
+    }
+    return { data, postComments, postLikes };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// ****************************************************************
+
+export const createPostComment = async (user, selectedPost, comment) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/comment/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+        content: comment,
+      }),
+    });
+    if (!response.ok) throw new Error("Failed to add comment");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to create comment:", error);
+  }
+};
+
+// ****************************************************************
+
+export const createPostLike = async (user, selectedPost) => {
+  try {
+    console.log("User ID:", user?._id);
+    console.log("Post ID:", selectedPost.postid);
+    const response = await fetch(`http://localhost:5000/posts/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+      }),
+    });
+    if (!response.ok) throw new Error("Failed to add like");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to create like:", error);
+  }
+};
+
+// ****************************************************************
+
+export const deletePostLike = async (user, selectedPost) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/like`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: user?._id,
+        postid: selectedPost.postid,
+      }),
+    });
+    if (!response.ok) throw new Error("Failed to delete like");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to delete like:", error);
+  }
+};
+
+// ****************************************************************
+
 export const getPostByID = async (postId: string): Promise<IPost> => {
   try {
     const response = await fetch(
@@ -734,6 +907,7 @@ export const getPostByID = async (postId: string): Promise<IPost> => {
     }
 
     const data = await response.json();
+
     console.log("API response:", data);
     return data;
   } catch (error) {
