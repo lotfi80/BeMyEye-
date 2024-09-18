@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import TableHeadCell from "../Table/TableHeadCell";
 import { Button } from "../Table/Button";
@@ -7,6 +5,10 @@ import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
 import IUser from "../../../interfaces/User";
 import { IPost } from "../../../interfaces/Post";
+import { deletePost } from "../../../http/api";
+// import { useNavigate } from 'react-router-dom';
+
+// const navigate = useNavigate();
 
 interface TableProps {
   posts: IPost[];
@@ -35,7 +37,7 @@ const GetUsersPost: React.FC<TableProps> = ({
       return "";
     }
     const date = new Date(dateString);
-    return date.toLocaleDateString();
+    return date.toLocaleDateString("de-DE");
   }
 
   const handleEdit = (postId: string) => {

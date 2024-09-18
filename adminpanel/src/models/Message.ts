@@ -1,9 +1,10 @@
-import mongoose, { Schema, model, Document } from "mongoose";
+import mongoose, { Schema, model, Document } from 'mongoose';
+import { IUser } from './user.js';
 
 export interface IMessage extends Document {
   _id: mongoose.Types.ObjectId;
-  sender: mongoose.Types.ObjectId;
-  recipient: mongoose.Types.ObjectId[];
+  sender: IUser;
+  recipient: IUser[];
   message: string;
   subject: string;
   attachments: string[];
@@ -16,8 +17,8 @@ export interface IMessage extends Document {
 
 const MessageSchema = new Schema(
   {
-    sender: { type: mongoose.Schema.ObjectId, ref: "User" },
-    recipient: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+    sender: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    recipient: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
     message: { type: String },
     subject: { type: String },
     isRead: { type: Boolean, default: false },
@@ -28,5 +29,5 @@ const MessageSchema = new Schema(
   { timestamps: true }
 );
 
-const Message = model<IMessage>("Message", MessageSchema);
+const Message = model<IMessage>('Message', MessageSchema);
 export default Message;
