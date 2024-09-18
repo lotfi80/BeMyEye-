@@ -33,9 +33,9 @@ const GetUsersPost: React.FC<TableProps> = ({
   }
 
   return (
-    <>
+    <div className="relative p-4">
       <div
-        className="absolute top-5 left-5"
+        className="absolute top-5 left-5 z-10"
         onClick={() => {
           if (currentUser) {
             setPostsVisible(false);
@@ -44,60 +44,62 @@ const GetUsersPost: React.FC<TableProps> = ({
           }
         }}
       >
-        <Button text="Back" />
+        {/* <Button text="Back" /> */}
       </div>
-      <table className="min-w-full divide-y divide-gray-400">
-        <thead className="bg-gray-100">
-          <tr>
-            <TableHeadCell>Post Title</TableHeadCell>
-            <TableHeadCell>Image</TableHeadCell>
-            <TableHeadCell>Description</TableHeadCell>
-            <TableHeadCell>Post Date</TableHeadCell>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200 p-5">
-          {posts
-            ? posts.map((post) => (
-                <tr key={post._id} className="hover:bg-gray-200">
-                  <td>{post.title}</td>
-                  <td>
-                    {post.postimage.length === 0 ? (
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                        alt="NoImage"
-                        className="w-16 h-16 object-cover my-4 "
-                      />
-                    ) : (
-                      <img
-                        src={
-                          post.postimage[0]?.image.includes("http")
-                            ? post?.postimage[0]?.image
-                            : `http://localhost:5000/${post.postimage[0]?.image}`
-                        }
-                        alt="postimage"
-                        className="w-16 h-16 object-cover my-4"
-                      />
-                    )}
-                  </td>
-                  <td className="max-w-md break-words">{post.description}</td>
-                  <td>{formatDate(post.postDate)}</td>
 
+      <div className="table-container overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-300 bg-white rounded-lg shadow-md">
+          <thead className="bg-gray-100">
+            <tr>
+              <TableHeadCell>Post Title</TableHeadCell>
+              <TableHeadCell>Image</TableHeadCell>
+              <TableHeadCell>Description</TableHeadCell>
+              <TableHeadCell>Post Date</TableHeadCell>
+              {isMyPost && <TableHeadCell>Actions</TableHeadCell>}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {posts ? (
+              posts.map((post) => (
+                <tr key={post._id} className="hover:bg-gray-100">
+                  <td className="p-4 text-gray-800 text-lg">{post.title}</td>
+                  <td className="p-4">
+                    <img
+                      src={
+                        post.postimage[0]?.image.includes("http")
+                          ? post.postimage[0]?.image
+                          : `http://localhost:5000/${post.postimage[0]?.image}`
+                      }
+                      alt="postimage"
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                  </td>
+                  <td className="p-4 max-w-xs overflow-hidden text-ellipsis text-lg">
+                    {post.description}
+                  </td>
+                  <td className="p-4 text-lg">{formatDate(post.postDate)}</td>
                   {isMyPost && (
-                    <>
-                      <td>
-                        <EditButton postId={post._id} />
-                      </td>
-                      <td>
-                        <DeleteButton postId={post._id} />
-                      </td>
-                    </>
+                    <td className="p-4 flex space-x-2">
+                      <EditButton postId={post._id} />
+                      <DeleteButton postId={post._id} />
+                    </td>
                   )}
                 </tr>
               ))
-            : null}
-        </tbody>
-      </table>
-    </>
+            ) : (
+              <tr>
+                <td
+                  colSpan={isMyPost ? 5 : 4}
+                  className="p-4 text-center text-gray-500 text-lg"
+                >
+                  No posts available.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 

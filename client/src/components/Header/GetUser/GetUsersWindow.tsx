@@ -102,6 +102,7 @@ const GetUsersWindow: React.FC = () => {
       </>
 
       {postsVisible && (
+        
         <GetUsersPosts
           posts={posts}
           postsVisible={postsVisible}
