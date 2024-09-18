@@ -21,3 +21,5 @@ import UsersAmount from '../src/components/Dashboard/UsersAmount'
 AdminJS.UserComponents.UsersAmount = UsersAmount
 import SelectTimePeriod from '../src/components/Dashboard/SelectTimePeriod'
 AdminJS.UserComponents.SelectTimePeriod = SelectTimePeriod
+import UserPage from '../src/components/User/main'
+AdminJS.UserComponents.UserPage = UserPage

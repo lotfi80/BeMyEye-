@@ -265,10 +265,7 @@ export const deletePost = async (postId: string) => {
   }
 };
 //*********************************************************************
-export const updatePost = async (
-  postId: string,
-  updatedData: Partial<IPost>
-) => {
+export const updatePost = async (postId: string, formData: FormData) => {
   try {
     console.log("formDataformData", formData);
     const response = await fetch(`http://localhost:5000/posts/${postId}`, {
