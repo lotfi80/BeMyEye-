@@ -93,6 +93,28 @@ const GridContainer: React.FC = () => {
   const handleClosePopup = () => {
     setSelectedPost(null);
   };
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "Datum nicht verfügbar";
+  
+    const date = new Date(dateString);
+    const now = new Date();
+    const differenceInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+    if (differenceInSeconds < 60) {
+      return `vor ${differenceInSeconds} Sekunden`;
+    } else if (differenceInSeconds < 3600) {
+      const minutes = Math.floor(differenceInSeconds / 60);
+      return `vor ${minutes} Minuten`;
+    } else if (differenceInSeconds < 86400) {
+      const hours = Math.floor(differenceInSeconds / 3600);
+      return `vor ${hours} Stunden`;
+    } else {
+      const days = Math.floor(differenceInSeconds / 86400);
+      return `vor ${days} Tagen`;
+    }
+  };
+  
+
 
   return (
     <div className="max-h-screen overflow-y-auto p-4">
@@ -132,6 +154,10 @@ const GridContainer: React.FC = () => {
                 {post.category.name}
               </p>
             )}
+          <p className="text-sm text-gray-600 mb-2">
+  Gepostet: <span className="font-medium">{formatDate(post.postDate)}</span>
+</p>
+
 
             {post.userid && (
               <div className="flex items-center mt-3 space-x-3">

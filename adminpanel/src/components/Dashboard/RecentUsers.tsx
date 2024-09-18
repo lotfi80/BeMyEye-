@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IUser } from '../../models/user.js';
 import { Box, H6, Badge } from '@adminjs/design-system';
@@ -14,6 +14,7 @@ const RecentUsers: React.FC<recentUsersProps> = ({ sortedUsers }) => {
     profileimage: string;
     registerDate: string;
     sex: string;
+    id: string;
   };
   const navigate = useNavigate();
   const sexMapping = {
@@ -29,7 +30,8 @@ const RecentUsers: React.FC<recentUsersProps> = ({ sortedUsers }) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('de-DE');
   }
-  const arrayVorMap = sortedUsers.slice(0, 10);
+
+  const arrayVorMap = sortedUsers.slice(0, 40);
   return (
     <Box p="lg">
       {arrayVorMap.map((user: IUser, index: number) => {
@@ -40,14 +42,15 @@ const RecentUsers: React.FC<recentUsersProps> = ({ sortedUsers }) => {
           firstname: user.firstname ? user.firstname : 'No Name',
           profileimage: user.profileimage ? (user.profileimage as string) : '',
           sex: sexMapping[user.sex],
+          id: user._id.toString(),
         };
         return (
           <Box
             key={index}
             onClick={() => {
-              const queryParam = `filters._id=${user._id}`;
-
-              navigate(`/admin/resources/User?${queryParam}`);
+              if (userBox.id) {
+                navigate(`/admin/pages/user`, { state: { userID: userBox.id } });
+              }
             }}
             borderBottom="1px solid darkgrey"
             style={{

@@ -14,7 +14,8 @@ const Components = {
   PostAmount: componentLoader.add('PostAmount', '../components/Dashboard/PostAmount.tsx'),
   UsersAmount: componentLoader.add('UsersAmount', '../components/Dashboard/UsersAmount.tsx'),
   SelectTimePeriod: componentLoader.add('SelectTimePeriod', '../components/Dashboard/SelectTimePeriod.tsx'),
+  UserPage: componentLoader.add('UserPage', '../components/User/main.tsx'),
 };
 
-// console.log('Components:', Components);
+console.log('Components:', Components);
 export { componentLoader, Components };

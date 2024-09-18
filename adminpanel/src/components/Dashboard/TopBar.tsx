@@ -2,7 +2,6 @@ import { Box, BoxProps, Icon, cssClass } from '@adminjs/design-system';
 import { styled } from '@adminjs/design-system/styled-components';
 import React from 'react';
 import CurrentAdmin from './CurrentAdmin.js';
-import Logo from '../../utils/Logo.js';
 
 const NavBar = styled(Box)<BoxProps>`
   height: ${({ theme }) => theme.sizes.navbarHeight};

@@ -32,7 +32,7 @@ postRouter.put("/comment/update/:id", updateComment);
 postRouter.get("/:id/like", getLikesByPOst);
 postRouter.post("/like", togglePostLike);
 postRouter.delete("/:postId", deletePost);
-postRouter.put("/:postId", updatePost);
+postRouter.put("/:postId", imagesUpload.single("postImages"), updatePost);
 
 postRouter.get("/:id", authMiddleware, getPostsById);
 

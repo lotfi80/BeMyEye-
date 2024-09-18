@@ -9,6 +9,7 @@ import { componentLoader } from './admin/component-loader.js';
 import { Components } from './admin/component-loader.js';
 
 import options from './admin/options.js';
+import { Label } from '@adminjs/design-system';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -33,6 +34,20 @@ const start = async (): Promise<void> => {
     },
     branding: {
       companyName: 'BeMyEye',
+    },
+    pages: {
+      user: {
+        label: 'UserCard Page',
+        component: Components.UserPage,
+        handler: async (req, res, context) => {
+          res.send('Custom Page Content');
+        },
+        navigation: {
+          name: 'UserCard',
+          Label: 'User Card',
+          icon: 'Document',
+        },
+      },
     },
   };
   const admin = new AdminJS(adminJsOptions);

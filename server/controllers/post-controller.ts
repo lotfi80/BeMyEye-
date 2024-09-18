@@ -128,7 +128,9 @@ export const updatePost = async (
   next: NextFunction
 ) => {
   try {
+    console.log('helloooo put post');
     const { postId } = req.params;
+    console.log('reqqqqqqqq', req.body);
     const {
       title,
       description,
@@ -140,16 +142,16 @@ export const updatePost = async (
     } = req.body;
     const image = req.file;
 
-    if (!title || !description || !category) {
-      return res
-        .status(400)
-        .json({ message: "Please fill all required fields" });
-    }
-    if (!address || !latitute || !longtitute) {
-      return res
-        .status(400)
-        .json({ message: "Please enter a valid street name and city" });
-    }
+    // if (!title || !description || !category) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Please fill all required fields" });
+    // }
+    // if (!address || !latitute || !longtitute) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Please enter a valid street name and city" });
+    // }
 
     const existingPost = await Post.findById(postId);
     if (!existingPost) {

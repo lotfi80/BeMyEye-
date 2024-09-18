@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, H1 } from '@adminjs/design-system';
-import { getUsers } from '../../http/api.js';
 
 interface userAmount {
   userAmount: number;

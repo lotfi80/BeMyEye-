@@ -1,9 +1,10 @@
+
+
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCategoryUserContext } from "../context/CategoryUser";
-import { dataFormDatenGet, getPostByID } from "../http/api";
+import { dataFormDatenGet, getPostByID, updatePost } from "../http/api";
 import { Autocomplete, LoadScript, Libraries } from "@react-google-maps/api";
-
 const libraries: Libraries = ["places"];
 
 const PostComponent: React.FC = () => {
@@ -17,7 +18,9 @@ const PostComponent: React.FC = () => {
   // const [city, setCity] = useState<string>("");
   // const [street, setStreet] = useState<string>("");
   // const [country, setCountry] = useState<string>("");
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [image, setImage] = useState<File | null>(null);
+  const [initialImage, setInitialImage] = useState<string>("null");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +60,7 @@ const PostComponent: React.FC = () => {
 
   const navigate = useNavigate();
 
-  useEffect (() => {
+  useEffect(() => {
     const fetOnePost = async () => {
       if (id) {
         const data = await getPostByID(id);
@@ -65,10 +68,12 @@ const PostComponent: React.FC = () => {
         setDescription(data.description);
         setSelectedCategory(data.category);
         setAddress(data.address);
+        setInitialImage(data.postimage[0].image);
+        setEditMode(true);
       }
-    }
+    };
     fetOnePost();
-  }, [id])
+  }, [id]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -129,28 +134,38 @@ const PostComponent: React.FC = () => {
     setErrorAddress("");
     setErrorCategory("");
     setErrorImage("");
-
-    const data = await dataFormDatenGet(formData, "posts/create");
-    if (data?.message === "Please fill all required fields") {
-      if (!title)
-        setErrorTitle("Bitte füllen Sie alle erforderlichen Felder aus");
-      if (!description)
-        setErrorDescription("Bitte füllen Sie alle erforderlichen Felder aus");
+    console.log("conditionnnn", editMode, id, editMode && id);
+    if (editMode && id) {
+      console.log("hellooo edit Mode");
+      const data = await updatePost(id, formData);
+      // navigate("/home");
+    } else {
+      const data = await dataFormDatenGet(formData, "posts/create");
+      if (data?.message === "Please fill all required fields") {
+        if (!title)
+          setErrorTitle("Bitte füllen Sie alle erforderlichen Felder aus");
+        if (!description)
+          setErrorDescription(
+            "Bitte füllen Sie alle erforderlichen Felder aus"
+          );
+        console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
+        return;
+      } else if (
+        data?.message === "Please enter a valid street name and city"
+      ) {
+        setErrorAddress(
+          "Bitte geben Sie einen gültigen Straßennamen und eine gültige Stadt ein"
+        );
+        console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
+        return;
+      } else if (data?.message === "Please upload an image") {
+        setErrorImage("Bitte laden Sie ein Bild hoch für ihren Post");
+        console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
+        return;
+      }
       console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
-      return;
-    } else if (data?.message === "Please enter a valid street name and city") {
-      setErrorAddress(
-        "Bitte geben Sie einen gültigen Straßennamen und eine gültige Stadt ein"
-      );
-      console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
-      return;
-    } else if (data?.message === "Please upload an image") {
-      setErrorImage("Bitte laden Sie ein Bild hoch für ihren Post");
-      console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
-      return;
+      navigate("/home");
     }
-    console.log(`das ist die data 15/09 ${JSON.stringify(data)}`);
-    navigate("/home");
   };
 
   if (loadingCategories) return <p>Lädt Kategorien...</p>;
@@ -158,10 +173,14 @@ const PostComponent: React.FC = () => {
   const apiKey = "AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg";
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <div
+      className="
+    max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 border border-blue-500"
+    >
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        Erstelle einen neuen Post test
+        {editMode ? "Update deinen Post" : "Erstelle einen neuen Post"}
       </h1>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
@@ -221,7 +240,6 @@ const PostComponent: React.FC = () => {
               }}
             >
               <input
-                // ref={autocompleteRef}
                 type="text"
                 id="address"
                 placeholder="adresse"
@@ -276,6 +294,9 @@ const PostComponent: React.FC = () => {
           >
             Post Image
           </label>
+          {editMode && (
+            <img src={`http://localhost:5000/${initialImage}`} alt="" />
+          )}
           <input
             type="file"
             id="image"
@@ -294,7 +315,7 @@ const PostComponent: React.FC = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Post erstellen
+          {editMode ? "Post aktualisieren" : "Post erstellen"}
         </button>
       </form>
     </div>
