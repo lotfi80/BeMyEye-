@@ -16,8 +16,6 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
   const [posts, setPosts] = useState<any[]>([]);
   const { user } = useCategoryUserContext();
 
-  
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -35,7 +33,7 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
   // };
   const handleDelete = async (postId) => {
     if (!postId) {
-      console.error('No postId provided');
+      console.error("No postId provided");
       return;
     }
 
@@ -44,10 +42,9 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
       setPosts(posts.filter((post) => post._id !== postId));
       // onDelete();
     } catch (error) {
-      console.error('Failed to delete post:', error);
+      console.error("Failed to delete post:", error);
     }
   };
-
 
   return (
     <>

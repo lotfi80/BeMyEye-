@@ -5,8 +5,6 @@ import CurrentAdmin from '../src/components/Dashboard/CurrentAdmin'
 AdminJS.UserComponents.CurrentAdmin = CurrentAdmin
 import TopBar from '../src/components/Dashboard/TopBar'
 AdminJS.UserComponents.TopBar = TopBar
-import ButtonExamples from '../src/components/Button'
-AdminJS.UserComponents.ButtonExamples = ButtonExamples
 import SearchBarA from '../src/components/Search/SearchBarA'
 AdminJS.UserComponents.SearchBarA = SearchBarA
 import MyDropDown from '../src/components/Search/MyDropDown'
@@ -23,3 +21,5 @@ import SelectTimePeriod from '../src/components/Dashboard/SelectTimePeriod'
 AdminJS.UserComponents.SelectTimePeriod = SelectTimePeriod
 import UserPage from '../src/components/User/main'
 AdminJS.UserComponents.UserPage = UserPage
+import PostPage from '../src/components/Post/main'
+AdminJS.UserComponents.PostPage = PostPage

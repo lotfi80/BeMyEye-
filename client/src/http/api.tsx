@@ -1,4 +1,3 @@
-import { AuthTokens } from "../interfaces/AuthToken";
 import IUser from "../interfaces/User";
 import { IPost } from "../interfaces/Post";
 
@@ -77,7 +76,7 @@ export const getUserIdByActivationLink = async (
     console.error("Failed to fetch user by activation link:", error);
   }
 };
-// ***************************************************************************
+// ***************************************************************
 export const loginUser = async (
   email: string,
   password: string
@@ -115,7 +114,7 @@ export const loginUser = async (
     throw new Error("An error occurred during login");
   }
 };
-// **********************************************************************
+// ****************************************************************
 export const googleLogin = async (): Promise<IUser | void> => {
   try {
     const response = await fetch(`http://localhost:5000/auth/tokenReceive`, {
@@ -233,10 +232,7 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
       console.log("Please upload an image");
       return { message: "Please upload an image" };
     }
-    // if (!response.ok) {
-    //   console.error("Server response error:", data);
-    //   throw new Error("Failed to create form");
-    // }
+
     console.log("Form submitted successfully:", data);
   } catch (error) {
     console.error("Fehler beim Erstellen der Form:", error);
@@ -256,7 +252,6 @@ export const deletePost = async (postId: string) => {
       throw new Error(`Error deleting post: ${response.statusText}`);
     }
 
-    // Parse the response data
     const data = await response.json();
     return data;
   } catch (error) {

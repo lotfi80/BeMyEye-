@@ -1,0 +1,116 @@
+@mixin flex-col ($gap: 0, $justify: center, $align: center, $wrap: nowrap) {
+      display: flex;
+      flex-direction: column;
+      justify-content: $justify;
+      align-items: $align;
+      flex-wrap: $wrap;
+      gap: $gap
+}
+
+@mixin flex-row ($gap: 0, $justify: center, $align: center, $wrap: nowrap) {
+      display: flex;
+      justify-content: $justify;
+      align-items: $align;
+      flex-wrap: $wrap;
+      gap: $gap
+}
+
+@mixin flex ($gap: 0, $justify: center, $align: center, $wrap: nowrap) {
+      display: flex;
+      justify-content: $justify;
+      align-items: $align;
+      flex-wrap: $wrap;
+      gap: $gap
+}
+
+@mixin grid-area-num($rowstart, $rowend , $colstart, $colend) {
+      grid-area: #{$rowstart}/#{$colstart}/#{$rowend}/#{$colend};
+}
+
+
+// $areas1:($selector-n:$area-n)
+// @include grid-area($areas1)
+@mixin grid-area ($areas) {
+      @each $selector, $area in $areas {
+            #{$selector} {
+                  grid-area: $area;
+            }
+      }
+}
+
+// relative ---> position: relative
+// n
+@mixin position ($position, $left, $top,
+      $right, $bottom) {
+      @if $position =='fixed' {
+            position: fixed;
+      }
+
+      @if $position =='absolute' {
+            position: absolute;
+      }
+
+      @if ($left !='n') {
+            left: $left;
+      }
+
+      @if ($top !='n') {
+            top: $top;
+      }
+
+      @if ($right !='n') {
+            right: $right;
+      }
+
+      @if ($bottom !='n') {
+            bottom: $bottom;
+      }
+
+}
+
+@mixin size ($width, $height, $background-color: inherit) {
+      width: $width;
+      height: $height;
+
+      @if $background-color !='none' {
+            @if $background-color =="cover" {
+                  object-fit: 'cover';
+            }
+
+            @else if $background-color =="contain" {
+                  object-fit: 'contain';
+            }
+
+            @else {
+                  background-color: $background-color;
+            }
+      }
+}
+
+@mixin font ($font-size, $color, $font-weight) {
+      font-size: $font-size;
+      color: $color;
+
+      @if $font-weight=='bold' {
+            font-weight: bold;
+      }
+}
+
+@mixin hcenter($position) {
+      position: $position;
+      left: 50%;
+      transform: translate(-50%, 0);
+}
+
+@mixin vcenter($position) {
+      position: $position;
+      top: 50%;
+      transform: translate(0, -50%);
+}
+
+@mixin hvcenter($position) {
+      position: $position;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+}

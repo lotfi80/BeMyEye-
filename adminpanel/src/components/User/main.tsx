@@ -108,17 +108,16 @@ const UserPage = () => {
               <ValueGroup label="Street" value={currentUser?.street} />
               <ValueGroup label="Country" value={currentUser?.country} />
             </Card>
+            <Card>
+              <ValueGroup label="Email Privacy" value={booleanMapping[String(currentUser?.privacy.email)]} />
+              <ValueGroup label="First Name Privacy" value={booleanMapping[String(currentUser?.privacy.firstname)]} />
+              <ValueGroup label="Last Name Privacy" value={booleanMapping[String(currentUser?.privacy.lastname)]} />
+              <ValueGroup label="Birthdate Privacy" value={booleanMapping[String(currentUser?.privacy.birthdate)]} />
+              <ValueGroup label="Country Privacy" value={booleanMapping[String(currentUser?.privacy.country)]} />
+              <ValueGroup label="City Privacy" value={booleanMapping[String(currentUser?.privacy.city)]} />
+            </Card>
           </>
         )}
-
-        <Card>
-          <ValueGroup label="Email Privacy" value={booleanMapping[String(currentUser?.privacy.email)]} />
-          <ValueGroup label="First Name Privacy" value={booleanMapping[String(currentUser?.privacy.firstname)]} />
-          <ValueGroup label="Last Name Privacy" value={booleanMapping[String(currentUser?.privacy.lastname)]} />
-          <ValueGroup label="Birthdate Privacy" value={booleanMapping[String(currentUser?.privacy.birthdate)]} />
-          <ValueGroup label="Country Privacy" value={booleanMapping[String(currentUser?.privacy.country)]} />
-          <ValueGroup label="City Privacy" value={booleanMapping[String(currentUser?.privacy.city)]} />
-        </Card>
       </Box>
     </Box>
   );

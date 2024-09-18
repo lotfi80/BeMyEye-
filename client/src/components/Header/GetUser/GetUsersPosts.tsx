@@ -5,10 +5,6 @@ import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
 import IUser from "../../../interfaces/User";
 import { IPost } from "../../../interfaces/Post";
-import { deletePost } from "../../../http/api";
-// import { useNavigate } from 'react-router-dom';
-
-// const navigate = useNavigate();
 
 interface TableProps {
   posts: IPost[];
@@ -18,7 +14,6 @@ interface TableProps {
   isMyPost: boolean;
   setIsZoomed?: React.Dispatch<React.SetStateAction<string | null>>;
   currentUser?: IUser | null;
-  handleDelete: (postId: string) => void;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
@@ -28,10 +23,7 @@ const GetUsersPost: React.FC<TableProps> = ({
   isMyPost,
   setIsZoomed = () => {},
   currentUser = null,
-  handleDelete = () => {},
 }) => {
-  const [editingPostId, setEditingPostId] = useState<string | null>(null);
-
   function formatDate(dateString: any): string {
     if (!dateString) {
       return "";
@@ -39,12 +31,6 @@ const GetUsersPost: React.FC<TableProps> = ({
     const date = new Date(dateString);
     return date.toLocaleDateString("de-DE");
   }
-
-  const handleEdit = (postId: string) => {
-    // setEditingPostId(postId);
-    // if (postId) {
-    // }
-  };
 
   return (
     <>
@@ -95,19 +81,14 @@ const GetUsersPost: React.FC<TableProps> = ({
                   </td>
                   <td className="max-w-md break-words">{post.description}</td>
                   <td>{formatDate(post.postDate)}</td>
+
                   {isMyPost && (
                     <>
                       <td>
-                        <EditButton
-                          postId={post._id}
-                          editPost={handleEdit}
-                        ></EditButton>
+                        <EditButton postId={post._id} />
                       </td>
                       <td>
-                        <DeleteButton
-                          postId={post._id}
-                          deletePost={handleDelete}
-                        />
+                        <DeleteButton postId={post._id} />
                       </td>
                     </>
                   )}
@@ -116,8 +97,6 @@ const GetUsersPost: React.FC<TableProps> = ({
             : null}
         </tbody>
       </table>
-
-      {editingPostId && <div></div>}
     </>
   );
 };

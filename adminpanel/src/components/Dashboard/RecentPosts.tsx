@@ -17,6 +17,7 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts, filteredPosts, isFi
     img: string;
     category: string;
     address: string;
+    id: string;
   };
   const navigate = useNavigate();
 
@@ -40,13 +41,15 @@ const RecentPosts: React.FC<recentPostsProps> = ({ allPosts, filteredPosts, isFi
           img: post.postimage[0]?.image ? (post.postimage[0].image as string) : '',
           category: post.category.name,
           address: post.address,
+          id: post._id.toString(),
         };
         return (
           <Box
             key={index}
             onClick={() => {
-              const queryParam = `filters._id=${post._id}`;
-              navigate(`/admin/resources/Post?${queryParam}`);
+              if (postBox.id) {
+                navigate(`/admin/pages/post`, { state: { postID: postBox.id } });
+              }
             }}
             borderBottom="1px solid darkgrey"
             style={{

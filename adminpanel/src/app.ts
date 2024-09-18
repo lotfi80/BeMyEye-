@@ -39,12 +39,24 @@ const start = async (): Promise<void> => {
       user: {
         label: 'UserCard Page',
         component: Components.UserPage,
+        // handler: async (req, res, context) => {
+        //   res.send('Custom Page Content');
+        // },
+        navigation: {
+          name: 'UserCard',
+          Label: 'User Card',
+          icon: 'Document',
+        },
+      },
+      post: {
+        label: 'PostCard Page',
+        component: Components.PostPage,
         handler: async (req, res, context) => {
           res.send('Custom Page Content');
         },
         navigation: {
-          name: 'UserCard',
-          Label: 'User Card',
+          name: 'PostCard',
+          Label: 'Post Card',
           icon: 'Document',
         },
       },

@@ -128,9 +128,9 @@ export const updatePost = async (
   next: NextFunction
 ) => {
   try {
-    console.log('helloooo put post');
+    console.log("helloooo put post");
     const { postId } = req.params;
-    console.log('reqqqqqqqq', req.body);
+    console.log("reqqqqqqqq", req.body);
     const {
       title,
       description,
@@ -454,7 +454,8 @@ export const getPostsById = async (
     const post = await Post.findById(id)
       .populate("userid")
       .populate("category")
-      .populate("postimage");
+      .populate("postimage")
+      .populate("postcomments");
 
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
