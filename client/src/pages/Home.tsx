@@ -6,8 +6,8 @@ export const Home: React.FC = () => {
   const [id, setID] = useState("");
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-gray-100">
-      <div className="w-full flex flex-col lg:hidden">
+    <div className="w-full min-h-screen flex flex-col bg-gray-100 ">
+      <div className="w-full flex flex-col lg:hidden ">
         <div className="w-full p-4 bg-gray-200">
           <Category />
         </div>
