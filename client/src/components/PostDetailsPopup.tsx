@@ -1,7 +1,5 @@
-
-
-
 import React, { useEffect, useState } from "react";
+import * as io from "socket.io-client";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
 import "./Header/AccountButton/GetMyPosts/button.css"
@@ -14,6 +12,10 @@ import {
 import { EditButton } from "./Header/AccountButton/GetMyPosts/EditButton";
 import {DeleteButton} from "./Header/AccountButton/GetMyPosts/DeleteButton";
 
+import { deletePost } from "../http/api";
+
+const socket: any = io.connect('http://localhost:5000');
+
 interface PostDetailsPopupProps {
   selectedPost: {
     postid: string;
@@ -25,14 +27,25 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   selectedPost,
   onClose,
 }) => {
-  const { user } = useCategoryUserContext();
+  const { user, posts, setPosts } = useCategoryUserContext();
   const [post, setPost] = useState<any>({});
   const [comment, setComment] = useState<string>("");
   const [comments, setComments] = useState<any[]>([]);
   const [likes, setLikes] = useState<any[]>([]);
   const [showPopup, setShowPopup] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
-  const [time, setTime] = React.useState("fetching");
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
+/*socket */
+  useEffect(() => {
+    socket.emit(`room${selectedPost.postid}`);
+    socket.on("postLike", function ({ likes, postId }) {
+        setLikes(likes);
+    });
+    socket.on("postComment", function ({ comments, postId }) {
+      setComments(comments);
+    })
+  }, [])
+  /*socket*/
 
   useEffect(() => {
     const getOnePost = async () => {
@@ -40,15 +53,24 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
       setPost(data?.data);
       setComments(data?.postComments);
       setLikes(data?.postLikes);
+      socket.emit('postLike', { likes: data?.postLikes, postId: selectedPost.postid});
+      socket.emit('postComment', { comments: data?.postComments, postId: selectedPost.postid});
+      const hasLikedByUser = data?.postLikes.find(
+        (like) =>
+          like.userid._id === user?._id && like.postid === selectedPost.postid
+      );
+      if(hasLikedByUser) {
+        setHasLiked(true);
+      }
     };
 
     getOnePost();
 
-    const intervalId = setInterval(() => {
-      getOnePost();
-    }, 3000);
+    // const intervalId = setInterval(() => {
+    //   getOnePost();
+    // }, 3000);
 
-    return () => clearInterval(intervalId);
+    // return () => clearInterval(intervalId);
   }, [selectedPost.postid]);
 
   const handleClose = () => {
@@ -72,10 +94,11 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
 
   const addComment = async () => {
     if (!comment.trim()) return;
-
+    const data = await createPostComment(user, selectedPost, comment);
     const commentToAdd = {
       _id: Math.random().toString(36).substr(2, 9),
-      text: comment,
+      content: comment,
+      commentDate: Date.now(),
       userid: {
         username: user?.username,
         profileimage: user?.profileimage,
@@ -83,18 +106,22 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     };
     setComments((prev) => [...prev, commentToAdd]);
     setComment("");
-
-    try {
-      const data = await createPostComment(user, selectedPost, comment);
-    } catch (error) {
-      console.error(error);
-      setComments((prev) => prev.filter((com) => com._id !== commentToAdd._id));
-    }
+    socket.emit('postComment', { comments: [...comments, commentToAdd], postId: selectedPost.postid});
+    // try {
+    //   const data = await createPostComment(user, selectedPost, comment);
+    // } catch (error) {
+    //   console.error(error);
+    //   setComments((prev) => prev.filter((com) => com._id !== commentToAdd._id));
+    //   socket.emit('postComment', { comments: comments.filter((com) => com._id !== commentToAdd._id), postId: selectedPost.postid});
+    // }
   };
 
   const addLikes = async () => {
+    const data = await createPostLike(user, selectedPost);
     if (hasLiked) {
       setLikes((prev) => prev.filter((like) => like.userid._id !== user?._id));
+      setHasLiked(false);
+      socket.emit('postLike', { likes: likes.filter((like) => like.userid._id !== user?._id), postId: selectedPost.postid});
     } else {
       const newLike = {
         _id: Math.random().toString(36).substr(2, 9),
@@ -105,26 +132,43 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
         },
       };
       setLikes((prev) => [...prev, newLike]);
+      setHasLiked(true);
+      socket.emit('postLike', { likes: [...likes, newLike], postId: selectedPost.postid});
+    }
+
+    // try {
+    //   const data = await createPostLike(user, selectedPost);
+    // } catch (error) {
+    //   console.error(error);
+    //   if (hasLiked) {
+    //     setLikes((prev) => [...prev, hasLiked]);
+    //   } else {
+    //     setLikes((prev) =>
+    //       prev.filter((like) => like.userid._id !== user?._id)
+    //     );
+    //   }
+    // }
+  };
+
+  const handleDelete = async (postId) => {
+    if (!postId) {
+      console.error('No postId provided');
+      return;
     }
 
     try {
-      const data = await createPostLike(user, selectedPost);
+      await deletePost(postId);
+      setPosts(posts.filter((post) => post._id !== postId));
+      setShowPopup(false);
+      setTimeout(() => {
+        onClose();
+      }, 500);
+      // onDelete();
     } catch (error) {
-      console.error(error);
-      if (hasLiked) {
-        setLikes((prev) => [...prev, hasLiked]);
-      } else {
-        setLikes((prev) =>
-          prev.filter((like) => like.userid._id !== user?._id)
-        );
-      }
+      console.error('Failed to delete post:', error);
     }
   };
 
-  const hasLiked = likes.find(
-    (like) =>
-      like.userid._id === user?._id && like.postid === selectedPost.postid
-  );
 
   return (
     <div
@@ -178,7 +222,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
         </div>
         <div className=" p-4">
            <DeleteButton postId={post._id}
-          deletePost={() => {}}
+          deletePost={handleDelete}
         />
         </div>
         
@@ -302,7 +346,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             <div className="space-y-4 max-h-48 overflow-y-auto">
               {comments.length > 0 ? (
                 comments
-                  .slice()
+                  // .slice()
                   .sort(
                     (a, b) =>
                       new Date(b.commentDate).getTime() -
@@ -310,7 +354,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                   )
                   .map((cmt) => (
                     <div
-                      key={cmt.id}
+                      key={cmt._id}
                       className="p-4 bg-gray-100 rounded-lg shadow-sm"
                     >
                       <img

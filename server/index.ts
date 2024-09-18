@@ -1,7 +1,9 @@
 import express from "express";
+/*socket : ich muss beobachten und wieder testen ob es rictig eigensetzt*/
+import { Server } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+/*socket*/
 import dotenv from "dotenv";
-// import http from 'http';
-// import { Server } from "socket.io";
 dotenv.config();
 import connectDB from "./service/mongo-start";
 import cors from "cors";
@@ -63,34 +65,29 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;
-
-// const server = http.createServer(app);
-// const io = new Server(server, {
-//   cors: {
-//     origin: '*', // Adjust as needed for security
-//   },
-// });
-// io.on('connection',(socket)=>{
-//   console.log('client connected: ',socket.id)
-  
-//   socket.join('clock-room')
-//   socket.on("sendMessage", (chatMessage) => {
-//     console.log("message sent");
-//     io.to('clock-room').emit("receiveMessage", chatMessage);
-// });
-  
-//   socket.on('disconnect',(reason)=>{
-//     console.log(reason)
-//   })
-// })
-
-// setInterval(()=>{
-//   io.to('clock-room').emit('time', new Date())
-// },1000)
+/*socket */
+const server: Server = new Server(app);
+const io: SocketIOServer = new SocketIOServer(server, {
+  cors: {
+    origin: "*",
+    // methods: ["GET", "POST"]
+  }
+});
+io.on('connection', socket => {
+  socket.on('postLike', ({ likes, postId }) => {
+    socket.join(`room${postId}`);
+    io.to(`room${postId}`).emit('postLike', { likes, postId })
+  })
+  socket.on('postComment', ({ comments, postId }) => {
+    socket.join(`room${postId}`);
+    io.to(`room${postId}`).emit('postComment', { comments, postId })
+  })
+})
+/*socket*/
 const start = async () => {
   try {
     await connectDB();
-    app.listen(port, () => {
+    server.listen(port, () => { /*socket app.listen */
       console.log(`Server is running on port= ${port}`);
     });
   } catch (error) {
