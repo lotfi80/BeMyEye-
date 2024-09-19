@@ -3,7 +3,7 @@
 @import '../_settings.scss';
 
 header {
-      @include size(100%, 6rem, $background_tertiary);
+      @include size(100%, 5rem, $background_tertiary);
       padding-left: 3rem;
       padding-right: 3rem;
 }
@@ -11,7 +11,6 @@ header {
 header nav {
       @include size(100%, 100%);
       @include flex-row(2rem, space-between, center);
-      border: 1px solid red;
 
 }
 
@@ -26,9 +25,6 @@ header nav {
             display: none;
       }
 
-      @media (min-width: $desktop) {
-            display: none;
-      }
 }
 
 .popover-group-left {
@@ -39,17 +35,12 @@ header nav {
       @media (min-width: $tablet) {
             @include flex-row(1rem, center, center);
       }
-
-      @media (min-width: $desktop) {
-            @include flex-row(1rem, center, center);
-
-      }
 }
 
 
 .popover-button {
       @include flex-row(1rem, center, center);
-      @include font (1.2rem, $fontColor_primary, bold);
+      @include font (1rem, $fontColor_primary, bold);
 
 }
 
@@ -79,5 +70,44 @@ header nav {
 
 .registration-login-block span {
       @include font(1rem, $fontColor_primary, n);
+}
 
+p.loginButtonName {
+      @include font(1rem, $fontColor_primary, n);
+}
+
+img.loginButtonImage {
+      @include size(2rem, 2rem);
+      object-fit: cover;
+      border-radius: 50%;
+
+      @media (min-width: $desktop) {
+            @include size(3rem, 3rem);
+      }
+}
+
+.account-popover {
+      @include flex-col(0.75rem, center, center);
+      @include position(fixed, n, 5rem, 2.5rem, n);
+      @include size(25%, auto, $background_tertiary);
+      @include font(1rem, $fontColor_primary, n);
+      z-index: 10;
+}
+
+// ********************************
+// ******Dialog Panel*************
+.dialog-panel {
+      @include position(fixed, 0, 5rem, 0, 0);
+      @include size(100%, 50%, $background_tertiary);
+      z-index: 10;
+      overflow-y: auto;
+      padding: 1.5rem;
+}
+
+@media (min-width: $tablet) {
+      .sm\:max-w-sm {
+            max-width: 24rem;
+      }
+
+      // @include position(fixed, 0, 5rem, 0, 0);
 }

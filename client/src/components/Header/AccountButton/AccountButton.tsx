@@ -8,15 +8,10 @@ import Privacy from "./Privacy";
 import Logout from "./Logout";
 import DeleteAcc from "./DeleteAcc";
 
-import CloseButton from "../../MyCloseButton";
-import Blind from "../../Blind";
-
 import { IPost } from "../../../interfaces/Post";
 import { getUsersPost } from "../../../http/api";
-
 const Account: React.FC = () => {
   const { user, setUser } = useCategoryUserContext();
-  const [showDropdown, setShowDropdown] = useState(false);
   const [isPrivacy, setIsPrivacy] = useState(false);
   const [postCount, setPostCount] = useState<number>(0);
   const [isMyPost, setIsMyPost] = useState<boolean>(true);
@@ -40,63 +35,35 @@ const Account: React.FC = () => {
     ? user?.profileimage
     : `http://localhost:5000/${user?.profileimage}`;
 
-  const handleOnLinkClick = () => {
-    setShowDropdown(!showDropdown);
-  };
-
   return (
     <>
-      <div
-        className="text-sm font-semibold leading-6 text-gray-900 flex flex-row gap-1"
-        onClick={(e) => {
-          setShowDropdown(!showDropdown);
-        }}
-      >
-        <img
-          src={userImage}
-          alt="profileimage"
-          className="w-12 h-12 object-cover rounded-full -translate-y-1/4"
-        />
-        <p>{user?.username}</p>
+      <div className="account-panel">
+        <img src={userImage} alt="profileimage" />
+        <div className="top-right">
+          <p>{user?.username}</p>
+          <p>{`Posts: ${postCount}`}</p> <p>{"Likes:"}</p>
+        </div>
       </div>
-      {showDropdown && (
-        <>
-          <Blind />
-          <div className="fixed text-black z-50 top-20 right-10 w-1/4 h-auto p-5 bg-white  shadow-md hover:text-black flex flex-col gap-3">
-            <div className="flex flex-row gap-8 justify-evenly items-top">
-              <CloseButton
-                setFunction={() => {
-                  setShowDropdown(!showDropdown);
-                  setIsPrivacy(false);
-                }}
-              />
-
-              <img
-                src={userImage}
-                alt="profileimage"
-                className="w-24 h-24 object-cover rounded-full "
-              />
-              <div className="flex flex-col justify-evenly">
-                <p className="text-2xl">{user?.username}</p>
-                <p className="text-base">{`Posts: ${postCount}`}</p>{" "}
-                <p className="text-base">Likes:</p>
-              </div>
-            </div>
-            <hr />
-            <GetMyPosts isMyPost={isMyPost} />
-            <Following />
-            <Link to={`/profile/${user?._id}`} onClick={handleOnLinkClick}>
-              Profile
-            </Link>
-            <Privacy isPrivacy={isPrivacy} setIsPrivacy={setIsPrivacy} />
-            <hr />
-            <div className="grid grid-cols-2  justify-start">
-              <Logout />
-              <DeleteAcc />
-            </div>
-          </div>
-        </>
-      )}
+      <hr />
+      <div className="middle">
+        <GetMyPosts isMyPost={isMyPost} />
+        <Following />
+        <Link
+          className="linkToProfile"
+          to={`/profile/${user?._id}`}
+          onClick={() => {
+            setIsMyPost(false);
+          }}
+        >
+          Profile
+        </Link>
+        <Privacy isPrivacy={isPrivacy} setIsPrivacy={setIsPrivacy} />
+      </div>
+      <hr />
+      <div className="grid grid-cols-2  justify-start">
+        <Logout />
+        <DeleteAcc />
+      </div>
     </>
   );
 };

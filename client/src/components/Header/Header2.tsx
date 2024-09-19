@@ -67,11 +67,13 @@ const callsToAction = [
   { name: "Contact sales", href: "#", icon: PhoneIcon },
 ];
 
-export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+interface props {
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: any;
+}
+export default function Example({ mobileMenuOpen, setMobileMenuOpen }: props) {
   return (
-    <header className="bg-white  ">
+    <>
       <Dialog
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
@@ -146,6 +148,6 @@ export default function Example() {
           </div>
         </DialogPanel>
       </Dialog>
-    </header>
+    </>
   );
 }

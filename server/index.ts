@@ -1,7 +1,7 @@
 import express from "express";
 /*socket : ich muss beobachten und wieder testen ob es rictig eigensetzt*/
-import { Server } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import { Server } from "http";
+import { Server as SocketIOServer } from "socket.io";
 /*socket*/
 import dotenv from "dotenv";
 dotenv.config();
@@ -45,8 +45,8 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    // origin: "*",
     credentials: true,
+    exposedHeaders: ["x-access-token"],
   })
 );
 
@@ -80,25 +80,33 @@ const port = (process.env.PORT as string) || 10000;
 const server: Server = new Server(app);
 const io: SocketIOServer = new SocketIOServer(server, {
   cors: {
-    origin: "*",
-    // methods: ["GET", "POST"]
-  }
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  },
 });
-io.on('connection', socket => {
-  socket.on('postLike', ({ likes, postId }) => {
+io.on("connection", (socket) => {
+  socket.on("postLike", ({ likes, postId }) => {
     socket.join(`room${postId}`);
-    io.to(`room${postId}`).emit('postLike', { likes, postId })
-  })
-  socket.on('postComment', ({ comments, postId }) => {
+    io.to(`room${postId}`).emit("postLike", { likes, postId });
+  });
+  socket.on("postComment", ({ comments, postId }) => {
     socket.join(`room${postId}`);
-    io.to(`room${postId}`).emit('postComment', { comments, postId })
-  })
-})
+    io.to(`room${postId}`).emit("postComment", { comments, postId });
+  });
+});
+
 /*socket*/
 const start = async () => {
   try {
     await connectDB();
-    server.listen(port, () => { /*socket app.listen */
+    server.listen(port, () => {
+      /*socket app.listen */
       console.log(`Server is running on port= ${port}`);
     });
   } catch (error) {

@@ -55,6 +55,7 @@ const GridContainer: React.FC = () => {
           },
           credentials: "include",
         });
+        
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

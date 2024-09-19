@@ -1,6 +1,6 @@
 import IUser from "../interfaces/User";
 import { IPost } from "../interfaces/Post";
-
+import { useCategoryUserContext } from "../context/CategoryUser";
 const BASE_URL = "http://localhost:5000/api";
 
 // **********************************************************************
@@ -151,6 +151,10 @@ export const logout = async (): Promise<void> => {
       },
       credentials: "include",
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
@@ -177,7 +181,10 @@ export const getUserDataByID = async (
       },
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
@@ -199,7 +206,10 @@ export const fetchUser = async (): Promise<IUser | undefined> => {
       },
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
@@ -221,6 +231,10 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
       body: formData,
       credentials: "include",
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     const data = await response.json();
     if (data.message === "Please fill all required fields") {
       console.log("Please fill all required fields");
@@ -247,7 +261,10 @@ export const deletePost = async (postId: string) => {
         "Content-Type": "application/json",
       },
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error(`Error deleting post: ${response.statusText}`);
     }
@@ -271,7 +288,10 @@ export const updatePost = async (postId: string, formData: FormData) => {
       body: formData,
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error(`Error updating post: ${response.statusText}`);
     }
@@ -299,6 +319,10 @@ export const userInContextUpdateRequest = async (
       body: JSON.stringify(user),
       credentials: "include",
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     const message = await response.json();
     if (!response.ok) {
       console.error("Server response error:", message);
@@ -330,7 +354,10 @@ export const getAllPosts = async (
       },
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch posts");
     }
@@ -357,7 +384,10 @@ export const getPostByUser = async (userid: string): Promise<any> => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch posts");
     }
@@ -387,6 +417,10 @@ export const uploadProfileImage = async (
         credentials: "include",
       }
     );
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       console.error("Server response error:");
       throw new Error("Failed to upload profile image");
@@ -420,7 +454,10 @@ export const getHash = async (
       }
     );
     // const hash = await response.json();
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       console.error("Server response error:");
       throw new Error("Failed to create form");
@@ -441,6 +478,10 @@ export const getUsers = async () => {
       },
       credentials: "include",
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch users");
     }
@@ -462,6 +503,10 @@ export const deleteUser = async (id: string) => {
       credentials: "include",
       // body: JSON.stringify(id),
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to delete user");
     }
@@ -482,7 +527,12 @@ export const getUsersPost = async (userid: string) => {
       },
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    console.log("Old Access Token:", localStorage.getItem("accessToken"));
+    if (newAccessToken) {
+      console.log("New Access Token received:", newAccessToken);
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch posts");
     }
@@ -509,7 +559,10 @@ export const notifyFollowers = async (userId: string) => {
       }),
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
@@ -534,7 +587,10 @@ export const makeFollower = async (userId: string, followingId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to follow user");
     }
@@ -557,7 +613,10 @@ export const getFollow_ = async (userId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch followers");
     }
@@ -584,7 +643,10 @@ export const deleteFollower = async (userId: string, followingId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to unfollow user");
     }
@@ -615,7 +677,10 @@ export const sendMessage = async (
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to sent message");
     }
@@ -638,7 +703,10 @@ export const getUserInbox = async (userId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch inbox");
     }
@@ -663,7 +731,10 @@ export const getUserSent = async (userId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch sent messages");
     }
@@ -688,7 +759,10 @@ export const markAsRead = async (messageId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to mark message as read");
     }
@@ -711,7 +785,10 @@ export const deleteMessage = async (messageId: string) => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to delete message");
     }
@@ -734,6 +811,10 @@ export const getUsersByField = async (field: string, value: string) => {
         credentials: "include",
       }
     );
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch users");
     }
@@ -755,7 +836,10 @@ export const attachmentUpload = async (attachments: FormData) => {
       body: attachments,
       credentials: "include",
     });
-
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to upload attachments");
     }
@@ -782,6 +866,10 @@ export const fetchOnePost = async (selectedPost) => {
         credentials: "include",
       }
     );
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) throw new Error("Failed to fetch post");
     const data = await response.json();
     // setPost(data);
@@ -832,6 +920,10 @@ export const createPostComment = async (user, selectedPost, comment) => {
         content: comment,
       }),
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) throw new Error("Failed to add comment");
     return await response.json();
   } catch (error) {
@@ -855,6 +947,10 @@ export const createPostLike = async (user, selectedPost) => {
         postid: selectedPost.postid,
       }),
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) throw new Error("Failed to add like");
     return await response.json();
   } catch (error) {
@@ -876,6 +972,10 @@ export const deletePostLike = async (user, selectedPost) => {
         postid: selectedPost.postid,
       }),
     });
+    const newAccessToken = response.headers.get("x-access-token");
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) throw new Error("Failed to delete like");
     return await response.json();
   } catch (error) {
@@ -898,7 +998,11 @@ export const getPostByID = async (postId: string): Promise<IPost> => {
         credentials: "include",
       }
     );
-
+    const newAccessToken = response.headers.get("x-access-token");
+    console.log(newAccessToken);
+    if (newAccessToken) {
+      localStorage.setItem("accessToken", newAccessToken);
+    }
     if (!response.ok) {
       throw new Error("Failed to fetch post");
     }
