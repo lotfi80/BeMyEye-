@@ -20,7 +20,7 @@ export interface IPost {
   address: string;
   latitute: number;
   longtitute: number;
-  category: string;
+  category: {_id: string, name: string};
   userid: { username: string };
   barcode?: string; 
   postDate?: string; 

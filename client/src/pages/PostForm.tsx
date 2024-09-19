@@ -72,7 +72,7 @@ const PostComponent: React.FC = () => {
         console.log('datagetPostByID', data);
         setTitle(data.title);
         setDescription(data.description);
-        setSelectedCategory(data.category);
+        setSelectedCategory(data.category?._id);
         setAddress(data.address);
         setInitialImage(data.postimage[0].image);
       }
@@ -120,7 +120,7 @@ const PostComponent: React.FC = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("address", searchTerm);
+    formData.append("address", searchTerm || address);
     formData.append("longtitute", longtitute);
     formData.append("latitute", latitute);
 

@@ -14,6 +14,7 @@ interface TableProps {
   isMyPost: boolean;
   setIsZoomed?: React.Dispatch<React.SetStateAction<string | null>>;
   currentUser?: IUser | null;
+  handleDelete: (string) => void;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
@@ -23,6 +24,7 @@ const GetUsersPost: React.FC<TableProps> = ({
   isMyPost,
   setIsZoomed = () => {},
   currentUser = null,
+  handleDelete = () => {},
 }) => {
   function formatDate(dateString: any): string {
     if (!dateString) {
@@ -81,7 +83,7 @@ const GetUsersPost: React.FC<TableProps> = ({
                   {isMyPost && (
                     <td className="p-4 flex space-x-2">
                       <EditButton postId={post._id} />
-                      <DeleteButton postId={post._id} />
+                      <DeleteButton postId={post._id} deletePost={handleDelete}/>
                     </td>
                   )}
                 </tr>

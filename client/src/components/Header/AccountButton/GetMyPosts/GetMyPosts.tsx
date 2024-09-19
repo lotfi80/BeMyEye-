@@ -29,8 +29,6 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
     };
     fetchPosts();
   }, [user]);
-  // const handleDelete = (postId: string) => {
-  // };
   const handleDelete = async (postId) => {
     if (!postId) {
       console.error("No postId provided");
