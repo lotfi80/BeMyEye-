@@ -640,10 +640,10 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             {user?._id === post.userid?._id && (
               <div className="relative flex items-center justify-between mr-5 ">
                 <div className="p-4">
-                  <EditButton postId={post._id} editPost={() => {}} />
+                  <EditButton postId={post._id} />
                 </div>
                 <div className="p-4">
-                  <DeleteButton postId={post._id} deletePost={handleDelete} />
+                  <DeleteButton postId={post._id} deletePost={() =>handleDelete(post._id)} />
                 </div>
               </div>
             )}

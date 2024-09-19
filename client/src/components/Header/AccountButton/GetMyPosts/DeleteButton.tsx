@@ -5,16 +5,17 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 interface DeleteButtonProps {
   postId: string;
+  deletePost: (string) => void;
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId }) => {
-  const deletePost = async (postId: string) => {
-    try {
-      console.log(`Post with id ${postId} deleted`);
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
+export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId, deletePost }) => {
+  // const deletePost = async (postId: string) => {
+  //   try {
+  //     console.log(`Post with id ${postId} deleted`);
+  //   } catch (error) {
+  //     console.error("Error: ", error);
+  //   }
+  // };
   return (
     <div
       onClick={() => deletePost(postId)}
