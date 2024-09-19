@@ -102,7 +102,7 @@ const loremIpsumTexts = [
   "Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.",
 ];
 const startDate = new Date("2023-01-01");
-const endDate = new Date("2024-01-01");
+const endDate = new Date("2024-09-17");
 
 // async function createUser(data: Partial<IUser>): Promise<IUser> {
 //   const user = new User(data);
@@ -141,7 +141,7 @@ async function updateUserWithPostId(
   userId: Types.ObjectId,
   postId: Types.ObjectId
 ): Promise<void> {
-  await User.findByIdAndUpdate(userId, { $set: { postid: postId } });
+  await User.findByIdAndUpdate(userId, { $push: { postid: postId } });
 }
 
 async function run() {

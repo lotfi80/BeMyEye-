@@ -1,4 +1,3 @@
-import { AuthTokens } from "../interfaces/AuthToken";
 import IUser from "../interfaces/User";
 import { IPost } from "../interfaces/Post";
 
@@ -77,7 +76,7 @@ export const getUserIdByActivationLink = async (
     console.error("Failed to fetch user by activation link:", error);
   }
 };
-// ***************************************************************************
+// ***************************************************************
 export const loginUser = async (
   email: string,
   password: string
@@ -115,7 +114,7 @@ export const loginUser = async (
     throw new Error("An error occurred during login");
   }
 };
-// **********************************************************************
+// ****************************************************************
 export const googleLogin = async (): Promise<IUser | void> => {
   try {
     const response = await fetch(`http://localhost:5000/auth/tokenReceive`, {
@@ -233,15 +232,58 @@ export const dataFormDatenGet = async (formData: FormData, pathEnd: string) => {
       console.log("Please upload an image");
       return { message: "Please upload an image" };
     }
-    // if (!response.ok) {
-    //   console.error("Server response error:", data);
-    //   throw new Error("Failed to create form");
-    // }
+
     console.log("Form submitted successfully:", data);
   } catch (error) {
     console.error("Fehler beim Erstellen der Form:", error);
   }
 };
+// **********************************************************************
+export const deletePost = async (postId: string) => {
+  try {
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error deleting post: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error deleting post: ${error}`);
+    throw error;
+  }
+};
+//*********************************************************************
+export const updatePost = async (postId: string, formData: FormData) => {
+  try {
+    console.log("formDataformData", formData);
+    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: formData,
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error updating post: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error updating post: ${error}`);
+    throw error;
+  }
+};
+
 // **********************************************************************
 export const userInContextUpdateRequest = async (
   id: string,
@@ -735,7 +777,9 @@ export const fetchOnePost = async (selectedPost) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        credentials: "include",
       }
     );
     if (!response.ok) throw new Error("Failed to fetch post");
@@ -748,6 +792,7 @@ export const fetchOnePost = async (selectedPost) => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
@@ -842,12 +887,22 @@ export const deletePostLike = async (user, selectedPost) => {
 
 export const getPostByID = async (postId: string): Promise<IPost> => {
   try {
-    const response = await fetch(`http://localhost:5000/posts/${postId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:5000/posts/getby/${postId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch post");
+    }
+
     const data = await response.json();
 
     console.log("API response:", data);

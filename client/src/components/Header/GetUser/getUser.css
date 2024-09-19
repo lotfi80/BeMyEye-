@@ -1,0 +1,30 @@
+/* styles.css */
+.table-container {
+    overflow-x: auto; /* Horizontales Scrollen bei kleinen Bildschirmen */
+  }
+  
+  /* Tablet-Styling */
+  @media (max-width: 768px) {
+    table {
+      font-size: 14px; /* Kleinere Schriftgröße für Tablets */
+    }
+    .table-container {
+      padding: 0 10px; /* Etwas Padding für Tablet-Ansichten */
+    }
+  }
+  
+  /* Smartphone-Styling */
+  @media (max-width: 480px) {
+    table {
+      font-size: 12px; /* Kleinere Schriftgröße für Smartphones */
+    }
+    .table-container {
+      padding: 0 5px; /* Weniger Padding für Smartphones */
+    }
+    img {
+      width: 50px; /* Kleinere Bilder auf Smartphones */
+      height: 50px;
+    }
+  }
+  
+  

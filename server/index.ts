@@ -1,4 +1,8 @@
 import express from "express";
+/*socket : ich muss beobachten und wieder testen ob es rictig eigensetzt*/
+import { Server } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+/*socket*/
 import dotenv from "dotenv";
 dotenv.config();
 import connectDB from "./service/mongo-start";
@@ -26,10 +30,21 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+const allowedOrigins = [
+  process.env.CLIENT_URL as string,
+  "http://localhost:5001",
+];
+
 const app = express();
 app.use(
   cors({
-    origin: process.env.CLIENT_URL as string,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     // origin: "*",
     credentials: true,
   })
@@ -61,11 +76,29 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 
 const port = (process.env.PORT as string) || 10000;
-
+/*socket */
+const server: Server = new Server(app);
+const io: SocketIOServer = new SocketIOServer(server, {
+  cors: {
+    origin: "*",
+    // methods: ["GET", "POST"]
+  }
+});
+io.on('connection', socket => {
+  socket.on('postLike', ({ likes, postId }) => {
+    socket.join(`room${postId}`);
+    io.to(`room${postId}`).emit('postLike', { likes, postId })
+  })
+  socket.on('postComment', ({ comments, postId }) => {
+    socket.join(`room${postId}`);
+    io.to(`room${postId}`).emit('postComment', { comments, postId })
+  })
+})
+/*socket*/
 const start = async () => {
   try {
     await connectDB();
-    app.listen(port, () => {
+    server.listen(port, () => { /*socket app.listen */
       console.log(`Server is running on port= ${port}`);
     });
   } catch (error) {

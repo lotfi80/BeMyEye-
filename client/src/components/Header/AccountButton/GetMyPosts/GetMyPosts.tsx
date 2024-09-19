@@ -4,6 +4,7 @@ import { useCategoryUserContext } from "../../../../context/CategoryUser";
 import { getUsersPost } from "../../../../http/api";
 import CloseButton from "../../../MyCloseButton";
 import Blind from "../../../Blind";
+import { deletePost } from "../../../../http/api";
 
 interface props {
   isMyPost: boolean;
@@ -28,6 +29,22 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
     };
     fetchPosts();
   }, [user]);
+  // const handleDelete = (postId: string) => {
+  // };
+  const handleDelete = async (postId) => {
+    if (!postId) {
+      console.error("No postId provided");
+      return;
+    }
+
+    try {
+      await deletePost(postId);
+      setPosts(posts.filter((post) => post._id !== postId));
+      // onDelete();
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
+  };
 
   return (
     <>
@@ -51,6 +68,7 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
                 setPostsVisible={setPostsVisible}
                 setTableVisible={setTableVisible}
                 isMyPost={isMyPost}
+                handleDelete={handleDelete}
               />
               <CloseButton
                 setFunction={() => {

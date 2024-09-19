@@ -87,7 +87,7 @@ function Footer() {
         </div>
       </div>
       <div className="mb-4 bg-white text-zinc-400 justify-center bg-clip-padding text-center py-7">
-        &copy; 2024 Be-My-Eyes. All rights reserved.
+        &copy; 2024 BeMyEye. All rights reserved.
       </div>
     </div>
   );
