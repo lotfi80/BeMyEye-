@@ -55,6 +55,12 @@ const GridContainer: React.FC = () => {
           },
           credentials: "include",
         });
+        const newAccessToken = response.headers.get("x-access-token");
+        console.log("Old Access Token:", localStorage.getItem("accessToken"));
+        if (newAccessToken) {
+          console.log("New Access Token received:", newAccessToken);
+          localStorage.setItem("accessToken", newAccessToken);
+        }
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -95,11 +101,13 @@ const GridContainer: React.FC = () => {
   };
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Datum nicht verfügbar";
-  
+
     const date = new Date(dateString);
     const now = new Date();
-    const differenceInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  
+    const differenceInSeconds = Math.floor(
+      (now.getTime() - date.getTime()) / 1000
+    );
+
     if (differenceInSeconds < 60) {
       return `vor ${differenceInSeconds} Sekunden`;
     } else if (differenceInSeconds < 3600) {
@@ -113,8 +121,6 @@ const GridContainer: React.FC = () => {
       return `vor ${days} Tagen`;
     }
   };
-  
-
 
   return (
     <div className="max-h-screen overflow-y-auto p-4">
@@ -154,10 +160,10 @@ const GridContainer: React.FC = () => {
                 {post.category.name}
               </p>
             )}
-          <p className="text-sm text-gray-600 mb-2">
-  Gepostet: <span className="font-medium">{formatDate(post.postDate)}</span>
-</p>
-
+            <p className="text-sm text-gray-600 mb-2">
+              Gepostet:{" "}
+              <span className="font-medium">{formatDate(post.postDate)}</span>
+            </p>
 
             {post.userid && (
               <div className="flex items-center mt-3 space-x-3">
@@ -234,28 +240,27 @@ const GridContainer: React.FC = () => {
         </button>
       </div> */}
       <div className="flex justify-center p-8">
-  <button
-    onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
-    disabled={page === 1}
-    className="flex items-center px-10 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
-  >
-<i className="fa-solid fa-angles-left fa-xl"></i>Previous
-  </button>
-  <span className="mx-6 my-2 text-m text-gray-700">
-    Page {page} of {totalPages}
-  </span>
-  <button
-    onClick={() =>
-      setPage((prevPage) => Math.min(prevPage + 1, totalPages))
-    }
-    disabled={page === totalPages}
-    className="flex items-center px-10 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
-  >
-    Next
-    <i className="fa-solid fa-angles-right ml-2 fa-xl"></i>
-  </button>
-</div>
-
+        <button
+          onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+          disabled={page === 1}
+          className="flex items-center px-10 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+        >
+          <i className="fa-solid fa-angles-left fa-xl"></i>Previous
+        </button>
+        <span className="mx-6 my-2 text-m text-gray-700">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setPage((prevPage) => Math.min(prevPage + 1, totalPages))
+          }
+          disabled={page === totalPages}
+          className="flex items-center px-10 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+        >
+          Next
+          <i className="fa-solid fa-angles-right ml-2 fa-xl"></i>
+        </button>
+      </div>
 
       {selectedPost && (
         <PostDetailsPopup
