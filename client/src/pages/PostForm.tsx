@@ -62,15 +62,19 @@ const PostComponent: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('idddddddd', id);
+    if (id) {
+      setEditMode(true);
+    }
     const fetOnePost = async () => {
       if (id) {
         const data = await getPostByID(id);
+        console.log('datagetPostByID', data);
         setTitle(data.title);
         setDescription(data.description);
-        setSelectedCategory(data.category);
+        setSelectedCategory(data.category?._id);
         setAddress(data.address);
         setInitialImage(data.postimage[0].image);
-        setEditMode(true);
       }
     };
     fetOnePost();
@@ -116,7 +120,7 @@ const PostComponent: React.FC = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("address", searchTerm);
+    formData.append("address", searchTerm || address);
     formData.append("longtitute", longtitute);
     formData.append("latitute", latitute);
 
@@ -139,7 +143,7 @@ const PostComponent: React.FC = () => {
     if (editMode && id) {
       console.log("hellooo edit Mode");
       const data = await updatePost(id, formData);
-      // navigate("/home");
+      navigate("/home");
     } else {
       const data = await dataFormDatenGet(formData, "posts/create");
       if (data?.message === "Please fill all required fields") {

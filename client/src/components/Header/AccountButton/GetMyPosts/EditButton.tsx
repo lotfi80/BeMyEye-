@@ -118,23 +118,20 @@ import { Link } from "react-router-dom";
 import "./button.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 
 interface EditButtonProps {
   postId: string;
+  // editPost: (postId: string) => void;
 }
 
-export const EditButton: React.FC<EditButtonProps> = ({ postId }) => {
-  const navigate = useNavigate();
-
-  const editPost = (postId: string) => {
-    navigate(`/posts/${postId}`);
-  };
-
+export const EditButton: React.FC<EditButtonProps> = ({ postId, editPost }) => {
   return (
-    <div className="edit-button-container" onClick={() => editPost(postId)}>
-      <FontAwesomeIcon icon={faPenToSquare} className="edit-button-icon" />
-      <div className="edit-button-tooltip">Post bearbeiten</div>
+    <div className="edit-button-container">
+      <Link to={`/posts/${postId}`} aria-label="Edit post" className="edit-button">
+        <FontAwesomeIcon icon={faPenToSquare} className="edit-button-icon" />
+        <div className="edit-button-tooltip">Post bearbeiten</div>
+      </Link>
     </div>
   );
 };
+
