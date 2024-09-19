@@ -18,6 +18,12 @@ const CategoryList: React.FC = () => {
           },
           credentials: "include",
         });
+        const newAccessToken = response.headers.get("x-access-token");
+    console.log("Old Access Token:", localStorage.getItem("accessToken"));
+    if (newAccessToken) {
+      console.log("New Access Token received:", newAccessToken);
+      localStorage.setItem("accessToken", newAccessToken);
+    }
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
