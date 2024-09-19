@@ -324,12 +324,12 @@ const PostComponent: React.FC = () => {
     //     </button>
     //   </form>
     // </div>
-    <div className="max-w-2xl mx-auto bg-neutral-200 shadow-lg rounded-lg p-6 border border-blue-500 transition-transform transform hover:scale-105">
+    <div className="max-w-2xl mx-auto bg-neutral-200 shadow-2xl rounded-lg p-6 border border-blue-500 ">
   <h1 className="text-2xl font-bold mb-6 text-gray-800">
     {editMode ? "Update deinen Post" : "Erstelle einen neuen Post"}
   </h1>
 
-  <form onSubmit={handleSubmit} className="space-y-4">
+  <form onSubmit={handleSubmit} className="space-y-5">
     <div>
       <label htmlFor="title" className="block text-gray-700 font-semibold text-lg mb-2">
         Post Title
@@ -424,13 +424,16 @@ const PostComponent: React.FC = () => {
       />
       {errorImage && <p className="text-red-500 text-sm mt-1">{errorImage}</p>}
     </div>
-
-    <button
+<div className="button-container" >
+  <button
       type="submit"
-      className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 shadow-md hover:shadow-lg"
-    >
+      // className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 shadow-md hover:shadow-lg"
+
+className="button py-8">
       {editMode ? "Post aktualisieren" : "Post erstellen"}
     </button>
+</div>
+    
   </form>
 </div>
 

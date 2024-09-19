@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
 import PostDetailsPopup from "../../../PostDetailsPopup";
-
+import "../../../../App.css"
 const GridContainer: React.FC = () => {
   const {
     selectedCategory,
@@ -243,11 +243,13 @@ const GridContainer: React.FC = () => {
         <button
           onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
           disabled={page === 1}
-          className="flex items-center px-10 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
-        >
+          // className="flex items-center px-10 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+
+className="button"
+>
           <i className="fa-solid fa-angles-left fa-xl"></i>Previous
         </button>
-        <span className="mx-6 my-2 text-m text-gray-700">
+        <span className="mx-6 my-6 text-lg font-bold text-gray-700">
           Page {page} of {totalPages}
         </span>
         <button
@@ -255,8 +257,10 @@ const GridContainer: React.FC = () => {
             setPage((prevPage) => Math.min(prevPage + 1, totalPages))
           }
           disabled={page === totalPages}
-          className="flex items-center px-10 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
-        >
+          // className="flex items-center px-10 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+
+className="button"
+>
           Next
           <i className="fa-solid fa-angles-right ml-2 fa-xl"></i>
         </button>
