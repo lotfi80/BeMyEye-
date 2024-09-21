@@ -62,12 +62,8 @@ const CategoryList: React.FC = () => {
   //   </div>
   // );
   return (
-    <div className="flex flex-col p-4">
-      {/* Display loading or error message */}
+    <div className="flex flex-col p-4 sticky top-5 z-10">
       {loading && <p className="text-center text-gray-600">Loading...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
-
-      {/* Categories List */}
       <div className="flex flex-wrap gap-4 justify-center">
         {categories.map((category) => (
           // <div

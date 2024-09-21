@@ -409,6 +409,8 @@ import React, { useEffect, useState, useRef } from "react";
 import * as io from "socket.io-client";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
+import "../App.css";
+
 import "./Header/AccountButton/GetMyPosts/button.css";
 import {
   createPostComment,
@@ -649,16 +651,20 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             )}
           </div>
 
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed break-words">
-            Description: {post.description}
+          <p className="text-lg text-[#2781b5] mb-6 leading-relaxed break-words">
+            Description: 
+            <span className="ml-5 font-medium text-black">
+              {post.description}
+            </span>
+            
           </p>
-          <p className="text-sm text-gray-600 mb-2">
-            Adresse: <span className="font-medium">{post.address}</span>
+          <p className="text-lg text-[#2781b5] mb-2">
+            Adresse: <span className="ml-5 font-medium text-black">{post.address}</span>
           </p>
 
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-lg text-[#2781b5] mb-2">
             Erstellt am:{" "}
-            <span className="font-medium">{formatDate(post.postDate)}</span>
+            <span className="ml-5 font-medium text-black">{formatDate(post.postDate)}</span>
           </p>
 
           <div className="flex items-center space-x-4 mb-4">
@@ -669,7 +675,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                   alt={`${post.userid.username} Profilbild`}
                   className="w-12 h-12 object-cover rounded-full shadow-md"
                 />
-                <p className="text-gray-700">
+                <p className="text-lg text-[#2781b5]">
                   Erstellt von:{" "}
                   <span className="font-medium text-gray-900">
                     {post.userid.username || "Unbekannt"}
@@ -708,7 +714,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                 {`${likes.length} likes`}
               </span>
               {hovered && (
-                <div className="absolute top-full left-0 mt-2 bg-white border border-gray-300 rounded shadow-lg p-2 text-sm z-10 w-64">
+                <div className="absolute top-full left-0 mt-2 bg-white border border-gray-300 rounded shadow-lg p-2 m-5 text-m z-10 w-64">
                   {likes.length > 0 ? (
                     likes.map((like) => (
                       <div
@@ -729,9 +735,9 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                         <p className="truncate flex-1">
                           {like.userid.username || "Unknown"}
                           {like.userid.username === user?.username && (
-                            <span className="text-blue-500">
+                            <span className="geliktpopup">
                               {" "}
-                              (Du hast es gelikt)
+                              (Du hast es geclickt)
                             </span>
                           )}
                         </p>
@@ -760,7 +766,8 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
               />
               <button
                 onClick={addComment}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                // className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                className="button"
               >
                 Absenden
               </button>

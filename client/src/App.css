@@ -9,4 +9,12 @@
 body {
   margin: 0;
   width: 100%;
+  background-color: #976116;
+}
+.geclickt{
+  color : red;
+}
+.geliktpopup{
+  color: #2781b5;
+
 }

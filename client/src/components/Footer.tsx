@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="w-full h-[30%] bg-white">
+    <div className="w-full h-[20%] bg-white">
       {/* Footer-Inhalt hier */}
 
       <div className="container mx-auto text-center pt-10">
