@@ -123,8 +123,8 @@ const GridContainer: React.FC = () => {
   };
 
   return (
-    <div className="max-h-screen overflow-y-auto p-4   ">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-4 border-solid border-[#fcaf45]">
+      <div className="grid grid-cols-1  gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <div
             key={post._id}
@@ -197,7 +197,7 @@ const GridContainer: React.FC = () => {
                   className={`flex items-center ${
                     post.postlikes.length > 0
                       ? "text-red-500"
-                      : "border border-red-500 text-red-500"
+                      : "border text-red-500"
                   }`}
                 >
                   <svg

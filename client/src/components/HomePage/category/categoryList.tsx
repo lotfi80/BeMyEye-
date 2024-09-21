@@ -62,9 +62,9 @@ const CategoryList: React.FC = () => {
   //   </div>
   // );
   return (
-    <div className="flex flex-col p-4 sticky top-5 z-10">
+    <div className="flex flex-col  p-4 sticky top-5 z-10 rounded-lg border-4 border-solid border-[#fcaf45]">
       {loading && <p className="text-center text-gray-600">Loading...</p>}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-5 justify-center">
         {categories.map((category) => (
           // <div
           //   key={category._id}
@@ -80,7 +80,7 @@ const CategoryList: React.FC = () => {
           <div
   key={category._id}
   onClick={() => handleCategoryClick(category._id)}
-  className={`button-category ${selectedCategory === category._id ? 'selected' : 'default'}`}
+  className={`button-category text- font-bold ${selectedCategory === category._id ? 'selected' : 'default'}`}
 >
   {category.name}
 </div>

@@ -45,7 +45,7 @@ const libraries : Libraries = ['places'];
     console.log("Latitude: ", lat, "Longitude: ", lng);
   };
   return (
-    <div className="w-full h-full p-4 bg-white rounded-lg shadow-md">
+    <div className="w-full h-full p-4 bg-white rounded-lg shadow-md  border-4 border-solid border-[#fcaf45]">
     <div className="relative w-full h-[100%] md:h-[100%] lg:h-[100%] rounded-lg shadow-md">
 
     <LoadScript

@@ -12,7 +12,7 @@ const Container: React.FC = () => {
   //     </div>
   // );
   return (
-    <div className="w-full flex flex-col h-full ">
+    <div className="w-full flex flex-col h-full rounded-lg border-4 border-solid border-[#fcaf45] ">
       <ContainerSearch />
 
       <div className="flex-grow overflow-y-auto">

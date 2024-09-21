@@ -74,12 +74,12 @@ function ContainerSearch() {
           </LoadScript>
         </div>
 
-        <div className="bg-white p-4">
+        <div className="bg-white p-4 rounded-lg border-4 border-solid border-[#fcaf45] ">
           <DistanceList />
         </div>
       </div>
 
-      <div className="bg-white p-4 mt-4">
+      <div className="bg-white  mt-4">
         <CategoryList />
       </div>
     </div>
