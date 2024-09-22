@@ -64,21 +64,22 @@ function ContainerSearch() {
             >
               <input
                 type="text"
-                placeholder="Enter City"
+                placeholder="Gib hier eine Straße und Stadt ein..."
                 value={searchTerm}
                 onChange={(e) => onInputPlaceChange(e)}
-                className="w-2/4 p-2 border rounded-md border-gray-300 "
-              />
+
+                className="w-2/4 p-2 border-2 border-gray-500 rounded-md bg-white text-gray-800 placeholder-gray-400 shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                />
             </Autocomplete>
           </LoadScript>
         </div>
 
-        <div className="bg-white p-4">
+        <div className="bg-white p-4 rounded-lg  ">
           <DistanceList />
         </div>
       </div>
 
-      <div className="bg-white p-4 mt-4">
+      <div className="bg-white  mt-4">
         <CategoryList />
       </div>
     </div>

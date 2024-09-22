@@ -28,7 +28,7 @@ const App: React.FC = () => {
       <CategoryUserProvider>
         <UserContextLoader />
         <UserContextSaver />
-        <div className="bg-white h-screen w-full">
+        <div className="bg-white h-screen w-full relative">
           <Header />
           <Routes>
             <Route path="/home" element={<Home />} />
