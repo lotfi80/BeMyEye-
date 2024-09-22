@@ -218,14 +218,14 @@ const TableView: React.FC<props> = ({
                     />
                   </td>
                   <td>{user.username}</td>
-                  <td>{user.privacy.email ? user.email : ""}</td>
-                  <td>{user.privacy.firstname ? user.firstname : ""}</td>
-                  <td>{user.privacy.lastname ? user.lastname : ""}</td>
+                  <td>{user.privacy && user.privacy.email ? user.email : ""}</td>
+                  <td>{user.privacy && user.privacy.firstname ? user.firstname : ""}</td>
+                  <td>{user.privacy && user.privacy.lastname ? user.lastname : ""}</td>
                   <td>
-                    {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
+                    {user.privacy && user.privacy.birthdate ? formatDate(user.birthdate) : ""}
                   </td>
-                  <td>{user.privacy.country ? user.country : ""}</td>
-                  <td>{user.privacy.city ? user.city : ""}</td>
+                  <td>{user.privacy && user.privacy.country ? user.country : ""}</td>
+                  <td>{user.privacy && user.privacy.city ? user.city : ""}</td>
                 </tr>
               )}
 

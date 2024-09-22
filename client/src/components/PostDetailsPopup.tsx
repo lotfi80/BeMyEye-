@@ -29,6 +29,7 @@ interface PostDetailsPopupProps {
 const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   selectedPost,
   onClose,
+  
 }) => {
   const { user, posts, setPosts } = useCategoryUserContext();
   const [post, setPost] = useState<any>({});
@@ -187,6 +188,13 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     }
   };
 
+  const userImage = (user: any): string => {
+    const userImage = user?.profileimage?.includes("http")
+      ? user?.profileimage
+      : `http://localhost:5000/${user?.profileimage}`;
+    return userImage;
+  }
+
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70 transition-opacity duration-300 ${
@@ -248,7 +256,8 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
             {post?.userid ? (
               <>
                 <img
-                  src={`http://localhost:5000/${post.userid.profileimage}`}
+                  src={`${userImage(post.userid)}`}
+                  // src={`http://localhost:5000/${post.userid.profileimage}`}
                   alt={`${post.userid.username} Profilbild`}
                   className="w-12 h-12 object-cover rounded-full shadow-md"
                 />
@@ -300,7 +309,8 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                       >
                         {like.userid.profileimage ? (
                           <img
-                            src={`http://localhost:5000/${like.userid.profileimage}`}
+                            src={`${userImage(like.userid)}`}
+                            // src={`http://localhost:5000/${like.userid.profileimage}`}
                             alt={`${like.userid.username}'s Profilbild`}
                             className="w-8 h-8 object-cover rounded-full"
                           />
@@ -364,7 +374,8 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                       className="p-4 bg-gray-100 rounded-lg shadow-sm flex items-start space-x-4"
                     >
                       <img
-                        src={`http://localhost:5000/${cmt.userid.profileimage}`}
+                        src={`${userImage(cmt.userid)}`}
+                        // src={`http://localhost:5000/${cmt.userid.profileimage}`}
                         alt={`${cmt.userid.username} Profilbild`}
                         className="w-12 h-12 object-cover rounded-full"
                       />

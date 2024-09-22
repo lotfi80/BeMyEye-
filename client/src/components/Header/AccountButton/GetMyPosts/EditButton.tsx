@@ -124,7 +124,7 @@ interface EditButtonProps {
   // editPost: (postId: string) => void;
 }
 
-export const EditButton: React.FC<EditButtonProps> = ({ postId, editPost }) => {
+export const EditButton: React.FC<EditButtonProps> = ({ postId }) => {
   return (
     <div className="edit-button-container">
       <Link to={`/posts/${postId}`} aria-label="Edit post" className="edit-button">
