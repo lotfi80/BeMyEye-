@@ -239,17 +239,18 @@ export const userProfileUpdate = async (
           sex: sex,
           profileimage: profileimage,
           privacy: {
-            email: privacy.email,
-            firstname: privacy.firstname,
-            lastname: privacy.lastname,
-            birthdate: privacy.birthdate,
-            country: privacy.country,
-            city: privacy.city,
+            email: privacy?privacy.email:false,
+            firstname: privacy?privacy.firstname:false,
+            lastname: privacy?privacy.lastname:false,
+            birthdate: privacy?privacy.birthdate:false,
+            country: privacy?privacy.country:false,
+            city: privacy?privacy.city:false,
           },
         },
       },
       { $upsert: true }
     );
+    console.log(currentUser)
     return res.json(currentUser);
   } catch (e) {
     console.error(e);
@@ -271,7 +272,7 @@ export const userProfileImageUpdate = async (
     }
 
     const imagePath = `profileImages/${profileimage.filename}`;
-
+    console.log("server/imagePath", imagePath);
     await User.updateOne(
       { _id: userId },
       {
