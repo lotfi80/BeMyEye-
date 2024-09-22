@@ -4,15 +4,9 @@ import ContainerSearch from '../container-searchbar/containerSearch';
 import GridContainer from './gridContainer';
 
 const Container: React.FC = () => {
-  // return (
-  //   <div className="w-full h-screen flex flex-col">
-  //      <ContainerSearch />
-        
-  //       <GridContainer />
-  //     </div>
-  // );
+
   return (
-    <div className="w-full flex flex-col h-full">
+    <div className="w-full flex flex-col h-full rounded-lg border-2 border-solid border-[#fcaf45] ">
       <ContainerSearch />
 
       <div className="flex-grow overflow-y-auto">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCategoryUserContext } from "../../../../context/CategoryUser";
 import PostDetailsPopup from "../../../PostDetailsPopup";
-
+import "../../../../App.css";
 const GridContainer: React.FC = () => {
   const {
     selectedCategory,
@@ -122,14 +122,21 @@ const GridContainer: React.FC = () => {
     }
   };
 
+  const userImage = (user: any): string => {
+    const userImage = user?.profileimage?.includes("http")
+      ? user?.profileimage
+      : `http://localhost:5000/${user?.profileimage}`;
+    return userImage;
+  }
+
   return (
-    <div className="max-h-screen overflow-y-auto p-4">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-2 border-solid border-[#fcaf45]">
+      <div className="grid grid-cols-1  gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <div
             key={post._id}
             onClick={() => handlePostClick(post)}
-            className="bg-white p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer"
+            className=" p-4 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer"
           >
             <div className="mb-3">
               {post.postimage && post.postimage.length > 0 ? (
@@ -169,7 +176,8 @@ const GridContainer: React.FC = () => {
               <div className="flex items-center mt-3 space-x-3">
                 {post.userid.profileimage && (
                   <img
-                    src={`http://localhost:5000/${post.userid.profileimage}`}
+                    src={`${userImage(post.userid)}`}
+                    // src={`http://localhost:5000/${post.userid.profileimage}`}
                     alt={`${post.userid.username || "User"} Profilbild`}
                     className="w-10 h-10 object-cover rounded-full"
                   />
@@ -190,27 +198,35 @@ const GridContainer: React.FC = () => {
 
             <div className="flex items-center space-x-2 mt-2">
               <div className="flex items-center space-x-1">
-                <p className="text-sm text-gray-500 truncate">
+                <p className="text-m black truncate">
                   {post.postlikes.length} Likes
                 </p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={`h-5 w-5 ${
-                    post.postlikes.length > 0 ? "text-red-500" : "text-gray-500"
+                <div
+                  className={`flex items-center ${
+                    post.postlikes.length > 0
+                      ? "text-red-500"
+                      : "border text-red-500"
                   }`}
-                  fill={post.postlikes.length > 0 ? "currentColor" : "none"}
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-5 w-5 ${
+                      post.postlikes.length > 0 ? "fill-red-500" : "fill-white"
+                    }`}
+                    fill={post.postlikes.length > 0 ? "currentColor" : "none"}
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth={2}
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                  />
-                </svg>
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                    />
+                  </svg>
+                </div>
               </div>
-              <p className="text-sm text-gray-500 truncate">
+              <p className="text-sm text-black truncate">
                 {post.postcomments.length} comments
               </p>
             </div>
@@ -218,36 +234,17 @@ const GridContainer: React.FC = () => {
         ))}
       </div>
 
-      {/* <div className="flex justify-center p-4">
-        <button
-          onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Previous
-        </button>
-        <span className="mx-4 text-sm text-gray-700">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() =>
-            setPage((prevPage) => Math.min(prevPage + 1, totalPages))
-          }
-          disabled={page === totalPages}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Next
-        </button>
-      </div> */}
       <div className="flex justify-center p-8">
         <button
           onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
           disabled={page === 1}
-          className="flex items-center px-10 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+          // className="flex items-center px-10 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+
+          className="button"
         >
           <i className="fa-solid fa-angles-left fa-xl"></i>Previous
         </button>
-        <span className="mx-6 my-2 text-m text-gray-700">
+        <span className="mx-6 my-6 text-lg font-bold text-gray-700">
           Page {page} of {totalPages}
         </span>
         <button
@@ -255,7 +252,9 @@ const GridContainer: React.FC = () => {
             setPage((prevPage) => Math.min(prevPage + 1, totalPages))
           }
           disabled={page === totalPages}
-          className="flex items-center px-10 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+          // className="flex items-center px-10 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-transform transform hover:scale-105 disabled:opacity-50"
+
+          className="button"
         >
           Next
           <i className="fa-solid fa-angles-right ml-2 fa-xl"></i>

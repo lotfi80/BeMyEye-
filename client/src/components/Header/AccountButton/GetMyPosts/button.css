@@ -24,21 +24,33 @@
   visibility: visible;
   opacity: 1;
 }
-
 .edit-button-icon {
   cursor: pointer;
   font-size: 20px;
   color: rgb(34, 190, 34);
+  transition: transform 0.2s ease-in-out, color 0.2s, box-shadow 0.2s;
 }
 
-.delete-icon {
+.edit-button-icon:hover {
+  transform: scale(2);
+  color: rgb(0, 150, 0);
+  box-shadow: 0 4px 8px rgba(0, 150, 0, 0.4);
+}
+
+/* .edit-button-icon {
+  cursor: pointer;
+  font-size: 20px;
+  color: rgb(34, 190, 34);
+} */
+
+/* .delete-icon {
   transition: transform 0.2s;
   color: red;
-}
+} */
 
-.delete-icon:hover {
+/* .delete-icon:hover {
   transform: scale(1.2);
-}
+} */
 .delete-button-container {
   position: relative;
   display: inline-block;
@@ -65,10 +77,28 @@
   visibility: visible;
   opacity: 1;
 }
-
 .delete-button-icon {
+  cursor: pointer;
+  color: rgb(230, 55, 55);
+  font-size: 20px;
+  transition: transform 0.2s ease-in-out, color 0.2s, box-shadow 0.2s;
+}
+
+.delete-button-icon:hover {
+  transform: scale(2);
+  color: rgb(255, 0, 0);
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4);
+}
+
+/* .delete-button-icon {
+  cursor: pointer;
+  color: rgb(230, 55, 55);
+
+  font-size: 20px;
+}
+.delete-button-icon:hover {
   cursor: pointer;
   color: red;
 
   font-size: 20px;
-}
+} */

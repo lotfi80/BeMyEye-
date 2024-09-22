@@ -62,25 +62,28 @@ const CategoryList: React.FC = () => {
   //   </div>
   // );
   return (
-    <div className="flex flex-col p-4">
-      {/* Display loading or error message */}
+    <div className="flex flex-col  p-4 sticky top-5 z--1000 rounded-lg border-2 border-solid border-[#fcaf45]">
       {loading && <p className="text-center text-gray-600">Loading...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
-
-      {/* Categories List */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-5 justify-center">
         {categories.map((category) => (
+          // <div
+          //   key={category._id}
+          //   onClick={() => handleCategoryClick(category._id)}
+          //   className={`px-4 py-2 rounded-md cursor-pointer transition-colors ${
+          //     selectedCategory === category._id
+          //       ? "bg-black text-white"
+          //       : "bg-gray-300 text-black hover:bg-black hover:text-white"
+          //   }`}
+          // >
+          //   {category.name}
+          // </div>
           <div
-            key={category._id}
-            onClick={() => handleCategoryClick(category._id)}
-            className={`px-4 py-2 rounded-md cursor-pointer transition-colors ${
-              selectedCategory === category._id
-                ? "bg-black text-white"
-                : "bg-gray-300 text-black hover:bg-black hover:text-white"
-            }`}
-          >
-            {category.name}
-          </div>
+  key={category._id}
+  onClick={() => handleCategoryClick(category._id)}
+  className={`button-category text- font-bold ${selectedCategory === category._id ? 'selected' : 'default'}`}
+>
+  {category.name}
+</div>
         ))}
       </div>
     </div>
