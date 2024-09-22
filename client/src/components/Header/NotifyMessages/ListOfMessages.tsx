@@ -52,7 +52,7 @@ const ListOfMessages: React.FC<props> = ({
   }
 
   function handleOnMessageClick(
-    e: React.MouseEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLLIElement>,
     message: IMessage
   ): void {
     e.preventDefault();
@@ -72,61 +72,45 @@ const ListOfMessages: React.FC<props> = ({
   return (
     <>
       <Blind />
-      <StyledWrapper>
-        <div
-          className="fixed mr-0 top-0 right-0 left-0 
-                      bottom-0 z-50 flex justify-center "
-        >
-          <div className="w-1/2 h-2/3 bg-white absolute top-20 z-60 p-10 overflow-y-auto">
-            <SearchMessages
-              inbox={inbox}
-              setIsSearchActive={setIsSearchActive}
-              isSearchActive={isSearchActive}
-              setWriteInSearchBarResults={setWriteInSearchBarResults}
-              writeInSearchBarResults={writeInSearchBarResults}
-              setSearchResults={setSearchResults}
-            />
+      <div className="notifyPostContainer">
+        <div className="notifyPostCard msg">
+          <SearchMessages
+            inbox={inbox}
+            setIsSearchActive={setIsSearchActive}
+            isSearchActive={isSearchActive}
+            setWriteInSearchBarResults={setWriteInSearchBarResults}
+            writeInSearchBarResults={writeInSearchBarResults}
+            setSearchResults={setSearchResults}
+          />
 
-            <SortButton setSortedMessages={setSortedMessages} inbox={inbox} />
-            <CloseButton setFunction={closeListOfMessages} />
-            <h2>Your messages:</h2>
-            <hr />
-            <ul>
-              {arrayForMessages
-                ?.filter((message) => unreadMessages?.includes(message))
-                .map((message) => (
-                  <div onClick={(e) => handleOnMessageClick(e, message)}>
-                    <Li message={message} />
-                  </div>
-                ))}
+          <SortButton setSortedMessages={setSortedMessages} inbox={inbox} />
+          <CloseButton setFunction={closeListOfMessages} />
+          <h2>Your messages:</h2>
+          <hr />
+          <ul>
+            {arrayForMessages
+              ?.filter((message) => unreadMessages?.includes(message))
+              .map((message) => (
+                <li onClick={(e) => handleOnMessageClick(e, message)}>
+                  <Li message={message} />
+                </li>
+              ))}
 
-              {arrayForMessages
-                ?.filter((message) => readedMessages?.includes(message))
-                .map((message) => (
-                  <div
-                    className="readed"
-                    onClick={(e) => handleOnMessageClick(e, message)}
-                  >
-                    <Li message={message} />
-                  </div>
-                ))}
-            </ul>
-          </div>
+            {arrayForMessages
+              ?.filter((message) => readedMessages?.includes(message))
+              .map((message) => (
+                <li
+                  className="readed"
+                  onClick={(e) => handleOnMessageClick(e, message)}
+                >
+                  <Li message={message} />
+                </li>
+              ))}
+          </ul>
         </div>
-      </StyledWrapper>
+      </div>
     </>
   );
 };
 
-const StyledWrapper = styled.div`
-  ul {
-    margin-top: 20px;
-
-    list-style-type: none;
-    font-size: 14px;
-  }
-  div.readed li {
-    background-color: #78a4784e;
-  }
-`;
 export default ListOfMessages;

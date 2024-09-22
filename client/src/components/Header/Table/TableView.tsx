@@ -42,6 +42,7 @@ const TableView: React.FC<props> = ({
   const { user: accountOwner } = useCategoryUserContext();
   const [isFollowed, setIsFollowed] = useState<boolean | undefined>(false);
   const [letterVisible, setLetterVisible] = useState<boolean>(false);
+  const [letterVisibleID, setLetterVisibleID] = useState<string | null>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   //Sort Data by
@@ -150,6 +151,7 @@ const TableView: React.FC<props> = ({
   const handleButtonSendMessage = (user: IUser) => {
     setIsZoomed(null);
     setCurrentUser(user);
+    setLetterVisibleID(user._id);
     setLetterVisible(true);
   };
 
@@ -177,7 +179,7 @@ const TableView: React.FC<props> = ({
               handleButtonFollow={handleButtonFollow}
               accountOwner={accountOwner}
               handleButtonUnFollow={handleButtonUnFollow}
-              letterVisible={letterVisible}
+              letterVisible={letterVisible && letterVisibleID === user._id}
               setLetterVisible={setLetterVisible}
               handleButtonViewPosts={handleButtonViewPosts}
               handleButtonSendMessage={handleButtonSendMessage}
