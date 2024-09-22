@@ -1,0 +1,35 @@
+@import '../popover.scss';
+
+.popover-group-right {
+      @include flex-row(2em, center, center);
+}
+
+.registration-login-block {
+      @include flex-row(0.5em, center, center);
+      margin-left: 2em;
+}
+
+
+.registration-login-block span,
+p.loginButtonName {
+      @include font(1em, $fontColor_primary, 700);
+}
+
+
+img.loginButtonImage {
+      @include size(2rem, 2rem);
+      object-fit: cover;
+      border-radius: 50%;
+
+      @media (min-width: $desktop) {
+            @include size(3rem, 3rem);
+      }
+}
+
+.account-popover {
+      @include flex-col(0.75rem, center, center);
+      @include position(fixed, n, 5rem, 2.5rem, n);
+      @include size(25%, auto, $background_tertiary);
+      @include font(1em, $fontColor_primary, 700);
+      z-index: 10;
+}

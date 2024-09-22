@@ -37,7 +37,7 @@ export const activateUser = async (activationLink: string): Promise<any> => {
       `http://localhost:5000/auth/activate/${activationLink}`,
       {
         method: "GET",
-        credentials: "include",
+        // credentials: "include",
       }
     );
 

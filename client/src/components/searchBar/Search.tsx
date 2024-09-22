@@ -31,10 +31,6 @@ export const Search: React.FC<props> = ({
     setInputValues(event.target.value);
     if (event.target.value.length > 0) {
       setIsDropDown(true);
-      // /////////////////////////////////////
-      ///////////////////////////////////////
-      //////////////////////////////////////
-      /////////////////////////////////////
       if (allUsers && allUsers.length > 0) {
         const results = allUsers
           .map((user: IUser) => {

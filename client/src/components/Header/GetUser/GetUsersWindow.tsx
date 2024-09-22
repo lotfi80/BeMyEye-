@@ -74,7 +74,7 @@ const GetUsersWindow: React.FC = () => {
   };
 
   return (
-    <div className="p-2 pt-10 text-xs">
+    <div className="getUsersWindow">
       <>
         <Search
           setIsSearchActive={setIsSearchActive}
@@ -102,7 +102,6 @@ const GetUsersWindow: React.FC = () => {
       </>
 
       {postsVisible && (
-        
         <GetUsersPosts
           posts={posts}
           postsVisible={postsVisible}

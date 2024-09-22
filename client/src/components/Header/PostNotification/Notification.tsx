@@ -35,8 +35,9 @@ const Notification: React.FC = () => {
   }, [user]);
 
   return (
-    <StyledWrapper pcount={postCount}>
+    <>
       <div
+        data-count={postCount}
         className="notification"
         onClick={() => setIsListOfPostsVisible(true)}
       >
@@ -54,28 +55,28 @@ const Notification: React.FC = () => {
           posts={posts}
         />
       )}
-    </StyledWrapper>
+    </>
   );
 };
 
-const StyledWrapper = styled.div<{ pcount: number }>`
-  .notification::before {
-    content: "${(props) => props.pcount}";
-    color: white;
-    font-size: 0.8em;
-    font-weight: bold;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: red;
-    position: absolute;
-    right: 6px;
-    top: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
-  }
-`;
+// const StyledWrapper = styled.div<{ pcount: number }>`
+//   .notification::before {
+//     content: "${(props) => props.pcount}";
+//     color: white;
+//     font-size: 0.8em;
+//     font-weight: bold;
+//     width: 15px;
+//     height: 15px;
+//     border-radius: 50%;
+//     background-color: red;
+//     position: absolute;
+//     right: 6px;
+//     top: 0.5rem;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     z-index: 2;
+//   }
+// `;
 
 export default Notification;

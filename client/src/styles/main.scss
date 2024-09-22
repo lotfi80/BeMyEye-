@@ -6,14 +6,13 @@ body {
       @include size(100vw, 100vh, $background_primary);
       color: $fontColor_primary;
       font-family: 'Roboto', sans-serif;
-      font-size: 62.5%;
+      font-weight: 400;
+      // font-size: 62.5%;
 }
 
 
-@import './components/header.scss';
-@import './components/accountButton.scss';
-@import './components/notify.scss';
-@import './components/notification.scss';
+@import './components/header/header.scss';
+
 // @import './components/BigCard.scss';
 // @import './components/WatchListCard.scss';
 // @import './components/Main.scss';

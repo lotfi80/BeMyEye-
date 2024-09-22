@@ -1,0 +1,44 @@
+.inbox-btn {
+      @include size(3em, 2.5em, transparent);
+      @include flex-row(0, center, center);
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+}
+
+.inbox-btn svg path {
+      fill: $colorBlue-primary;
+}
+
+.inbox-btn svg {
+      height: 20px;
+      transition: all 0.3s;
+}
+
+.msg-count {
+      @include size(1.5em, 1.5em, $colorOrange-tertiary);
+      @include font(0.8em, white, bold);
+      @include position(absolute, n, 0, 0, n);
+      @include flex(0, center, center);
+      border-radius: 50%;
+      z-index: 2;
+}
+
+.tooltip {
+      @include position(absolute, 50%, n, n, 100%);
+      transform: translateX(-50%);
+      @include size(auto, auto, #646464);
+      @include font(0.8rem, white, normal);
+      padding: 5px 10px;
+      border-radius: 5px;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      z-index: 3;
+}
+
+.inbox-btn:hover .tooltip {
+      visibility: visible;
+      opacity: 0.8;
+}

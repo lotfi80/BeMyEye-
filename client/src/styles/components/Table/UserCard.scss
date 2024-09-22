@@ -1,0 +1,121 @@
+@import "../../variables.scss";
+@import "../../mixins.scss";
+@import "../../_settings.scss";
+
+.userCardWrapper {
+  padding: 1rem;
+  @include size(100%, 40vh, $background_secondary);
+}
+
+.userCard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-areas: "left right";
+  column-gap: 2rem;
+}
+
+$userCard-grid-area: (
+  ".left": left,
+  ".right": right
+);
+@include grid-area($userCard-grid-area);
+
+/* ------------------ */
+.userCard .left {
+  display: grid;
+  row-gap: 0.5rem;
+  grid-template-rows: 5fr 1fr;
+}
+
+.userCard img {
+  width: 80%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  place-self: center;
+  border-radius: 50%;
+}
+
+div.button.follow {
+  background-color: white;
+  color: $colorBlue-secondary;
+}
+
+
+
+div.button {
+  @include size(80%, 2rem, $colorBlue-primary);
+  @include flex(0, center, center);
+  @include font(1rem, white, 700);
+  border: none;
+  justify-self: center;
+  margin: 0;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $colorBlue-third;
+  }
+}
+
+/* ------------------- */
+
+.right {
+  display: grid;
+  grid-template-rows: 1fr 1fr 3fr 1fr;
+  grid-template-areas:
+    "name"
+    "city"
+    "data"
+    "but";
+  row-gap: 0.5rem;
+  column-gap: 0.5rem;
+
+}
+
+$userCardRight-grid-area: (
+  ".userCard .name": name,
+  ".address": city,
+  ".data": data,
+  "div.buton": but1
+);
+@include grid-area($userCardRight-grid-area);
+
+.userCard .name {
+  justify-self: center;
+  @include font(2rem, $fontColor_primary, 700);
+  line-height: 2rem;
+  margin: 0;
+  border-bottom: 3px solid $colorOrange-primary;
+}
+
+.userCard .address {
+  justify-self: center;
+  font-size: 1rem;
+}
+
+.userCard .data {
+  justify-self: left;
+  align-self: start;
+  font-size: 1rem;
+}
+
+
+
+div.twoButtons {
+  grid-area: but;
+  width: 100%;
+  @include flex-row(0, space-around, top);
+
+}
+
+.twoButtons .button {
+  width: 40%;
+}
+
+// ****************************************************
+.cntner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

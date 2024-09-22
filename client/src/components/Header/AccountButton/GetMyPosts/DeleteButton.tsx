@@ -8,7 +8,10 @@ interface DeleteButtonProps {
   deletePost: (string) => void;
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId, deletePost }) => {
+export const DeleteButton: React.FC<DeleteButtonProps> = ({
+  postId,
+  deletePost,
+}) => {
   // const deletePost = async (postId: string) => {
   //   try {
   //     console.log(`Post with id ${postId} deleted`);
@@ -16,6 +19,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId, deletePost }
   //     console.error("Error: ", error);
   //   }
   // };
+
   return (
     <div
       onClick={() => deletePost(postId)}

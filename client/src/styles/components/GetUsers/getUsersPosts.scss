@@ -1,0 +1,10 @@
+@import "../../../variables.scss";
+@import "../../../mixins.scss";
+@import "../../../_settings.scss";
+
+.positionContainer {
+      position: relative;
+      @include size(100%, 100%, transparent);
+      padding: 1rem;
+      border: $testBorder1;
+}

@@ -15,7 +15,7 @@ const SortButton: React.FC<props> = ({ setSortedMessages, inbox }) => {
   useEffect(() => {
     inbox?.map(
       (message: IMessage) =>
-        (message.username = message.sender.username
+        (message.username = message.sender?.username
           ? message.sender.username
           : "z")
     );

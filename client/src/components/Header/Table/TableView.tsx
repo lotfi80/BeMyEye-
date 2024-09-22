@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import IUser from "../../../interfaces/User";
+import { useMediaQuery } from "react-responsive";
 
 import TableHeadCell from "./TableHeadCell";
 import { TableSortLabel, Box } from "./TableSortLabel";
-import { Button } from "./Button";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
 import { getFollow_ } from "../../../http/api";
 import WriteMessage from "../WriteMessage";
-
-import "./userCard.css";
+import UserCard from "./UserCard";
 
 interface props {
   isZoomed: string | null;
@@ -43,6 +42,7 @@ const TableView: React.FC<props> = ({
   const { user: accountOwner } = useCategoryUserContext();
   const [isFollowed, setIsFollowed] = useState<boolean | undefined>(false);
   const [letterVisible, setLetterVisible] = useState<boolean>(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   //Sort Data by
   useEffect(() => {
@@ -158,180 +158,139 @@ const TableView: React.FC<props> = ({
     ? searchResults.slice(0)
     : sortedUsers.slice(0);
   // *********************************************************************
+  // {isMobile ? (
+
   if (!tableVisible) {
     return null;
   }
+
   return (
-    <table className="min-w-full divide-y divide-gray-200">
-      <thead className="bg-gray-100">
-        <tr>
-          {headCells.map((headCell) => (
-            <TableHeadCell
-              key={headCell.id}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              <TableSortLabel
-                active={orderBy === headCell.id ? true : false}
-                direction={orderBy === headCell.id ? order : "asc"}
-                createSortHandler={() => handleRequestSort(headCell.id)}
-              >
-                {orderBy === headCell.id ? (
-                  <Box>
-                    {order === "desc" ? (
-                      <img
-                        src="/arrow-down-solid.svg"
-                        alt=""
-                        style={{ visibility: "visible" }}
-                      />
-                    ) : (
-                      <img
-                        src="/arrow-up-solid.svg"
-                        alt=""
-                        style={{ visibility: "visible" }}
-                      />
-                    )}
-                  </Box>
-                ) : null}
-                <span>{headCell.label}</span>
-              </TableSortLabel>
-            </TableHeadCell>
-          ))}
-        </tr>
-      </thead>
-
-      <tbody className="bg-white divide-y divide-gray-200">
-        {arrayForTable ? (
+    <div className="cntner">
+      {isMobile ? (
+        arrayForTable ? (
           arrayForTable.map((user: any, index: number) => (
-            <>
-              {isZoomed === user._id || (
-                <tr
-                  key={user._id}
-                  className={`hover:bg-gray-200 "h-8 align-middle"
-               `}
-                  onClick={() => handleZoomClick(user)}
-                >
-                  <td className="py-1">
-                    <img
-                      src={`${userImage(user)}`}
-                      alt="avatar"
-                      className="w-8 h-8 object-cover"
-                    />
-                  </td>
-                  <td>{user.username}</td>
-                  <td>{user.privacy.email ? user.email : ""}</td>
-                  <td>{user.privacy.firstname ? user.firstname : ""}</td>
-                  <td>{user.privacy.lastname ? user.lastname : ""}</td>
-                  <td>
-                    {user.privacy.birthdate ? formatDate(user.birthdate) : ""}
-                  </td>
-                  <td>{user.privacy.country ? user.country : ""}</td>
-                  <td>{user.privacy.city ? user.city : ""}</td>
-                </tr>
-              )}
-
-              {isZoomed === user._id && (
-                <tr
-                  data-user-id={user._id}
-                  onClick={(e) => {
-                    setIsZoomed((prevId) =>
-                      prevId === user._id ? null : user._id
-                    );
-                  }}
-                >
-                  <td colSpan={8} className="p-4 bg-gray-200 w-full ">
-                    <div className="userCard">
-                      <div className="left">
-                        <img src={`${userImage(user)}`} alt="avatar" />
-                        {isFollowed || (
-                          <div
-                            className="button"
-                            onClick={() => {
-                              handleButtonFollow(accountOwner, user);
-                              setIsFollowed(true);
-                            }}
-                          >
-                            <Button text="Follow"></Button>
-                          </div>
-                        )}
-                        {isFollowed && (
-                          <div
-                            className="button followed"
-                            onClick={() => {
-                              handleButtonUnFollow(accountOwner, user);
-                              setIsFollowed(false);
-                            }}
-                          >
-                            <Button text="Followed!"></Button>
-                          </div>
-                        )}
-                      </div>
-
-                      {letterVisible || (
-                        <div className="right">
-                          <p className="name">{user.username}</p>
-                          <p className="address">
-                            {user.privacy.city ? user.city : ""},{" "}
-                            {user.privacy.country ? user.country : ""}
-                          </p>
-                          <div className="data">
-                            <p>
-                              {user.privacy.firstname ? user.firstname : ""}{" "}
-                              {user.privacy.lastname ? user.lastname : ""}
-                            </p>
-                            <br />
-                            <p>
-                              {user.privacy.birthdate
-                                ? formatDate(user.birthdate)
-                                : ""}
-                            </p>
-                            <br />
-                            <p>{user.privacy.email ? user.email : ""}</p>
-                            <br />
-                          </div>
-
-                          <div className="twoButtons">
-                            <div
-                              className="button"
-                              onClick={() => handleButtonViewPosts(user)}
-                            >
-                              <Button text="View Posts"></Button>
-                            </div>
-                            <div
-                              className="button"
-                              onClick={() => handleButtonSendMessage(user)}
-                            >
-                              <Button text="Send Message"></Button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {letterVisible && (
-                        <div
-                          onClick={(e) => {
-                            setIsZoomed(null);
-                          }}
-                        >
-                          <WriteMessage
-                            currentRecipient={currentUser}
-                            setLetterVisible={setLetterVisible}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </>
+            <UserCard
+              key={user._id}
+              user={user}
+              isFollowed={isFollowed}
+              setIsFollowed={setIsFollowed}
+              handleButtonFollow={handleButtonFollow}
+              accountOwner={accountOwner}
+              handleButtonUnFollow={handleButtonUnFollow}
+              letterVisible={letterVisible}
+              setLetterVisible={setLetterVisible}
+              handleButtonViewPosts={handleButtonViewPosts}
+              handleButtonSendMessage={handleButtonSendMessage}
+              currentUser={currentUser}
+              setIsZoomed={setIsZoomed}
+            />
           ))
         ) : (
-          <tr>
-            <td colSpan={8} className=" py-4 text-center">
-              No users found
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+          <p>No users found</p>
+        )
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              {headCells.map((headCell) => (
+                <TableHeadCell
+                  key={headCell.id}
+                  sortDirection={orderBy === headCell.id ? order : false}
+                >
+                  <TableSortLabel
+                    active={orderBy === headCell.id ? true : false}
+                    direction={orderBy === headCell.id ? order : "asc"}
+                    createSortHandler={() => handleRequestSort(headCell.id)}
+                  >
+                    {orderBy === headCell.id ? (
+                      <Box>
+                        {order === "desc" ? (
+                          <img
+                            src="/arrow-down-solid.svg"
+                            alt=""
+                            style={{ visibility: "visible" }}
+                          />
+                        ) : (
+                          <img
+                            src="/arrow-up-solid.svg"
+                            alt=""
+                            style={{ visibility: "visible" }}
+                          />
+                        )}
+                      </Box>
+                    ) : null}
+                    <span>{headCell.label}</span>
+                  </TableSortLabel>
+                </TableHeadCell>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {arrayForTable ? (
+              arrayForTable.map((user: any, index: number) => (
+                <>
+                  {isZoomed === user._id || (
+                    <tr key={user._id} onClick={() => handleZoomClick(user)}>
+                      <td>
+                        <img
+                          src={`${userImage(user)}`}
+                          alt="avatar"
+                          className="w-8 h-8 object-cover"
+                        />
+                      </td>
+                      <td>{user.username}</td>
+                      <td>{user.privacy.email ? user.email : ""}</td>
+                      <td>{user.privacy.firstname ? user.firstname : ""}</td>
+                      <td>{user.privacy.lastname ? user.lastname : ""}</td>
+                      <td>
+                        {user.privacy.birthdate
+                          ? formatDate(user.birthdate)
+                          : ""}
+                      </td>
+                      <td>{user.privacy.country ? user.country : ""}</td>
+                      <td>{user.privacy.city ? user.city : ""}</td>
+                    </tr>
+                  )}
+
+                  {isZoomed === user._id && (
+                    <tr
+                      data-user-id={user._id}
+                      onClick={(e) => {
+                        setIsZoomed((prevId) =>
+                          prevId === user._id ? null : user._id
+                        );
+                      }}
+                    >
+                      <UserCard
+                        user={user}
+                        isFollowed={isFollowed}
+                        setIsFollowed={setIsFollowed}
+                        handleButtonFollow={handleButtonFollow}
+                        accountOwner={accountOwner}
+                        handleButtonUnFollow={handleButtonUnFollow}
+                        letterVisible={letterVisible}
+                        setLetterVisible={setLetterVisible}
+                        handleButtonViewPosts={handleButtonViewPosts}
+                        handleButtonSendMessage={handleButtonSendMessage}
+                        currentUser={currentUser}
+                        setIsZoomed={setIsZoomed}
+                      />
+                    </tr>
+                  )}
+                </>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8} className=" py-4 text-center">
+                  No users found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      )}
+    </div>
   );
 };
 

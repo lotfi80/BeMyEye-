@@ -1,0 +1,22 @@
+.modalWindowPermission {
+      @include size (30%, 30%, $background_tertiary);
+      @include hvcenter(fixed);
+      padding: 2em;
+      z-index: 15;
+      border: 2px solid red;
+      @include flex-col(0.5em, space-evenly, center);
+}
+
+.modalWindowPermission p {
+      @include font(1.25em, $fontColor_primary, n);
+}
+
+.buttonGroup {
+      @include flex-row(2em, center, center);
+}
+
+.buttonGroup button {
+      @include size(7em, 2em, red);
+      @include font(1em, $fontColor_invert, n);
+      @include flex(0, center, center);
+}

@@ -119,11 +119,12 @@ export const activate = async (
 ): Promise<Response | void> => {
   try {
     const activationLink: string = req.params.link;
+    console.log("Activation link von server:", activationLink);
     if (!activationLink) {
       return res.status(400).json({ message: "Invalid activation link" });
     }
     await userServiceActivate(activationLink);
-    return res.redirect(process.env.CLIENT_URL || "/");
+    return res.redirect(process.env.CLIENT_URL as string);
   } catch (e) {
     console.error(e);
     next(e);

@@ -42,7 +42,7 @@ const Button: React.FC = () => {
 
   return (
     <>
-      <button className="inbox-btn" onClick={handleNotificationClick}>
+      <div className="inbox-btn" onClick={handleNotificationClick}>
         <svg
           viewBox="0 0 512 512"
           height="16"
@@ -62,7 +62,7 @@ const Button: React.FC = () => {
         <span className="tooltip">
           You have {unreadMessages.length} unread messages{" "}
         </span>
-      </button>
+      </div>
 
       {isListOfMessagesVisible && (
         <ListOfMessages

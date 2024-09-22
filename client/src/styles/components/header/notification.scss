@@ -1,60 +1,61 @@
-.bell {
-      border: 2.5px solid green;
-      border-radius: 10px 10px 0 0;
-      @include size(10px, 12px, transparent);
-
-
-      display: block;
-      position: relative;
-      top: -2px;
-}
-
-@media (min-width: $tablet) {
-      .bell {
-            @include size(12px, 14px, transparent);
-      }
-}
-
-@media (min-width: $desktop) {
-      .bell {
-            @include size(13px, 16px, transparent);
-      }
-}
-
-.bell::before,
-.bell::after {
-      content: "";
-      @include size(100%, 2.5px, green);
-      display: block;
-      @include hcenter(absolute);
-}
-
-.bell::before {
-      top: 100%;
-      width: 18px;
-}
-
-.bell::after {
-      top: calc(100% + 4px);
-      width: 10px;
-}
-
 .notification {
-      @include size(40px, 40px, transparent);
-      border: none;
-      border-radius: 50px;
-      padding: 15px 15px;
+      @include size(2.5em, 2.5em, transparent);
       cursor: pointer;
-      top: -5px;
+      top: 0;
       transition: 300ms;
       position: relative;
       @include flex-row(0, center, center);
 
 }
 
-.notification:hover {
-      background: rgba(170, 170, 170, 0.062);
+.notification::before {
+      content: attr(data-count);
+      @include font(0.8em, white, bold);
+      @include size(1.5em, 1.5em, $colorOrange-tertiary);
+      border-radius: 50%;
+      @include position(absolute, n, 0, 0, n);
+      @include flex(0, center, center);
+      z-index: 2;
 }
+
+
+.bell {
+      border: 2.5px solid $colorBlue-primary;
+      border-radius: 1em 1em 0 0;
+      @include size(1em, 1.2em, transparent);
+
+      display: block;
+      @include hvcenter(absolute);
+
+      @media (min-width: $tablet) {
+            @include size(12px, 14px, transparent);
+      }
+
+      @media (min-width: $desktop) {
+            @include size(13px, 16px, transparent);
+      }
+}
+
+
+.bell::before,
+.bell::after {
+      content: "";
+      @include size(100%, 2.5px, $colorBlue-primary);
+      @include hcenter(absolute);
+}
+
+.bell::before {
+      top: 100%;
+      width: 18px;
+      background-color: $colorBlue-primary;
+}
+
+.bell::after {
+      top: calc(100% + 4px);
+      width: 10px;
+      background-color: $colorBlue-primary;
+}
+
 
 .notification:hover .bell-container {
       animation: bell-animation 650ms ease-out 0s 1 normal both;

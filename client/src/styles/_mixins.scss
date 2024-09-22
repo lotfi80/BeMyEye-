@@ -28,6 +28,8 @@
 }
 
 
+
+
 // $areas1:($selector-n:$area-n)
 // @include grid-area($areas1)
 @mixin grid-area ($areas) {
@@ -87,13 +89,13 @@
       }
 }
 
-@mixin font ($font-size, $color, $font-weight) {
+@mixin font($font-size, $color, $font-weight) {
       font-size: $font-size;
       color: $color;
 
-      @if $font-weight=='bold' {
-            font-weight: bold;
-      }
+      font-weight: if($font-weight =='bold', bold,
+                  if($font-weight =='n', normal,
+                        $font-weight));
 }
 
 @mixin hcenter($position) {

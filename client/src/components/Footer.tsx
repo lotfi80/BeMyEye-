@@ -7,7 +7,7 @@ function Footer() {
       {/* Footer-Inhalt hier */}
 
       <div className="container mx-auto text-center pt-10">
-        <div className="flex justify-center p-2 text-zinc-500 pb-7">
+        {/* <div className="flex justify-center p-2 text-zinc-500 pb-7">
           <Link className="mx-2" to="/">
             Impressum
           </Link>
@@ -29,7 +29,7 @@ function Footer() {
           <Link className="mx-2" to="/">
             Service
           </Link>
-        </div>
+        </div> */}
         <div className="flex justify-center space-x-6">
           {/* Facebook */}
           <a

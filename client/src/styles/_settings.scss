@@ -4,11 +4,29 @@
 
 @font-face {
       font-family: 'Roboto';
-      src: url('/src/assets/fonts/Roboto-Regular.ttf'),
-            url('/src/assets/fonts/Roboto-Bold.'),
-            url('/src/assets/fonts/Roboto-Light.'),
-            url('/src/assets/fonts/Roboto-Medium.');
+      src: url('/src/assets/fonts/Roboto-Light.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+}
+
+@font-face {
+      font-family: 'Roboto';
+      src: url('/src/assets/fonts/Roboto-Regular.ttf') format('truetype');
       font-weight: 400;
+      font-style: normal;
+}
+
+@font-face {
+      font-family: 'Roboto';
+      src: url('/src/assets/fonts/Roboto-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+}
+
+@font-face {
+      font-family: 'Roboto';
+      src: url('/src/assets/fonts/Roboto-Bold.ttf') format('truetype');
+      font-weight: 700;
       font-style: normal;
 }
 
@@ -17,9 +35,6 @@
       padding: 0;
       border: 0;
       box-sizing: border-box;
-
-      font-family: 'Roboto', sans-serif;
-      // font-size: 62.5%;
 }
 
 a,
@@ -38,25 +53,23 @@ button {
 
 textarea,
 input,
-input:active,
-input:focus,
+// input:active,
+// input:focus,
 select:active,
 select:focus,
 button {
       outline: none;
-
       padding: 0.5rem;
       padding-left: 1rem;
-
       border: none;
       border-radius: 1rem;
-
 }
 
-a:hover,
+// a:hover,
 button:hover,
-select:hover,
-label:hover {
+select:hover // label:hover 
+
+      {
       cursor: pointer;
       scale: 1.05;
 }

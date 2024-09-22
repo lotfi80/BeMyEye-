@@ -1,0 +1,41 @@
+@import '../../variables.scss';
+@import '../../mixins.scss';
+@import '../../_settings.scss';
+
+header {
+
+      @include size(100%, 5rem, $background_tertiary);
+      @include font(12px, $fontColor_primary, 500);
+
+      padding-left: 1rem;
+      padding-right: 1rem;
+
+      @media (min-width: $tablet) {
+            padding-left: 3rem;
+            padding-right: 3rem;
+      }
+}
+
+header nav {
+      @include size(100%, 100%);
+      @include flex-row(0.5rem, end, center);
+
+      @media (min-width: $tablet) {
+            @include flex-row(1rem, space-between, center);
+      }
+}
+
+@import './logo.scss';
+@import '../burger.scss';
+@import './accountButton.scss';
+
+@import './PostUserGroup.scss';
+@import './notify.scss';
+@import './notification.scss';
+@import './LoginBlock.scss';
+@import '../permissionModal.scss';
+@import './DialogPanelMobile.scss';
+
+@import '../GetUsers/getUsersWindow.scss';
+@import '../Table/TableView.scss';
+@import '../writeMessage.scss';

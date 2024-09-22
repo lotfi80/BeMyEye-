@@ -1,0 +1,10 @@
+@import "../popover.scss";
+
+.popover-group-left {
+      display: none;
+
+      @media (min-width: $tablet) {
+            @include flex-row(1rem, center, center);
+            margin-left: auto;
+      }
+}

@@ -1,6 +1,6 @@
-@import '../variables.scss';
-@import '../mixins.scss';
-@import '../_settings.scss';
+@import '../../variables.scss';
+@import '../../mixins.scss';
+@import '../../_settings.scss';
 
 .account-panel {
       @include flex-row(2rem, space-evenly, center);
@@ -37,4 +37,10 @@
       @include flex-col(1rem, center, start);
       @include size(100%, 100%);
       padding-left: 1rem;
+}
+
+.logoutDeleteGroup {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-content: start;
 }

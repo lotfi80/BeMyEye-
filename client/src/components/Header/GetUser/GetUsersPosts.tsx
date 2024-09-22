@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import TableHeadCell from "../Table/TableHeadCell";
-import { Button } from "../Table/Button";
 import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
 import IUser from "../../../interfaces/User";
 import { IPost } from "../../../interfaces/Post";
+import { Button } from "../Table/Button";
 
 interface TableProps {
   posts: IPost[];
@@ -35,7 +35,7 @@ const GetUsersPost: React.FC<TableProps> = ({
   }
 
   return (
-    <div className="relative p-4">
+    <div className=".positionContainer">
       <div
         className="absolute top-5 left-5 z-10"
         onClick={() => {
@@ -46,7 +46,7 @@ const GetUsersPost: React.FC<TableProps> = ({
           }
         }}
       >
-        {/* <Button text="Back" /> */}
+        <Button text="Back" />
       </div>
 
       <div className="table-container overflow-x-auto">
@@ -83,7 +83,10 @@ const GetUsersPost: React.FC<TableProps> = ({
                   {isMyPost && (
                     <td className="p-4 flex space-x-2">
                       <EditButton postId={post._id} />
-                      <DeleteButton postId={post._id} deletePost={handleDelete}/>
+                      <DeleteButton
+                        postId={post._id}
+                        deletePost={handleDelete}
+                      />
                     </td>
                   )}
                 </tr>

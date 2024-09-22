@@ -1,8 +1,12 @@
-$colorBlue-primery: #38b5ff;
+$colorBlue-primary: #38b5ff;
 $colorBlue-secondary: #2781b5;
+$colorBlue-third: #214256;
 
-$colorOrange-primery: #fcaf45;
+$colorOrange-primary: #fcaf45;
 $colorOrange-secondary: #fed7aa;
+$colorOrange-tertiary: #e37e03;
+$colorOrange-third: #976116;
+
 
 
 $background_primary: #f8f9f9;
@@ -19,3 +23,7 @@ $shadowColor_secondary: rgba(0, 0, 0, 0.08);
 $mobile: 480px;
 $tablet: 768px;
 $desktop: 1024px;
+
+$testBorder1: 1px solid red;
+$testBorder2: 1px solid blue;
+$testBorder3: 1px solid green;
