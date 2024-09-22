@@ -46,35 +46,33 @@ const UserCard: React.FC<UserCardProps> = ({
   }
   return (
     <td colSpan={8} className="userCardWrapper ">
-      <div className="userCard">
-        <div className="left">
-          <img src={`${userImage(user)}`} alt="avatar" />
-          {isFollowed || (
-            <div
-              className="button follow"
-              onClick={() => {
-                handleButtonFollow(accountOwner, user);
-                setIsFollowed(true);
-              }}
-            >
-              <Button text="Follow"></Button>
-            </div>
-          )}
-          {isFollowed && (
-            <div
-              className="button followed"
-              onClick={() => {
-                handleButtonUnFollow(accountOwner, user);
-                setIsFollowed(false);
-              }}
-            >
-              <Button text="Followed!"></Button>
-            </div>
-          )}
-        </div>
+      <div className={`userCard ${letterVisible ? "letterVisible" : ""}`}>
+        <img src={`${userImage(user)}`} alt="avatar" />
+        {isFollowed || (
+          <div
+            className="button follow"
+            onClick={() => {
+              handleButtonFollow(accountOwner, user);
+              setIsFollowed(true);
+            }}
+          >
+            <Button text="Follow"></Button>
+          </div>
+        )}
+        {isFollowed && (
+          <div
+            className="button followed"
+            onClick={() => {
+              handleButtonUnFollow(accountOwner, user);
+              setIsFollowed(false);
+            }}
+          >
+            <Button text="Followed!"></Button>
+          </div>
+        )}
 
         {letterVisible || (
-          <div className="right">
+          <>
             <p className="name">{user.username}</p>
             <p className="address">
               {user.privacy.city ? user.city : ""},{" "}
@@ -94,22 +92,23 @@ const UserCard: React.FC<UserCardProps> = ({
 
             <div className="twoButtons">
               <div
-                className="button"
+                className="button view"
                 onClick={() => handleButtonViewPosts(user)}
               >
                 <Button text="View Posts"></Button>
               </div>
               <div
-                className="button"
+                className="button send"
                 onClick={() => handleButtonSendMessage(user)}
               >
                 <Button text="Send Message"></Button>
               </div>
             </div>
-          </div>
+          </>
         )}
         {letterVisible && (
           <div
+            className="letter"
             onClick={(e) => {
               setIsZoomed(null);
             }}
