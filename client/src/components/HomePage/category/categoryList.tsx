@@ -62,7 +62,7 @@ const CategoryList: React.FC = () => {
   //   </div>
   // );
   return (
-    <div className="flex flex-col  p-4 sticky top-5 z-10 rounded-lg border-2 border-solid border-[#fcaf45]">
+    <div className="flex flex-col  p-4 sticky top-5 z--1000 rounded-lg border-2 border-solid border-[#fcaf45]">
       {loading && <p className="text-center text-gray-600">Loading...</p>}
       <div className="flex flex-wrap gap-5 justify-center">
         {categories.map((category) => (

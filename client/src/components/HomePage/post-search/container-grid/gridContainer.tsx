@@ -122,6 +122,13 @@ const GridContainer: React.FC = () => {
     }
   };
 
+  const userImage = (user: any): string => {
+    const userImage = user?.profileimage?.includes("http")
+      ? user?.profileimage
+      : `http://localhost:5000/${user?.profileimage}`;
+    return userImage;
+  }
+
   return (
     <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-2 border-solid border-[#fcaf45]">
       <div className="grid grid-cols-1  gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -169,7 +176,8 @@ const GridContainer: React.FC = () => {
               <div className="flex items-center mt-3 space-x-3">
                 {post.userid.profileimage && (
                   <img
-                    src={`http://localhost:5000/${post.userid.profileimage}`}
+                    src={`${userImage(post.userid)}`}
+                    // src={`http://localhost:5000/${post.userid.profileimage}`}
                     alt={`${post.userid.username || "User"} Profilbild`}
                     className="w-10 h-10 object-cover rounded-full"
                   />
