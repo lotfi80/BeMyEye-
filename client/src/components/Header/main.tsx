@@ -12,6 +12,7 @@ import UsersButton from "./UsersButton";
 import LoginBlock from "./LoginBlock";
 import MyDialogPanel from "./MyDialogPanel";
 import Burger from "../Burger";
+import { useMediaQuery } from "react-responsive";
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,6 +33,7 @@ const Header: React.FC = () => {
     const checked = e.target.checked;
     setMobileMenuOpen(e.target.checked);
   };
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   return (
     <header>
@@ -40,10 +42,12 @@ const Header: React.FC = () => {
           <img alt="" src="/logoneu.png" width="100px" />
         </Link>
 
-        <Burger
-          handleOnBurgerClick={handleOnBurgerClick}
-          isOpen={mobileMenuOpen}
-        />
+        {isMobile && (
+          <Burger
+            handleOnBurgerClick={handleOnBurgerClick}
+            isOpen={mobileMenuOpen}
+          />
+        )}
 
         <PopoverGroup className="popover-group-left">
           <PostButton

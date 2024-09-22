@@ -4,7 +4,6 @@ import CloseButton from "../../MyCloseButton";
 import Blind from "../../Blind";
 import { getFollow_, deleteFollower } from "../../../http/api";
 import IUser from "../../../interfaces/User";
-import "./following.css";
 
 const Following: React.FC = () => {
   const { user: accountOwner, setUser } = useCategoryUserContext();
@@ -99,14 +98,14 @@ const Following: React.FC = () => {
       {followingVisible && (
         <>
           <Blind />
-          <div className="fixed mr-0 top-0 right-0 w-full h-full flex justify-center items-center z-50">
+          <div className="followingContainer">
             <div className="window">
               <CloseButton
                 setFunction={() => {
                   setFollowingVisible(false);
                 }}
               />
-              <h1 className="text-lg font-bold pl-0 ml-0">Following</h1>
+              <h1>Following</h1>
               <hr />
               <div className="card">
                 {accountOwner?.following.map((follow, index) => {

@@ -76,7 +76,7 @@
 // ***************************************
 // successMessage
 // ***************************************
-.card {
+.successcard {
   @include position(absolute, 0, 30%, n, n);
   @include size(100%, 9rem, $background_secondary);
   border: 4px solid $colorOrange-primary;

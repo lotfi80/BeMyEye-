@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const SuccessNote = () => {
   return (
-    <div className="card">
+    <div className="successcard">
       <svg
         className="wave"
         viewBox="0 0 1440 320"
