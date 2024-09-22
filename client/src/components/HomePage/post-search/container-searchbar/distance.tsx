@@ -12,73 +12,7 @@ const DistanceList: React.FC = () => {
   };
 
   return (
-    // <div className="flex flex-col items-center gap-4 h-full w-full p-4">
-    //   <label htmlFor="distance-slider" className="text-lg font-medium mb-2">
-    //     Distanz: <span className="text-orange-700">{distance}</span>  km
-    //   </label>
-    //   <div className=" w-3/4 md:w-1/2 lg:w-2/3">
-    //     <input
-    //       id="distance-slider"
-    //       type="range"
-    //       min="5"
-    //       max="20"
-    //       step="5"
-    //       value={distance}
-    //       onChange={handleSliderChange}
-    //       className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer shadow-md"
-    //       style={{
-    //         background: `linear-gradient(to right, #2781b5 ${
-    //           ((distance - 5) / 15) * 100
-    //         }%, #e2e8f0 ${((distance - 5) / 15) * 100}%)`,
-    //       }}
-    //     />
-    //     <div
-    //       className="absolute -top-2 transform -translate-y-1/2 bg-blue-500 w-7 h-7 rounded-full shadow-xl"
-    //       style={{ left: `calc(${((distance - 5) / 15) * 100}% - 12px)` }}
-    //     />
-    //   </div>
-    //   <div className="flex justify-between w-3/4 md:w-1/2 lg:w-2/3 text-sm #2781b5 mt-2">
-    //     <span>5 km</span>
-    //     <span>10 km</span>
-    //     <span>15 km</span>
-    //     <span>20 km</span>
-    //   </div>
-    // </div>
 
-
-
-
-
-//     <div className="flex flex-col items-center gap-4 h-full w-full p-4">
-//   <label htmlFor="distance-slider" className="text-lg font-medium mb-2">
-//     Distanz: <span className="text-orange-700">{distance}</span> km
-//   </label>
-//   <div className="relative w-3/4 md:w-1/2 lg:w-2/3">
-//     <input
-//       id="distance-slider"
-//       type="range"
-//       min="5"
-//       max="20"
-//       step="5"
-//       value={distance}
-//       onChange={handleSliderChange}
-//       className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer shadow-md"
-//       style={{
-//         background: `linear-gradient(to right, #2781b5 ${((distance - 5) / 15) * 100}%, #e2e8f0 ${((distance - 5) / 15) * 100}%)`,
-//       }}
-//     />
-//     <div
-//       className="absolute  transform -translate-y-1/2 w-7 h-7 rounded-full shadow-xl"
-//       style={{ left: `calc(${((distance - 5) / 15) * 100}% - 12px)` }}
-//     />
-//   </div>
-//   <div className="flex justify-between w-3/4 md:w-1/2 lg:w-2/3 text-sm text-gray-700 mt-2">
-//     <span>5 km</span>
-//     <span>10 km</span>
-//     <span>15 km</span>
-//     <span>20 km</span>
-//   </div>
-// </div>
 
 <div className="flex flex-col items-center gap-4 h-full w-full p-4">
 <label htmlFor="distance-slider" className="text-lg font-medium mb-2">
@@ -99,7 +33,7 @@ const DistanceList: React.FC = () => {
     }}
   />
   <div
-  className="absolute -top-0 transform -translate-y-1/2 w-12 h-7 rounded-full shadow-xl "
+  className="absolute bg-[#214256] -bottom-2.5 -left-5 transform -translate-y-2 -translate-x-2 w-10 h-7 rounded-full shadow-xl "
   style={{ left: `calc(${((distance - 10) / 40) * 100}% - 2px)` }}
 />
 

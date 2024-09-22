@@ -123,7 +123,7 @@ const GridContainer: React.FC = () => {
   };
 
   return (
-    <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-4 border-solid border-[#fcaf45]">
+    <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-2 border-solid border-[#fcaf45]">
       <div className="grid grid-cols-1  gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <div
@@ -226,27 +226,6 @@ const GridContainer: React.FC = () => {
         ))}
       </div>
 
-      {/* <div className="flex justify-center p-4">
-        <button
-          onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Previous
-        </button>
-        <span className="mx-4 text-sm text-gray-700">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() =>
-            setPage((prevPage) => Math.min(prevPage + 1, totalPages))
-          }
-          disabled={page === totalPages}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Next
-        </button>
-      </div> */}
       <div className="flex justify-center p-8">
         <button
           onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}

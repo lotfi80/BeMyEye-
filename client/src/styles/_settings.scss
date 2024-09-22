@@ -128,20 +128,22 @@ width: 200px;
       transition: background-color 0.3s, color 0.3s; 
     
       &.selected {
-        background-color: $colorOrange-secondary; 
-        color: black; 
-        box-shadow: 0 0 0.5rem 0.1rem $colorOrange-secondary;
+        background-color: $colorOrange-primery; 
+        color: $colorBlue-third; 
+        box-shadow: 0 0 0.5rem 0.1rem $colorOrange-third;
       }
     
       &.default {
         // background-color:$colorOrange-primery; 
         // color: black;
         background-color:white;
-        color: black;
+        color: $colorBlue-third;
     
         &:hover {
           background-color:$colorOrange-third ; 
           color: white; 
         }
                }
+               box-shadow: 0 0 0.5rem 0.1rem $colorOrange-primery;
+
     }

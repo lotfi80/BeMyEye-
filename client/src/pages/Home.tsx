@@ -24,11 +24,16 @@ export const Home: React.FC = () => {
       </div>
 
       <div className="hidden lg:flex w-full ">
-        <div className="w-[30%] p-4 bg-gray-200  rounded-lg border-4 border-solid border-[#214256] mr-1">
+         {/* mit border */}
+        {/* <div className="w-[30%] p-4 bg-gray-200  rounded-lg border-2 border-solid border-[#214256] mr-1"> */}
+ {/* ohne border */}
+        <div className="w-[30%] p-4 bg-gray-200   mr-1">
           <Category />
         </div>
-
-        <div className="w-[70%] p-4  rounded-lg border-4 border-solid border-[#214256]">
+       {/* mit border */}
+        {/* <div className="w-[70%] p-4  rounded-lg border-2 border-solid border-[#214256]"> */}
+ {/* ohne border */}
+        <div className="w-[70%] p-4 ">
           <Container />
         </div>
       </div>
