@@ -29,6 +29,7 @@ postRouter.get("/", getFilteredPosts);
 postRouter.post("/comment/create", createComment);
 postRouter.get("/comment/get", getComments);
 postRouter.put("/comment/update/:id", updateComment);
+postRouter.delete("/comment/delete/:id", deleteComment);
 postRouter.get("/:id/like", getLikesByPOst);
 postRouter.post("/like", togglePostLike);
 postRouter.delete("/:postId", deletePost);
