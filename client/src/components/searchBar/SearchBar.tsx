@@ -19,10 +19,10 @@ const SearchBar: React.FC<props> = ({
   onKeyDown,
 }) => {
   return (
-    <div className="absolute left-5 top-3" style={{ width: "30%" }}>
-      <form className="form relative ">
+    <div className="searchBarContainer">
+      <form className="form">
         <button
-          className="absolute left-5 -translate-y-1/3 top-1/2 pl-5 "
+          className="zoomIcon"
           onClick={(e) => {
             e.preventDefault();
             setIsSearchActive(true);
@@ -30,8 +30,6 @@ const SearchBar: React.FC<props> = ({
           }}
         >
           <svg
-            width="17"
-            height="16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             role="img"
@@ -48,10 +46,7 @@ const SearchBar: React.FC<props> = ({
           </svg>
         </button>
         <input
-          className="rounded-2 pl-5  border-2 border-transparent ml-10
-          focus:outline-none focus:border-blue-500
-           placeholder-gray-400 transition-all duration-300 shadow-md "
-          style={{ width: "100%" }}
+          className="shadow-md input"
           placeholder="Search..."
           required
           type="text"
@@ -61,7 +56,7 @@ const SearchBar: React.FC<props> = ({
         />
         <button
           type="reset"
-          className="absolute left-full -translate-y-1/2 top-1/2 p-1"
+          className="closeIcon"
           onClick={(e) => {
             e.preventDefault();
             setInputValues("");

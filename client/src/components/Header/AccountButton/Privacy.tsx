@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCategoryUserContext } from "../../../context/CategoryUser";
-import { IUser } from "../../../interfaces/User";
+import IUser from "../../../interfaces/User";
 import { getUserDataByID, userInContextUpdateRequest } from "../../../http/api";
 
 interface props {

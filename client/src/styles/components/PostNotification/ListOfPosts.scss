@@ -1,0 +1,61 @@
+@import "../../variables.scss";
+@import "../../mixins.scss";
+@import "../../_settings.scss";
+
+.notifyPostContainer {
+      @include position(fixed, 0, 0, 0, 0);
+      @include flex(0, center, center);
+      z-index: 50;
+}
+
+.notifyPostCard {
+      @include size(100%, 80vh, $background_tertiary);
+      @include position(absolute, 0, 20, 0, n);
+      z-index: 60;
+      padding: 2.5rem;
+      overflow-y: auto;
+
+
+      @media(min-width: $tablet) {
+            @include size(50%, 66%, $background_tertiary);
+            @include position(absolute, 25%, 20, n, n);
+      }
+
+}
+
+.notifyPostCard ul {
+      @include flex-col(2.5rem, start, start);
+      margin-top: 2rem;
+      width: 100%;
+}
+
+.notifyPostCard li {
+      @include flex-row(1rem, space-between, start);
+      width: 100%;
+}
+
+.notifyPostCard li img {
+      width: 6rem;
+      height: auto;
+      object-fit: contain;
+}
+
+.notifyPostCard .rightPanel {
+      @include flex-col(1rem, start, start);
+      width: 100%;
+}
+
+.rightPanel div {
+      @include flex-row(n, space-between, end);
+      width: 100%;
+}
+
+.rightPanel div span:first-child {
+      text-decoration: underline;
+      text-decoration-color: $colorOrange-primary;
+      text-underline-offset: 0.2rem;
+}
+
+div.readed li {
+      background-color: $colorBlue-fourth;
+}

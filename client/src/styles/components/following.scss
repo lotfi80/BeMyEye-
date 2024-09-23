@@ -1,22 +1,42 @@
+@import '../variables.scss';
+@import '../mixins.scss';
+@import '../_settings.scss';
+
+.followingContainer {
+  @include position(fixed, 0, 0, 0, 0);
+  @include flex-row(0, center, center);
+  z-index: 50;
+}
+
 .window {
   position: relative;
-  width: 25%;
-  height: 70%;
-  background-color: white;
+  @include size(100%, 80%, $background_tertiary);
+
   z-index: 55;
   border: solid 2px green;
   border-radius: 5px;
   padding: 2rem;
   text-align: left;
   overflow: auto;
+
+  @media(min-width: $tablet) {
+    @include size(50%, 70%, $background_tertiary);
+  }
+
+  @media(min-width: "1100px") {
+    @include size(25%, 70%, $background_tertiary);
+  }
 }
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+
+.window h1 {
+  @include font(1rem, $fontColor_primary, 500);
+}
+
+.window .card {
+  @include flex-col(2rem, left, center);
   margin-top: 1rem;
-  justify-content: left;
 }
+
 .follow {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -44,6 +64,7 @@
   font-weight: bold;
   margin: 0;
 }
+
 .follow p {
   grid-area: name;
   font-size: 1rem;
@@ -88,7 +109,7 @@ hr {
   transition: all 0.5s;
 }
 
-.container input:checked ~ .checkmark {
+.container input:checked~.checkmark {
   border: 2px solid #080;
 }
 
@@ -100,10 +121,11 @@ hr {
 }
 
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+.container input:checked~.checkmark:after {
   display: block;
 }
-.container input:not(:checked) ~ .checkmark:after {
+
+.container input:not(:checked)~.checkmark:after {
   background-color: white;
   border-color: #080;
 }
@@ -120,10 +142,11 @@ hr {
   transition: all 0.5s;
 }
 
-.container input:not(:checked) ~ .checkmark {
+.container input:not(:checked)~.checkmark {
   background-color: white;
   border-color: #080;
 }
+
 .tooltip {
   visibility: hidden;
   width: 120px;
@@ -141,6 +164,7 @@ hr {
   opacity: 0;
   transition: opacity 0.3s;
 }
+
 .container:hover .tooltip {
   visibility: visible;
   opacity: 1;

@@ -1,0 +1,155 @@
+@import "../../variables.scss";
+@import "../../mixins.scss";
+@import "../../_settings.scss";
+
+.userCardWrapper {
+  padding: 0.5rem;
+  @include size(100%, auto, $background_secondary);
+
+  @media (min-width: $tablet) {
+    padding: 1rem;
+  }
+}
+
+.userCard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr 1fr 3fr 1fr;
+  grid-template-areas:
+    "image name"
+    "image city"
+    "image data"
+    "button twoButtons";
+  column-gap: 1rem;
+  @include font(0.8em, $fontColor_primary, 400);
+
+  @media(min-width: $tablet) {
+    @include font(1em, $fontColor_primary, 400);
+    column-gap: 2rem;
+  }
+
+  &.letterVisible {
+    grid-template-areas:
+      "image letter"
+      "image letter"
+      "image letter"
+      "button letter";
+  }
+}
+
+$userCard-grid-area: (
+  "img": image,
+  ".button.follow": button,
+  ".button.followed":button,
+
+  ".name": name,
+  ".address": city,
+  ".data": data,
+  ".twoButtons": twoButtons,
+
+  ".letter":letter
+);
+
+@include grid-area($userCard-grid-area);
+
+.userCard img {
+  width: 80%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  align-self: start;
+  justify-self: center;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+
+  @media(min-width: $tablet) {
+    place-self: center;
+  }
+}
+
+div.button.follow {
+  background-color: white;
+  color: $colorBlue-secondary;
+}
+
+
+
+div.button {
+  @include size(80%, 1.5rem, $colorBlue-primary);
+  @include flex(0, center, center);
+  @include font(0.8rem, white, 700);
+  border: none;
+  justify-self: center;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $colorBlue-third;
+  }
+
+  @media(min-width: $tablet) {
+    @include size(80%, 2rem, $colorBlue-primary);
+    @include font(1rem, white, 700);
+
+  }
+}
+
+/* ------------------- */
+
+.userCard .name {
+  justify-self: center;
+  @include font(1.5rem, $fontColor_primary, 700);
+  line-height: 1.5rem;
+  margin-top: 0.5rem;
+
+  border-bottom: 3px solid $colorOrange-primary;
+
+  @media(min-width: $tablet) {
+    font-size: 2rem;
+    line-height: 2rem;
+  }
+}
+
+.userCard .address {
+  justify-self: center;
+  font-size: 0.8rem;
+
+  @media(min-width: $tablet) {
+    font-size: 1rem;
+  }
+}
+
+.userCard .data {
+  justify-self: center;
+  align-self: start;
+  font-size: 0.8rem;
+
+  @media(min-width: $tablet) {
+    justify-self: left;
+    font-size: 1rem;
+  }
+}
+
+
+
+div.twoButtons {
+  width: 100%;
+  @include flex-row(0, space-around, top);
+
+}
+
+.twoButtons .button {
+  width: 45%;
+  height: 2rem;
+
+  @media(min-width: $tablet) {
+    width: 40%;
+  }
+}
+
+// ****************************************************
+.cntner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

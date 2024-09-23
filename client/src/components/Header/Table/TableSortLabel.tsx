@@ -15,15 +15,7 @@ export const TableSortLabel: React.FC<TableSortLabelProps> = ({
 }) => {
   // const sortIndicator = active ? `Sort direction: ${direction}` : "";
   return (
-    <span
-      onClick={createSortHandler}
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
-    >
+    <span className="table-sort-label" onClick={createSortHandler}>
       {children}
     </span>
   );

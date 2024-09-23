@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import TableHeadCell from "../Table/TableHeadCell";
-import { Button } from "../Table/Button";
 import { DeleteButton } from "../AccountButton/GetMyPosts/DeleteButton";
 import { EditButton } from "../AccountButton/GetMyPosts/EditButton";
 import IUser from "../../../interfaces/User";
 import { IPost } from "../../../interfaces/Post";
+import { Button } from "../Table/Button";
+import { useMediaQuery } from "react-responsive";
 
 interface TableProps {
   posts: IPost[];
@@ -33,9 +34,10 @@ const GetUsersPost: React.FC<TableProps> = ({
     const date = new Date(dateString);
     return date.toLocaleDateString("de-DE");
   }
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   return (
-    <div className="relative p-4">
+    <div className=".positionContainer">
       <div
         className="absolute top-5 left-5 z-10"
         onClick={() => {
@@ -46,45 +48,102 @@ const GetUsersPost: React.FC<TableProps> = ({
           }
         }}
       >
-        {/* <Button text="Back" /> */}
+        <Button text="Back" />
       </div>
 
       <div className="table-container overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-300 bg-white rounded-lg shadow-md">
+        <table className="getUsersPost rounded-lg shadow-md">
           <thead className="bg-gray-100">
-            <tr>
-              <TableHeadCell>Post Title</TableHeadCell>
-              <TableHeadCell>Image</TableHeadCell>
-              <TableHeadCell>Description</TableHeadCell>
-              <TableHeadCell>Post Date</TableHeadCell>
-              {isMyPost && <TableHeadCell>Actions</TableHeadCell>}
-            </tr>
+            {isMobile && (
+              <tr>
+                <TableHeadCell>Post Title</TableHeadCell>
+                <TableHeadCell>Description</TableHeadCell>
+                <TableHeadCell>Post Date</TableHeadCell>
+              </tr>
+            )}
+            {!isMobile && (
+              <tr>
+                <TableHeadCell>Post Title</TableHeadCell>
+                <TableHeadCell>Image</TableHeadCell>
+                <TableHeadCell>Description</TableHeadCell>
+                <TableHeadCell>Post Date</TableHeadCell>
+                {isMyPost && <TableHeadCell>Actions</TableHeadCell>}
+              </tr>
+            )}
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody>
             {posts ? (
               posts.map((post) => (
-                <tr key={post._id} className="hover:bg-gray-100">
-                  <td className="p-4 text-gray-800 text-lg">{post.title}</td>
-                  <td className="p-4">
-                    <img
-                      src={
-                        post.postimage[0]?.image.includes("http")
-                          ? post.postimage[0]?.image
-                          : `http://localhost:5000/${post.postimage[0]?.image}`
-                      }
-                      alt="postimage"
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  </td>
+                <tr key={post._id}>
+                  {isMobile && (
+                    <>
+                      <td className="mobile">
+                        {post.title}
+                        <img
+                          src={
+                            post.postimage[0]?.image.includes("http")
+                              ? post.postimage[0]?.image
+                              : `http://localhost:5000/${post.postimage[0]?.image}`
+                          }
+                          alt="postimage"
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!isMobile && (
+                    <>
+                      <td>{post.title}</td>
+                      <td>
+                        <img
+                          src={
+                            post.postimage[0]?.image.includes("http")
+                              ? post.postimage[0]?.image
+                              : `http://localhost:5000/${post.postimage[0]?.image}`
+                          }
+                          alt="postimage"
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </td>
+                    </>
+                  )}
+
                   <td className="p-4 max-w-xs overflow-hidden text-ellipsis text-lg">
                     {post.description}
                   </td>
-                  <td className="p-4 text-lg">{formatDate(post.postDate)}</td>
-                  {isMyPost && (
-                    <td className="p-4 flex space-x-2">
-                      <EditButton postId={post._id} />
-                      <DeleteButton postId={post._id} deletePost={handleDelete}/>
-                    </td>
+
+                  {isMobile && (
+                    <>
+                      <td className=" text-md">
+                        {formatDate(post.postDate)}
+                        {isMyPost && (
+                          <td className="flex-row justify-start gap-2">
+                            <EditButton postId={post._id} />
+                            <DeleteButton
+                              postId={post._id}
+                              deletePost={handleDelete}
+                            />
+                          </td>
+                        )}
+                      </td>
+                    </>
+                  )}
+
+                  {!isMobile && (
+                    <>
+                      <td className="p-4 text-lg">
+                        {formatDate(post.postDate)}
+                      </td>
+                      {isMyPost && (
+                        <td className="p-4 flex space-x-2">
+                          <EditButton postId={post._id} />
+                          <DeleteButton
+                            postId={post._id}
+                            deletePost={handleDelete}
+                          />
+                        </td>
+                      )}
+                    </>
                   )}
                 </tr>
               ))

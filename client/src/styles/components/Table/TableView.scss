@@ -1,0 +1,52 @@
+@import './UserCard.scss';
+
+table {
+      min-width: 100%;
+}
+
+table thead {
+      @include size(100%, 2rem, $background_secondary);
+
+}
+
+table thead th {
+      @include font(0.6em, $fontColor_primary, 500);
+      text-transform: uppercase;
+      border-bottom: 1px solid $fontColor_primary;
+
+      @media(min-width: $tablet) {
+            @include font(0.8em, $fontColor_primary, 500);
+      }
+
+      @media(min-width: $desktop) {
+            @include font(1em, $fontColor_primary, 500);
+      }
+}
+
+.table-sort-label {
+      @include flex-row(0, start, center);
+      cursor: pointer;
+}
+
+tbody {
+      @include size(100%, auto, $background_tertiary);
+}
+
+tbody tr {
+      @include size(100%, 2rem, inherit);
+
+      &:hover {
+            background-color: $background_secondary;
+      }
+}
+
+tbody td {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+}
+
+tbody tr {
+      &:nth-child(3) {
+            display: none;
+      }
+}

@@ -14,6 +14,7 @@ const GetUsersWindow: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   const [posts, setPosts] = useState<any[]>([]);
   const [isZoomed, setIsZoomed] = useState<string | null>(null);
+
   const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
   const [writeInSearchBarResults, setWriteInSearchBarResults] = useState<
     string[] | null
@@ -74,7 +75,7 @@ const GetUsersWindow: React.FC = () => {
   };
 
   return (
-    <div className="p-2 pt-10 text-xs">
+    <div className="getUsersWindow">
       <>
         <Search
           setIsSearchActive={setIsSearchActive}
@@ -102,7 +103,6 @@ const GetUsersWindow: React.FC = () => {
       </>
 
       {postsVisible && (
-        
         <GetUsersPosts
           posts={posts}
           postsVisible={postsVisible}

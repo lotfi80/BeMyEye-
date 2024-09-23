@@ -1,0 +1,181 @@
+@import "../../variables.scss";
+@import "../../mixins.scss";
+@import "../../_settings.scss";
+
+.inbox-btn {
+      position: relative;
+}
+
+.notifyPostCard.msg {
+      @include size(100%, 80vh, $background_tertiary);
+      @include position(absolute, 0, 20, 0, n);
+      z-index: 60;
+      padding: 2.5rem;
+      padding-top: 4rem;
+      overflow-y: auto;
+
+
+      @media(min-width: $tablet) {
+            @include size(50%, 66%, $background_tertiary);
+            @include position(absolute, 25%, 20, n, n);
+      }
+
+}
+
+.notifyPostCard.msg ul {
+      @include flex-col(0.5rem, start, start);
+      margin-top: 0.5rem;
+      width: 100%;
+}
+
+.liLI {
+      display: grid;
+      grid-template-columns: 1fr 5fr 2fr;
+      grid-template-rows: 1fr 1fr;
+      align-items: start;
+      justify-items: start;
+      grid-template-areas:
+            "img subject date"
+            "img username checkbox";
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid $colorBlue-third;
+      column-gap: 10px;
+      width: 100%;
+}
+
+.liLI img {
+      grid-area: img;
+      width: 50%;
+      height: auto;
+}
+
+.liLI span:nth-child(2) {
+      grid-area: username;
+}
+
+.liLI span:nth-child(3) {
+      grid-area: subject;
+      font-size: 1.2em;
+      line-height: 1em;
+      color: $colorOrange-tertiary;
+}
+
+.liLI span:nth-child(4) {
+      grid-area: date;
+}
+
+.liLI .messageListCheckbox {
+      grid-area: checkbox;
+      width: 15px;
+      height: 15px;
+      justify-self: start;
+      align-self: start;
+}
+
+.popup {
+      display: block;
+      position: relative;
+      float: right;
+      margin-bottom: 10px;
+
+      &input {
+            display: none;
+      }
+}
+
+
+
+.burger {
+      position: relative;
+      @include flex(0, center, center);
+      @include size(2em, 2.2em, $background_tertiary);
+
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.1s ease-in-out;
+      outline: none;
+}
+
+.burger span {
+      @include size(1.5em, 0.1em, $colorBlue-secondary);
+
+
+      position: absolute;
+      transition: 0.3s;
+}
+
+.burger span:nth-child(1) {
+      top: 0.6em;
+}
+
+.burger span:nth-child(2) {
+      bottom: 0.6em;
+}
+
+.burger span:nth-child(3) {
+      top: 50%;
+      transform: translateY(-50%);
+}
+
+.popup-window {
+      transform: scale(0.5);
+      visibility: hidden;
+      @include position(absolute, -100px, 3em, n, n);
+      @include size (auto, auto, $background_tertiary);
+      padding: 1em;
+      border-radius: 0.4em;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+
+      transition: all 0.1s ease-in-out;
+      @include flex-col(0.5em, start, start);
+}
+
+.popup-window legend {
+      color: gray;
+      font-size: 0.6em;
+      text-transform: uppercase;
+
+}
+
+.popup-window ul button {
+      @include size(100%, 2em, transparent);
+      @include font(0.8em, #515151, 500);
+      margin-bottom: 15px;
+      padding: 5px 5px;
+      white-space: nowrap;
+      cursor: pointer;
+}
+
+.popup-window ul button:hover {
+      color: white;
+      background: $colorBlue-secondary;
+}
+
+.burger:hover {
+      transform: scale(1.1);
+}
+
+.burger:active {
+      transform: scale(0.9);
+}
+
+.popup input:checked+.burger span:nth-child(1) {
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+}
+
+.popup input:checked+.burger span:nth-child(2) {
+      bottom: 50%;
+      transform: translateY(50%) rotate(-45deg);
+}
+
+.popup input:checked+.burger span:nth-child(3) {
+      opacity: 0;
+}
+
+.popup input:checked~nav {
+      transform: scale(1);
+      visibility: visible;
+      opacity: 1;
+}

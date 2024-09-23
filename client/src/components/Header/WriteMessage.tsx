@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./writeMessage.css";
 import { useCategoryUserContext } from "../../context/CategoryUser";
 import { attachmentUpload, getUsersByField, sendMessage } from "../../http/api";
 import IUser from "../../interfaces/User";
@@ -96,7 +95,6 @@ const WriteMessage: React.FC<props> = ({
       }
     } catch (err) {
       console.log(err);
-      console.log({ recipients, subject, message });
     }
   };
 

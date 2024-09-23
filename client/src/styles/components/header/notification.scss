@@ -1,0 +1,106 @@
+.notification {
+      @include size(2.5em, 2.5em, transparent);
+      cursor: pointer;
+      top: 0;
+      transition: 300ms;
+      position: relative;
+      @include flex-row(0, center, center);
+
+}
+
+.notification::before {
+      content: attr(data-count);
+      @include font(0.8em, white, bold);
+      @include size(1.5em, 1.5em, $colorOrange-tertiary);
+      border-radius: 50%;
+      @include position(absolute, n, 0, 0, n);
+      @include flex(0, center, center);
+      z-index: 2;
+}
+
+
+.bell {
+      border: 2.5px solid $colorBlue-primary;
+      border-radius: 1em 1em 0 0;
+      @include size(1em, 1.2em, transparent);
+
+      display: block;
+      @include hvcenter(absolute);
+
+      @media (min-width: $tablet) {
+            @include size(12px, 14px, transparent);
+      }
+
+      @media (min-width: $desktop) {
+            @include size(13px, 16px, transparent);
+      }
+}
+
+
+.bell::before,
+.bell::after {
+      content: "";
+      @include size(100%, 2.5px, $colorBlue-primary);
+      @include hcenter(absolute);
+}
+
+.bell::before {
+      top: 100%;
+      width: 18px;
+      background-color: $colorBlue-primary;
+}
+
+.bell::after {
+      top: calc(100% + 4px);
+      width: 10px;
+      background-color: $colorBlue-primary;
+}
+
+
+.notification:hover .bell-container {
+      animation: bell-animation 650ms ease-out 0s 1 normal both;
+}
+
+@keyframes bell-animation {
+      20% {
+            transform: rotate(15deg);
+      }
+
+      40% {
+            transform: rotate(-15deg);
+            scale: 1.1;
+      }
+
+      60% {
+            transform: rotate(10deg);
+            scale: 1.1;
+      }
+
+      80% {
+            transform: rotate(-10deg);
+      }
+
+      0%,
+      100% {
+            transform: rotate(0deg);
+      }
+}
+
+.tooltip {
+      @include position(absolute, 50%, n, n, 100%);
+      transform: translateX(-50%);
+      @include size(auto, auto, #646464);
+      @include font(0.8rem, white, normal);
+      padding: 5px 10px;
+      border-radius: 5px;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      z-index: 3;
+}
+
+.notification:hover .tooltip {
+      visibility: visible;
+      opacity: 0.8;
+}

@@ -167,7 +167,7 @@ const UserData: React.FC = () => {
     navigate("/home");
   };
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="z-200 max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <img
         src={imageUrl}
         alt="Profile Image"

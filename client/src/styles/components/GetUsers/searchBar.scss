@@ -1,0 +1,50 @@
+@import '../../variables.scss';
+@import '../../mixins.scss';
+@import '../../_settings.scss';
+
+.searchBarContainer {
+      @include position(absolute, 1rem, 1rem, n, n);
+      @include size(50%, 2rem, $background_tertiary);
+
+      @media(min-width: $tablet) {
+            @include size(30%, 2rem, $background_tertiary);
+      }
+}
+
+.searchBarContainer .form {
+      @include size(100%, 100%, transparent);
+      position: relative;
+}
+
+.searchBarContainer .form .input {
+      @include size(100%, 100%, transparent);
+      @include font(1em, $fontColor_primary, 400);
+      padding-left: 2.5rem;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      cursor: pointer;
+
+
+      &::placeholder {
+            color: $fontColor_secondary;
+      }
+
+}
+
+.zoomIcon {
+
+      @include position(absolute, -1em, 0, n, n);
+}
+
+.closeIcon {
+      @include position(absolute, n, 0, -1em, n);
+      padding-right: 1em;
+}
+
+.searchBarDropdown {
+      @include position(absolute, 1rem, 3rem, n, n);
+      @include size(30%, auto, $background_primary);
+      padding: 0.5rem 0.5rem 2rem 2.5rem;
+      z-index: 10;
+      @include flex-col(0.5rem, space-between, left);
+}

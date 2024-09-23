@@ -24,9 +24,8 @@ export const DropDown: React.FC<props> = ({
       {isDropDown && (
         <>
           <div
-            className="absolute top-15 left-5
-          h-auto bg-gray-100 z-50 flex flex-col pl-8 pb-8 pt-2"
-            style={{ width: width }}
+            className="searchBarDropdown
+           z-50 flex flex-col"
           >
             {children.map((child, index) => (
               <div key={index} onClick={() => handleOnClick(child)}>

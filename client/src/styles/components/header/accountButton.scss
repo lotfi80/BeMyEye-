@@ -1,0 +1,46 @@
+@import '../../variables.scss';
+@import '../../mixins.scss';
+@import '../../_settings.scss';
+
+.account-panel {
+      @include flex-row(2rem, space-evenly, center);
+      @include font(1rem, $fontColor_primary, bold);
+      @include size(100%, auto);
+      cursor: pointer;
+      padding: 1rem;
+      background-color: $background_tertiary;
+      color: $fontColor_primary;
+      transition: background-color 0.3s, color 0.3s;
+}
+
+.account-panel img {
+      @include size(5rem, 5rem);
+      border-radius: 50%;
+      object-fit: cover;
+}
+
+.account-panel .top-right {
+      @include flex-col(1rem, space-evenly, start);
+
+}
+
+.account-panel .top-right p:nth-child(1) {
+      @include font(1.5rem, $fontColor_primary, bold);
+}
+
+.account-panel .top-right p:nth-child(2),
+.account-panel .top-right p:nth-child(3) {
+      @include font(1rem, $fontColor_primary, bold);
+}
+
+.middle {
+      @include flex-col(1rem, center, start);
+      @include size(100%, 100%);
+      padding-left: 1rem;
+}
+
+.logoutDeleteGroup {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-content: start;
+}

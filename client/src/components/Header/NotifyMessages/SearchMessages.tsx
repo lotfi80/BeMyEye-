@@ -90,7 +90,7 @@ const SearchMessages: React.FC<props> = ({
     if (!inbox) return;
     const searchResult: Partial<IMessage>[] = inbox.filter((msg: IMessage) => {
       return (
-        msg.sender.username
+        msg.sender?.username
           ?.toLowerCase()
           .startsWith(inputValues.toLowerCase()) ||
         msg.createdAt?.toString().startsWith(inputValues) ||

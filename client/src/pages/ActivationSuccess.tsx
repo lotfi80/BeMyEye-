@@ -19,17 +19,18 @@ const ActivationSuccess = () => {
   useEffect(() => {
     const activateAccount = async () => {
       try {
+        console.log("Activation Link:", activationLink);
         if (activationLink) {
           await activateUser(activationLink);
           setRegistrationStatus("registered");
-
-          // navigate(`/home`);
+          // navigate(`/homactivated successfully!e`);
         }
       } catch (error) {
         console.error("Error in account activation process:", error);
       }
     };
 
+    console.log("Account ", registrationStatus);
     activateAccount();
   }, [activationLink, navigate]);
 

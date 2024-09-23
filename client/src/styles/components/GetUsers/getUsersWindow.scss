@@ -1,0 +1,16 @@
+@import '../../variables.scss';
+@import '../../mixins.scss';
+@import '../../_settings.scss';
+
+@import './searchBar.scss';
+
+.getUsersWindow {
+      position: relative;
+      @include size(100%, 100%, $background_tertiary);
+      padding: 1rem;
+      padding-top: 5rem;
+      @include font(0.8em, $fontColor_primary, 400);
+      overflow-y: auto;
+}
+
+@import '../Table/TableView.scss';

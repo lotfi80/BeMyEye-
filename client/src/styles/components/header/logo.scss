@@ -1,0 +1,10 @@
+.logo {
+      margin-right: auto;
+      cursor: pointer;
+      @include size(5rem, 5rem);
+      transition: none;
+}
+
+.logo:hover {
+      scale: 1;
+}
