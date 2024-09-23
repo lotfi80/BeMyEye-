@@ -46,7 +46,7 @@ const libraries : Libraries = ['places'];
   };
   return (
     // <div className="w-full h-full p-4 bg-white rounded-lg shadow-md  border-2 border-solid border-[#fcaf45]">
-     <div className="relative p-4 border-2 border-solid border-[#fcaf45]
+     <div className="relative p-4 border-2 border-solid border-[#2781b5]
      w-full h-[100%] md:h-[100%] lg:h-[100%] rounded-lg shadow-md">
 
     <LoadScript

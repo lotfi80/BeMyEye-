@@ -6,7 +6,7 @@ import GridContainer from './gridContainer';
 const Container: React.FC = () => {
 
   return (
-    <div className="w-full flex flex-col h-full rounded-lg border-2 border-solid border-[#fcaf45] ">
+    <div className="w-full flex flex-col h-full rounded-lg border-2  ">
       <ContainerSearch />
 
       <div className="flex-grow overflow-y-auto">

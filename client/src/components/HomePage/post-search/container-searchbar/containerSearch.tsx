@@ -52,7 +52,7 @@ function ContainerSearch() {
   return (
     <div className="p-4">
       <div className="flex flex-col gap-4">
-        <div className="bg-gray-100 p-4">
+        <div className="bg-gray-100 p-4 flex justify-center ">
           <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
             <Autocomplete
               onLoad={onLoad}
@@ -64,11 +64,11 @@ function ContainerSearch() {
             >
               <input
                 type="text"
-                placeholder="Gib hier eine Straße und Stadt ein..."
+                placeholder="Gib hier eine Stadt ein..."
                 value={searchTerm}
                 onChange={(e) => onInputPlaceChange(e)}
 
-                className="w-2/4 p-2 border-2 border-gray-500 rounded-md bg-white text-gray-800 placeholder-gray-400 shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+                className="min-w-96 p-2 border-2 border-gray-500 rounded-xl bg-white text-gray-800 placeholder-gray-400 shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
                 />
             </Autocomplete>
           </LoadScript>

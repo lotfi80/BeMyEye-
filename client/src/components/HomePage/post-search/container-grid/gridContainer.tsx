@@ -130,7 +130,7 @@ const GridContainer: React.FC = () => {
   }
 
   return (
-    <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-2 border-solid border-[#fcaf45]">
+    <div className="m-4 max-h-screen overflow-y-auto p-4 rounded-lg border-2 border-solid border-[#2781b5]">
       <div className="grid grid-cols-1  gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <div

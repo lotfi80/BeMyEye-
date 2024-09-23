@@ -18,7 +18,7 @@ const DistanceList: React.FC = () => {
 <label htmlFor="distance-slider" className="text-lg font-medium mb-2">
   Distanz: <span className="text-orange-700">{distance}</span> km
 </label>
-<div className="relative w-3/4 md:w-1/2 lg:w-2/3">
+<div className="relative w-2/4 md:w-1/2 lg:w-2/3">
   <input
     id="distance-slider"
     type="range"
@@ -27,7 +27,7 @@ const DistanceList: React.FC = () => {
     step="10"
     value={distance}
     onChange={handleSliderChange}
-    className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer shadow-md"
+    className="w-full h-0.5 bg-gray-300 rounded-lg appearance-none cursor-pointer shadow-2xl"
     style={{
       background: `linear-gradient(to right, #2781b5 ${((distance - 10) / 40) * 100}%, #e2e8f0 ${((distance - 10) / 40) * 100}%)`,
     }}
