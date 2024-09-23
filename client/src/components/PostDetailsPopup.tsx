@@ -1,10 +1,16 @@
-
-
 import React, { useEffect, useState, useRef } from "react";
 import * as io from "socket.io-client";
 import { useCategoryUserContext } from "../context/CategoryUser";
 import "./popup.css";
 import "../App.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  faTrash,
+  faEdit,
+  faPaperPlane,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 import "./Header/AccountButton/GetMyPosts/button.css";
 import {
@@ -12,6 +18,8 @@ import {
   fetchOnePost,
   createPostLike,
   deletePostLike,
+  deletePostComment,
+  updatePostComment,
 } from "../http/api";
 import { EditButton } from "./Header/AccountButton/GetMyPosts/EditButton";
 import { DeleteButton } from "./Header/AccountButton/GetMyPosts/DeleteButton";
@@ -29,7 +37,6 @@ interface PostDetailsPopupProps {
 const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   selectedPost,
   onClose,
-  
 }) => {
   const { user, posts, setPosts } = useCategoryUserContext();
   const [post, setPost] = useState<any>({});
@@ -39,6 +46,9 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   const [showPopup, setShowPopup] = useState<boolean>(true);
   const [hovered, setHovered] = useState<boolean>(false);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
+  const [newComment, setNewComment] = useState<any>({}); // interface vorbereiten : {commentId: newComment}
+
+  const [editMode, setEditMode] = useState<any>([]); // interface vorbereiten : array of commentsId
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -51,6 +61,10 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     socket.on("postComment", function ({ comments, postId }) {
       setComments(comments);
     });
+
+    return () => {
+      socket.off("postComment");
+    };
   }, []);
 
   /*socket*/
@@ -89,7 +103,10 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         handleClose();
       }
     };
@@ -122,11 +139,13 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   const addComment = async () => {
     if (!comment.trim()) return;
     const data = await createPostComment(user, selectedPost, comment);
+    console.log("newcomment", data);
     const commentToAdd = {
-      _id: Math.random().toString(36).substr(2, 9),
+      _id: data.newComment._id,
       content: comment,
       commentDate: Date.now(),
       userid: {
+        _id: user?._id,
         username: user?.username,
         profileimage: user?.profileimage,
       },
@@ -137,7 +156,44 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
       comments: [...comments, commentToAdd],
       postId: selectedPost.postid,
     });
+  };
+  const handleDeleteComment = async (commentId: string) => {
+    await deletePostComment(commentId);
 
+    const updatedComments = [
+      ...comments.filter((cmt) => cmt._id !== commentId),
+    ];
+    console.log("Aktualisierte Kommentare:", updatedComments);
+
+    setComments(updatedComments);
+    socket.emit("postComment", {
+      comments: updatedComments,
+      postId: selectedPost.postid,
+    });
+  };
+  const handleUpdateComment = async (commentId: string, newContent: string) => {
+    try {
+      const response = await updatePostComment(commentId, newContent);
+      setComments((prev) =>
+        prev.map((cmt) =>
+          cmt._id === commentId ? { ...cmt, content: newContent } : cmt
+        )
+      );
+      socket.emit("commentUpdated", { id: commentId, content: newContent });
+    } catch (error) {
+      console.error("Failed to update comment:", error);
+    }
+  };
+  const handleChangeEditMode = (commentId: string) => {
+    const isEditMode = editMode.includes(commentId);
+    if (isEditMode) {
+      setEditMode((prev) => prev.filter((id) => id !== commentId));
+    } else {
+      setEditMode((prev) => [...prev, commentId]);
+    }
+  };
+  const handleNewComment = (commentId: string, updatedComment: string) => {
+    setNewComment({ ...newComment, [commentId]: updatedComment });
   };
 
   const addLikes = async () => {
@@ -165,8 +221,6 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
         postId: selectedPost.postid,
       });
     }
-
-
   };
 
   const handleDelete = async (postId) => {
@@ -193,7 +247,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
       ? user?.profileimage
       : `http://localhost:5000/${user?.profileimage}`;
     return userImage;
-  }
+  };
 
   return (
     <div
@@ -206,7 +260,6 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
         className="bg-white rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto relative p-6"
       >
         {" "}
-
         <div className="mb-6">
           {post.postimage && post.postimage[0]?.image ? (
             <img
@@ -230,26 +283,29 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                   <EditButton postId={post._id} />
                 </div>
                 <div className="p-4">
-                  <DeleteButton postId={post._id} deletePost={() =>handleDelete(post._id)} />
+                  <DeleteButton
+                    postId={post._id}
+                    deletePost={() => handleDelete(post._id)}
+                  />
                 </div>
               </div>
             )}
           </div>
 
           <p className="text-lg text-[#2781b5] m-4 leading-relaxed break-words">
-            
             <span className="m-1 font-medium text-black">
               {post.description}
             </span>
-            
           </p>
           <p className="text-lg text-[#2781b5] mb-2">
-             <span className="ml-5 font-medium text-black">{post.address}</span>
+            <span className="ml-5 font-medium text-black">{post.address}</span>
           </p>
 
           <p className="text-lg text-[#2781b5] mb-2">
             {" "}
-            <span className="ml-5 font-medium text-black">{formatDate(post.postDate)}</span>
+            <span className="ml-5 font-medium text-black">
+              {formatDate(post.postDate)}
+            </span>
           </p>
 
           <div className="flex items-center space-x-4 mb-4">
@@ -348,15 +404,11 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 type="text"
-                className="w-full h-16 px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-16 px-4 py-4 border border-gray-300 rounded-lg focus:outline-none"
                 placeholder="Schreibe einen Kommentar..."
               />
-              <button
-                onClick={addComment}
-                // className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                className="button"
-              >
-                Absenden
+              <button onClick={addComment} className="text-blue-500">
+                <FontAwesomeIcon icon={faPaperPlane} size="lg" />
               </button>
             </div>
 
@@ -375,7 +427,6 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                     >
                       <img
                         src={`${userImage(cmt.userid)}`}
-                        // src={`http://localhost:5000/${cmt.userid.profileimage}`}
                         alt={`${cmt.userid.username} Profilbild`}
                         className="w-12 h-12 object-cover rounded-full"
                       />
@@ -383,13 +434,57 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
                         <p className="font-semibold text-gray-800 mb-1">
                           {cmt.userid.username}
                         </p>
-                        <p className="text-gray-800 break-words whitespace-normal mb-2">
-                          {cmt.content}
-                        </p>
+                        {editMode.includes(cmt._id) ? (
+                          <input
+                            type="text"
+                            value={newComment[cmt._id] || cmt.content}
+                            onChange={(e) =>
+                              handleNewComment(cmt._id, e.target.value)
+                            }
+                          />
+                        ) : (
+                          <p className="text-gray-800 break-words mb-2">
+                            {cmt.content}
+                          </p>
+                        )}
+                        {/* <p className="text-gray-800 break-words mb-2">
+                    {cmt.content}
+
+                  </p>
+                  <input type="text" value={cmt.content} onChange={(e) => handleUpdateComment(cmt._id, e.target.value)} /> */}
                         <p className="text-sm text-[#b48a4e]">
                           Erstellt am {formatDate(cmt.commentDate)}
                         </p>
                       </div>
+
+                      {user?._id === cmt.userid._id && (
+                        <div>
+                          <button
+                            onClick={() => handleDeleteComment(cmt._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                          <button
+                            onClick={() => handleChangeEditMode(cmt._id)}
+                            className="text-green-500 hover:text-green-700"
+                          >
+                            {editMode.includes(cmt._id) ? (
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                onClick={() =>
+                                  handleUpdateComment(
+                                    cmt._id,
+                                    newComment[cmt._id]
+                                  )
+                                }
+                              />
+                            ) : (
+                              <FontAwesomeIcon icon={faEdit} />
+                            )}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))
               ) : (
@@ -406,4 +501,3 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
 };
 
 export default PostDetailsPopup;
-

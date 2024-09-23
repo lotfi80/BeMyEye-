@@ -9,7 +9,17 @@ const TableHeadCell: React.FC<TableCellProps> = ({
   sortDirection,
   children,
 }) => {
-  return <th>{children}</th>;
+  return (
+    <th
+      className=" text-left  
+    font-medium text-gray-500
+     uppercase
+     my-10
+    "
+    >
+      {children}
+    </th>
+  );
 };
 
 export default TableHeadCell;

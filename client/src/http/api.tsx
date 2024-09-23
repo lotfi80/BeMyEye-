@@ -933,6 +933,48 @@ export const createPostComment = async (user, selectedPost, comment) => {
 
 // ****************************************************************
 
+export const updatePostComment = async (commentId, comment) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/posts/comment/update/${commentId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: comment }),
+      }
+    );
+    if (!response.ok) throw new Error("Failed to update comment");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to update comment:", error);
+  }
+}
+
+//************************************************************
+
+export const deletePostComment = async (commentId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/posts/comment/delete/${commentId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) throw new Error("Failed to delete comment");
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to delete comment:", error);
+  }
+}
+
+
+//*****************************************************************
+
 export const createPostLike = async (user, selectedPost) => {
   try {
     console.log("User ID:", user?._id);
