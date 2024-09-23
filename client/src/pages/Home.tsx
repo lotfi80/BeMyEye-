@@ -27,7 +27,8 @@ export const Home: React.FC = () => {
          {/* mit border */}
         {/* <div className="w-[30%] p-4 bg-gray-200  rounded-lg border-2 border-solid border-[#214256] mr-1"> */}
  {/* ohne border */}
-        <div className="w-[30%] p-4 bg-gray-200   mr-1">
+        <div className="w-[30%] p-4 bg-gray-200 rounded-2xl   mr-1
+        ">
           <Category />
         </div>
        {/* mit border */}
