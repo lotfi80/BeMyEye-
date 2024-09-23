@@ -11,11 +11,7 @@ const myCloseButton: React.FC<CloseButtonProps> = ({ setFunction }) => {
   return (
     <>
       <div
-        className={`
-       cursor-pointer
-        absolute top-5 right-5
-        z-10
-      `}
+        className="closeButton"
         onClick={() => {
           handleClose();
         }}

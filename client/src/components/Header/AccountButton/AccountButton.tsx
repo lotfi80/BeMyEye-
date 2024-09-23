@@ -57,7 +57,10 @@ const Account: React.FC<props> = ({
           </div>
           <hr />
           <div className="middle">
-            <GetMyPosts isMyPost={isMyPost} />
+            <GetMyPosts
+              isMyPost={isMyPost}
+              setMobileMenuOpen={setMobileMenuOpen}
+            />
             <Following />
             <Link
               className="linkToProfile"

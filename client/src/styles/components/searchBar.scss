@@ -1,6 +1,6 @@
-@import '../../variables.scss';
-@import '../../mixins.scss';
-@import '../../_settings.scss';
+@import '../variables.scss';
+@import '../mixins.scss';
+@import '../_settings.scss';
 
 .searchBarContainer {
       @include position(absolute, 1rem, 1rem, n, n);
@@ -43,7 +43,12 @@
 
 .searchBarDropdown {
       @include position(absolute, 1rem, 3rem, n, n);
-      @include size(30%, auto, $background_primary);
+      @include size(50%, auto, $background_primary);
+
+      @media(min-width: $tablet) {
+            @include size(30%, auto, $background_primary);
+      }
+
       padding: 0.5rem 0.5rem 2rem 2.5rem;
       z-index: 10;
       @include flex-col(0.5rem, space-between, left);

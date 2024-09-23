@@ -16,6 +16,7 @@ interface TableProps {
   setIsZoomed?: React.Dispatch<React.SetStateAction<string | null>>;
   currentUser?: IUser | null;
   handleDelete: (string) => void;
+  setMobileMenuOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GetUsersPost: React.FC<TableProps> = ({
@@ -26,6 +27,7 @@ const GetUsersPost: React.FC<TableProps> = ({
   setIsZoomed = () => {},
   currentUser = null,
   handleDelete = () => {},
+  setMobileMenuOpen = () => {},
 }) => {
   function formatDate(dateString: any): string {
     if (!dateString) {
@@ -35,6 +37,11 @@ const GetUsersPost: React.FC<TableProps> = ({
     return date.toLocaleDateString("de-DE");
   }
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  const handleEdit = (postId: string) => {
+    setPostsVisible(false);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div className=".positionContainer">
@@ -118,7 +125,10 @@ const GetUsersPost: React.FC<TableProps> = ({
                         {formatDate(post.postDate)}
                         {isMyPost && (
                           <td className="flex-row justify-start gap-2">
-                            <EditButton postId={post._id} />
+                            <EditButton
+                              postId={post._id}
+                              editPost={handleEdit}
+                            />
                             <DeleteButton
                               postId={post._id}
                               deletePost={handleDelete}
@@ -136,7 +146,7 @@ const GetUsersPost: React.FC<TableProps> = ({
                       </td>
                       {isMyPost && (
                         <td className="p-4 flex space-x-2">
-                          <EditButton postId={post._id} />
+                          <EditButton postId={post._id} editPost={handleEdit} />
                           <DeleteButton
                             postId={post._id}
                             deletePost={handleDelete}

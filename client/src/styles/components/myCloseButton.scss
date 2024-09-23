@@ -1,0 +1,5 @@
+.closeButton {
+      @include position(absolute, n, 1.25rem, 1.25rem, n);
+      cursor: pointer;
+      z-index: 10;
+}

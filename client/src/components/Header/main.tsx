@@ -39,7 +39,7 @@ const Header: React.FC = () => {
     <header>
       <nav>
         <Link className="logo" to="/home">
-          <img alt="" src="/logoneu.png" width="100px" />
+          <img alt="" src="/logo3.png" />
         </Link>
 
         {isMobile && (

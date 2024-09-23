@@ -2,6 +2,8 @@
 @import "../../mixins.scss";
 @import "../../_settings.scss";
 
+
+
 .inbox-btn {
       position: relative;
 }
@@ -99,7 +101,6 @@
 
 .burger span {
       @include size(1.5em, 0.1em, $colorBlue-secondary);
-
 
       position: absolute;
       transition: 0.3s;

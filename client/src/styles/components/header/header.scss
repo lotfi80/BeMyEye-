@@ -26,22 +26,27 @@ header nav {
 }
 
 @import './logo.scss';
-@import '../burger.scss';
 @import './accountButton.scss';
 
 @import './PostUserGroup.scss';
-@import './notify.scss';
+
+@import '../MessageNotification.scss/notify.scss';
+
 @import './notification.scss';
 @import './LoginBlock.scss';
-@import '../permissionModal.scss';
 @import './DialogPanelMobile.scss';
 
 @import '../GetUsers/getUsersWindow.scss';
 @import '../Table/TableView.scss';
 @import '../writeMessage.scss';
 
-@import '../PostNotification/ListOfPosts.scss';
-@import '../MessageNotification.scss/NotifyMessage.scss';
 
 @import './GetUsersPost.scss';
 @import '../following.scss';
+
+@import '../PostNotification/ListOfPosts.scss';
+
+@import '../blind.scss';
+@import '../burger.scss';
+@import '../myCloseButton.scss';
+@import '../permissionModal.scss';

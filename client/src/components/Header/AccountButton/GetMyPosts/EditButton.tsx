@@ -121,11 +121,17 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 interface EditButtonProps {
   postId: string;
+  editPost: (postId: string) => void;
 }
 
-export const EditButton: React.FC<EditButtonProps> = ({ postId }) => {
+export const EditButton: React.FC<EditButtonProps> = ({ postId, editPost }) => {
   return (
-    <div className="edit-button-container">
+    <div
+      className="edit-button-container"
+      onClick={(e) => {
+        editPost(postId);
+      }}
+    >
       <Link
         to={`/posts/${postId}`}
         aria-label="Edit post"

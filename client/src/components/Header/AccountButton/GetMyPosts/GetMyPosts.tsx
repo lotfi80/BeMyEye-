@@ -8,9 +8,10 @@ import { deletePost } from "../../../../http/api";
 
 interface props {
   isMyPost: boolean;
+  setMobileMenuOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
+const GetMyPosts: React.FC<props> = ({ isMyPost, setMobileMenuOpen }) => {
   const [postsVisible, setPostsVisible] = useState<boolean>(false);
   const [tableVisible, setTableVisible] = useState<boolean>(false);
   const [posts, setPosts] = useState<any[]>([]);
@@ -68,6 +69,7 @@ const GetMyPosts: React.FC<props> = ({ isMyPost }) => {
                 setTableVisible={setTableVisible}
                 isMyPost={isMyPost}
                 handleDelete={handleDelete}
+                setMobileMenuOpen={setMobileMenuOpen}
               />
               <CloseButton
                 setFunction={() => {
