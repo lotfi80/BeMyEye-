@@ -39,7 +39,7 @@ const RegisterForm: React.FC = () => {
           alt="Your Company"
         />
         <h2 className="mt-1 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          Registration
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -120,11 +120,10 @@ const RegisterForm: React.FC = () => {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">Register</p>
+          <p className=" mt-3 inline-block w-full rounded-md bg-[#FCAF45] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ">Register</p>
           <a
             className="mt-3 inline-block w-full rounded-md  bg-[#38b5ff] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-            href={`http://localhost:5000/auth/google/register`}
-          >
+            href={`http://localhost:5000/auth/google/register`}>
             Register with Google
           </a>
         </div>
