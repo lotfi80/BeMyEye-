@@ -251,14 +251,19 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70 transition-opacity duration-300 ${
-        showPopup ? "fade-in" : "fade-out"
-      }`}
-    >
-      <div
-        ref={modalRef}
-        className="bg-white rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto relative p-6"
-      >
+  className={`fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70 transition-opacity duration-300 ${
+    showPopup ? "fade-in" : "fade-out"
+  }`}
+>
+  <div
+    ref={modalRef}
+    className="
+      bg-white rounded-lg shadow-lg w-full 
+      max-w-full sm:max-w-md md:max-w-lg lg:max-w-3xl 
+      max-h-[90vh] sm:max-h-[80vh] lg:max-h-[70vh] 
+      overflow-y-auto relative p-4 sm:p-6 lg:p-8
+    "
+  >
         {" "}
         <div className="mb-6">
           {post.postimage && post.postimage[0]?.image ? (

@@ -45,13 +45,15 @@ const libraries : Libraries = ['places'];
     console.log("Latitude: ", lat, "Longitude: ", lng);
   };
   return (
-    <div className="w-full h-full p-4 bg-white rounded-lg shadow-md  border-2 border-solid border-[#fcaf45]">
-    <div className="relative w-full h-[100%] md:h-[100%] lg:h-[100%] rounded-lg shadow-md">
+    // <div className="w-full h-full p-4 bg-white rounded-lg shadow-md  border-2 border-solid border-[#fcaf45]">
+     <div className="relative p-4 border-2 border-solid border-[#fcaf45]
+     w-full h-[100%] md:h-[100%] lg:h-[100%] rounded-lg shadow-md">
 
     <LoadScript
       googleMapsApiKey="AIzaSyCq1RQazyFqWGNL-iwnAfZrEZbkUTJ-pqg"
       libraries={libraries} 
     >
+     
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
@@ -62,9 +64,10 @@ const libraries : Libraries = ['places'];
           <MarkerF key={index} position={location} />
         ))}
       </GoogleMap>
+      
     </LoadScript>
-    </div>
-    </div>
+   </div>
+    // </div>
 
   )
 }
