@@ -154,7 +154,7 @@ const Post: React.FC<PostProps> = ({
                 </p>
                 <div
                   className={`flex items-center ${
-                    post.postlikes.length > 0
+                    likes.length > 0
                       ? "text-red-500"
                       : "border text-red-500"
                   }`}
@@ -162,9 +162,9 @@ const Post: React.FC<PostProps> = ({
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className={`h-5 w-5 ${
-                      post.postlikes.length > 0 ? "fill-red-500" : "fill-white"
+                      likes.length > 0 ? "fill-red-500" : "fill-white"
                     }`}
-                    fill={post.postlikes.length > 0 ? "currentColor" : "none"}
+                    fill={likes.length > 0 ? "currentColor" : "none"}
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
