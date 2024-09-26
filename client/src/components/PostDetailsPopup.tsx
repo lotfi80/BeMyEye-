@@ -47,7 +47,6 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   const [hovered, setHovered] = useState<boolean>(false);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<any>({}); // interface vorbereiten : {commentId: newComment}
-
   const [editMode, setEditMode] = useState<any>([]); // interface vorbereiten : array of commentsId
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -55,6 +54,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
   /*socket */
   useEffect(() => {
     socket.emit(`room${selectedPost.postid}`);
+    // socket.emit("joinRoom", { postId: selectedPost.postid });
     socket.on("postLike", function ({ likes, postId }) {
       setLikes(likes);
     });
@@ -63,6 +63,7 @@ const PostDetailsPopup: React.FC<PostDetailsPopupProps> = ({
     });
 
     return () => {
+      socket.off("postLike");
       socket.off("postComment");
     };
   }, []);

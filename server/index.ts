@@ -91,7 +91,13 @@ const io: SocketIOServer = new SocketIOServer(server, {
   },
 });
 io.on("connection", (socket) => {
+  console.log('connectionnnnn');
+  socket.on("joinRoom", ({ postId }) => {
+    console.log('Joining room:', `room${postId}`);
+    socket.join(`room${postId}`);
+  });
   socket.on("postLike", ({ likes, postId }) => {
+    console.log('postIdddddddddd', postId)
     socket.join(`room${postId}`);
     io.to(`room${postId}`).emit("postLike", { likes, postId });
   });
