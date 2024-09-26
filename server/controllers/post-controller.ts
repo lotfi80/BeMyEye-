@@ -373,7 +373,13 @@ export const deleteComment = async (
   const { id } = req.params;
   try {
     const comment = await PostComment.findByIdAndDelete(id);
-    res.status(200).json({ message: "Comment deleted successfully", comment });
+    const post = await Post.findByIdAndUpdate(comment?.postid, {
+      $pull: { postcomments: comment?._id },
+      new: true,
+      
+    }
+    )
+    res.status(200).json({ message: "Comment deleted successfully", comment ,post });
   } catch (e) {
     console.error(e);
     next(e);
